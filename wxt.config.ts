@@ -3,7 +3,10 @@ import { resolve } from 'node:path'
 import { defineConfig } from 'wxt'
 
 export default defineConfig({
-	modules: ['@wxt-dev/module-react'],
+	modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
+	autoIcons: {
+		baseIconPath: resolve('public/icon.svg'),
+	},
 	manifest: {
 		// web_accessible_resources: [
 		// 	{
@@ -11,12 +14,6 @@ export default defineConfig({
 		// 		matches: ['https://leetcode.com/problems/*'],
 		// 	},
 		// ],
-		icons: {
-			'16': 'logo.png',
-			'32': 'logo.png',
-			'48': 'logo.png',
-			'128': 'logo.png',
-		},
 		permissions: ['search'],
 		browser_specific_settings: {
 			gecko: {
