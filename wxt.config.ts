@@ -18,6 +18,15 @@ export default defineConfig({
 			'128': 'logo.png',
 		},
 		permissions: ['search'],
+		browser_specific_settings: {
+			gecko: {
+				id: 'leetcode-enhancer@sbrjt',
+				data_collection_permissions: {
+					required: ['none'],
+					optional: [],
+				},
+			},
+		},
 	},
 	entrypointsDir: 'src',
 	vite: () => ({

@@ -3,11 +3,12 @@
   "description": "A browser extension to improve the LeetCode experience",
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://github.com/Sbrjt/leetcode-enhancer",
   "scripts": {
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
-    "build:firefox": "wxt build -b firefox",
+    "build:firefox": "wxt build -b firefox --mv3",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare"
   },
