@@ -1,7 +1,6 @@
 {
   "name": "leetcode-enhancer",
   "description": "A browser extension to improve the LeetCode experience",
-  "version": "0.0.0",
   "type": "module",
   "homepage": "https://github.com/Sbrjt/leetcode-enhancer",
   "scripts": {
@@ -23,6 +22,7 @@
     "@types/lodash.debounce": "^4.0.9",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@wxt-dev/auto-icons": "^1.1.1",
     "@wxt-dev/module-react": "^1.1.5",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",

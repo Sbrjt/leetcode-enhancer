@@ -1,0 +1,54 @@
+name: Build and Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm version ${TAG#v} --no-git-tag-version
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+
+      - name: Zip extensions
+        run: |
+          npx wxt zip
+          npx wxt zip -b firefox
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: .output/*.zip
+
+      # - name: Submit to stores
+      #   run: |
+      #     npm wxt submit \
+      #       --chrome-zip .output/*-chrome.zip \
+      #       --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
+      #   env:
+      #     CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+      #     CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+      #     CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+      #     CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      #     FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
+      #     FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+      #     FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+
+# docs: https://wxt.dev/guide/essentials/publishing.html
