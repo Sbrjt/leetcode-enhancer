@@ -6,7 +6,6 @@ A browser extension to improve the LeetCode experience.
 
 - Shows problem difficulty rating
 - Links to similar problems on other platforms for premium problems
-- Screenshots of premium editorials
 
 ### ⏳Todos
 
@@ -14,6 +13,7 @@ A browser extension to improve the LeetCode experience.
 - Code formatter
 - Autocomplete
 - Code snippets
+- Screenshots of premium editorials
 
 ### 🤗 Credits
 
