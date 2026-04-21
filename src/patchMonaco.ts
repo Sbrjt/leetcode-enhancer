@@ -25,7 +25,7 @@ export default defineUnlistedScript(async () => {
 			// parameterHints: { enabled: true },
 		})
 
-		console.log(editor.getRawOptions())
+		// console.log(editor.getRawOptions())
 		// editor.trigger('keyboard', 'editor.action.triggerSuggest', {})
 	}
 })

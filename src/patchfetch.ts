@@ -1,4 +1,4 @@
-# TODO
+// TODO: this is not implemented yet
 
 export default defineUnlistedScript(() => {
 	const originalFetch = window.fetch
@@ -20,7 +20,6 @@ export default defineUnlistedScript(() => {
 
 function isSubmission(url: string) {
 	// intercept runcode fetch calls
-
 	const pattern = /^\/submissions\/detail\/runcode.*\/check\/$/
 	return pattern.test(url)
 }

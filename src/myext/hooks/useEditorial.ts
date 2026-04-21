@@ -14,7 +14,7 @@ export default function useEditorial(question: Question | null, url: string) {
 			).find((a) => a.textContent === 'Subscribe')
 
 			if (!subBtn) return false
-			console.log('editorial', question.id)
+			// console.log('editorial', question.id)
 
 			subBtn.href = getEditorialLink(question.id, question.title)
 			subBtn.innerText = 'Go to editorial'

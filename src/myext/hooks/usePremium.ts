@@ -13,7 +13,7 @@ export default function usePremium(question: Question | null) {
 		if (question == null || !question.premium) return
 
 		const run = () => {
-			console.log('premium:', question.id)
+			// console.log('premium:', question.id)
 
 			const subBtn = Array.from(
 				document.querySelectorAll<HTMLAnchorElement>('a[href^="/subscribe"]'),
