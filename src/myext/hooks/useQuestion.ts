@@ -30,7 +30,7 @@ export default function useQuestion() {
 			}
 
 			setQuestion(q)
-			console.log('question:', q.id)
+			// console.log('question:', q.id)
 		})()
 	}, [slug])
 
