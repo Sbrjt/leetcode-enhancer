@@ -8,12 +8,12 @@ export default defineConfig({
 		baseIconPath: resolve('public/icon.svg'),
 	},
 	manifest: {
-		// web_accessible_resources: [
-		// 	{
-		// 		resources: ['patchfetch.js'],
-		// 		matches: ['https://leetcode.com/problems/*'],
-		// 	},
-		// ],
+		web_accessible_resources: [
+			{
+				resources: ['patchMonaco.js'],
+				matches: ['https://leetcode.com/*'],
+			},
+		],
 		permissions: ['search'],
 		browser_specific_settings: {
 			gecko: {

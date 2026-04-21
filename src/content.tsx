@@ -7,6 +7,7 @@ export default defineContentScript({
 
 	async main(ctx) {
 		// injectScript('/patchfetch.js', { keepInDom: true })
+		injectScript('/patchMonaco.js', { keepInDom: true })
 
 		const ui = createIntegratedUi(ctx, {
 			position: 'inline',
