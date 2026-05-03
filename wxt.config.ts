@@ -18,10 +18,7 @@ export default defineConfig({
 		browser_specific_settings: {
 			gecko: {
 				id: 'leetcode-enhancer@sbrjt',
-				data_collection_permissions: {
-					required: ['none'],
-					optional: [],
-				},
+				data_collection_permissions: { required: ['none'] },
 			},
 		},
 	},
