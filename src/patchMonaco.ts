@@ -1,10 +1,4 @@
-import type * as Monaco from 'monaco-editor'
-
-declare global {
-	interface Window {
-		monaco: typeof Monaco
-	}
-}
+import { sleep } from './myext/utils'
 
 export default defineUnlistedScript(async () => {
 	await sleep(2000)
@@ -14,9 +8,7 @@ export default defineUnlistedScript(async () => {
 	const editors = window.monaco.editor.getEditors?.() || []
 
 	for (const editor of editors) {
-		const model = editor.getModel()
-		const langId = model?.getLanguageId()
-		console.log(langId)
+		// console.log(editor?.getModel()?.getLanguageId())
 
 		editor.updateOptions({
 			quickSuggestions: { other: true },
@@ -25,11 +17,10 @@ export default defineUnlistedScript(async () => {
 			// parameterHints: { enabled: true },
 		})
 
+		// console.log(editor.getModel()?.getLanguageId())
 		// console.log(editor.getRawOptions())
 		// editor.trigger('keyboard', 'editor.action.triggerSuggest', {})
 	}
 })
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // TODO: Make language servers 😭

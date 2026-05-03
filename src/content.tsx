@@ -6,13 +6,10 @@ export default defineContentScript({
 	cssInjectionMode: 'ui',
 
 	async main(ctx) {
-		// injectScript('/patchfetch.js', { keepInDom: true })
 		injectScript('/patchMonaco.js', { keepInDom: true })
 
 		const ui = createIntegratedUi(ctx, {
 			position: 'inline',
-			// name: 'example-ui',
-			// anchor: 'body',
 
 			onMount(container) {
 				createRoot(container).render(<App />)

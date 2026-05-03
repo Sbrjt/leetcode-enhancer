@@ -10,13 +10,5 @@ export default function useFormatter(url: string) {
 		)
 
 		runBtn?.addEventListener('click', formatCode)
-
-		document.addEventListener('keydown', function (e) {
-			if (e.ctrlKey && e.key === 's') {
-				e.preventDefault()
-				e.stopPropagation()
-				formatCode()
-			}
-		})
 	}, [url])
 }
