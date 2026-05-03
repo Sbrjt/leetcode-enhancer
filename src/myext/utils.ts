@@ -88,3 +88,14 @@ export function searchLintCode(question: string) {
 		query: `${question} site:lintcode.com`,
 	})
 }
+
+export const sleep = (ms: number) =>
+	new Promise((resolve) => setTimeout(resolve, ms))
+
+export function formatCode() {
+	const formatBtn = document.querySelector<HTMLButtonElement>(
+		'button:has(svg[data-icon="align-left"])',
+	)
+
+	formatBtn?.click()
+}
