@@ -11,4 +11,18 @@ export type Question = {
 	slug: string
 	title: string
 	premium: boolean
+	dislikes: number
+}
+
+export type GraphQLResponse<T> = {
+	data: T
+}
+
+export type QuestionData = {
+	question: {
+		title: string
+		dislikes: number
+		isPaidOnly: boolean
+		questionFrontendId: string
+	}
 }
