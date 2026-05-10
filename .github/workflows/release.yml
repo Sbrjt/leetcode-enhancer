@@ -1,4 +1,4 @@
-name: Build and Release
+name: Release build
 
 on:
   release:
@@ -30,7 +30,7 @@ jobs:
       - name: Zip extensions
         run: |
           npx wxt zip
-          npx wxt zip -b firefox
+          npx wxt zip -b firefox --mv3
 
       - name: Release
         uses: softprops/action-gh-release@v3
