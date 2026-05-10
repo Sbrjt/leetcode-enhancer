@@ -1,3 +1,8 @@
+import type { GraphQLResponse, QuestionData } from './types'
+
+export const sleep = (ms: number) =>
+	new Promise((resolve) => setTimeout(resolve, ms))
+
 export function observeElement(callback: MutationCallback) {
 	// my custom wrapper for MutationObserver
 
@@ -30,6 +35,7 @@ export async function fetchQuestion(slug: string) {
 						questionFrontendId
 						title
 						isPaidOnly
+						dislikes
 					}
 				}`,
 		}),
@@ -39,7 +45,7 @@ export async function fetchQuestion(slug: string) {
 		},
 	})
 
-	const { data } = await res.json()
+	const { data }: GraphQLResponse<QuestionData> = await res.json()
 	return data.question
 }
 
@@ -53,6 +59,47 @@ export async function fetchRating(id: number) {
 	if (result == null) return 'N/A'
 
 	return result.Rating.toFixed(0)
+}
+
+export async function fetchDislike(slug: string) {
+	async function f() {
+		const res = await fetch('https://leetcode.com/graphql', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({
+				query: `
+            query questionTitle($titleSlug: String!) {
+              question(titleSlug: $titleSlug) {
+                dislikes
+              }
+            }
+          `,
+				variables: { titleSlug: 'two-sum' },
+			}),
+		})
+
+		const json = await res.json()
+		console.log(json)
+	}
+
+	const res = await fetch('https://leetcode.com/graphql', {
+		body: JSON.stringify({
+			query: `query {
+					question(titleSlug: "${slug}") {
+						questionFrontendId
+						title
+						isPaidOnly
+					}
+				}`,
+		}),
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	})
+
+	const { data } = await res.json()
+	return data.question
 }
 
 export function getScreenshotLink(questionId: number, questionTitle: string) {
@@ -89,13 +136,9 @@ export function searchLintCode(question: string) {
 	})
 }
 
-export const sleep = (ms: number) =>
-	new Promise((resolve) => setTimeout(resolve, ms))
-
-export function formatCode() {
-	const formatBtn = document.querySelector<HTMLButtonElement>(
-		'button:has(svg[data-icon="align-left"])',
-	)
-
-	formatBtn?.click()
+export function formatDislikes(n: number) {
+	return new Intl.NumberFormat('en', {
+		notation: 'compact',
+		maximumFractionDigits: 1,
+	}).format(n)
 }
