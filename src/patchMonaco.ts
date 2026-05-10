@@ -1,9 +1,9 @@
-import { sleep } from './myext/utils'
+import elementReady from 'element-ready'
 
 export default defineUnlistedScript(async () => {
-	await sleep(2000)
+	await elementReady('.monaco-editor', { stopOnDomReady: false })
 
-	// console.log(monaco.languages.getLanguages())
+	// console.log(window.monaco.languages.getLanguages())
 
 	const editors = window.monaco.editor.getEditors?.() || []
 
