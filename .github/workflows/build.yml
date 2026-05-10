@@ -33,4 +33,5 @@ jobs:
         with:
           name: extension-${{ github.sha }}
           path: '.output'
+          include-hidden-files: true
           if-no-files-found: error
