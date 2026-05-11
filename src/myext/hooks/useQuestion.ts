@@ -19,7 +19,7 @@ export default function useQuestion() {
 	useEffect(() => {
 		setQuestion(null)
 		;(async () => {
-			const { questionFrontendId, title, isPaidOnly, dislikes } =
+			const { questionFrontendId, title, isPaidOnly, dislikes, content } =
 				await fetchQuestion(slug)
 
 			const q = {
@@ -27,6 +27,7 @@ export default function useQuestion() {
 				slug,
 				title,
 				dislikes,
+				content,
 				premium: isPaidOnly,
 			}
 

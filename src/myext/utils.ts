@@ -1,3 +1,4 @@
+import TurndownService from 'turndown'
 import type { GraphQLResponse, QuestionData } from './types'
 
 export const sleep = (ms: number) =>
@@ -36,6 +37,7 @@ export async function fetchQuestion(slug: string) {
 						title
 						isPaidOnly
 						dislikes
+						content
 					}
 				}`,
 		}),
@@ -59,47 +61,6 @@ export async function fetchRating(id: number) {
 	if (result == null) return 'N/A'
 
 	return result.Rating.toFixed(0)
-}
-
-export async function fetchDislike(slug: string) {
-	async function f() {
-		const res = await fetch('https://leetcode.com/graphql', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({
-				query: `
-            query questionTitle($titleSlug: String!) {
-              question(titleSlug: $titleSlug) {
-                dislikes
-              }
-            }
-          `,
-				variables: { titleSlug: 'two-sum' },
-			}),
-		})
-
-		const json = await res.json()
-		console.log(json)
-	}
-
-	const res = await fetch('https://leetcode.com/graphql', {
-		body: JSON.stringify({
-			query: `query {
-					question(titleSlug: "${slug}") {
-						questionFrontendId
-						title
-						isPaidOnly
-					}
-				}`,
-		}),
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	})
-
-	const { data } = await res.json()
-	return data.question
 }
 
 export function getScreenshotLink(questionId: number, questionTitle: string) {
@@ -142,3 +103,19 @@ export function formatDislikes(n: number) {
 		maximumFractionDigits: 1,
 	}).format(n)
 }
+
+const turndownService = new TurndownService()
+
+turndownService.addRule('exampleAsBlockquote', {
+	filter: 'pre',
+	replacement: (content) =>
+		'\n' +
+		content
+			.trim()
+			.split('\n')
+			.map((line) => '> ' + line + '\n>\n')
+			.join('') +
+		'\n',
+})
+
+export const htmlToMd = (html: string) => turndownService.turndown(html)

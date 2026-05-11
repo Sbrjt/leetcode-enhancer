@@ -1,3 +1,4 @@
+import useCopy from './hooks/useCopy'
 import useDislike from './hooks/useDislike'
 import useFormatter from './hooks/useFormatter'
 import usePremium from './hooks/usePremium'
@@ -11,6 +12,7 @@ function App() {
 	useRating(question)
 	usePremium(question)
 	useDislike(question)
+	useCopy(question)
 	// useEditorial(question, url)
 
 	return (
