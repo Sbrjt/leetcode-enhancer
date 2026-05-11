@@ -14,8 +14,6 @@ export default function useDislike(question: Question | null) {
 
 			const btn = div?.closest('button')
 
-			console.log(formatDislikes(1505))
-
 			if (div) {
 				const newDiv = document.createElement('div')
 				newDiv.textContent = formatDislikes(question.dislikes)
