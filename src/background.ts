@@ -1,5 +1,5 @@
 export default defineBackground(() => {
-	browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+	browser.runtime.onMessage.addListener((msg, _sender, _sendResponse) => {
 		if (msg.type === 'SEARCH') {
 			browser.search.query({
 				text: msg.query,

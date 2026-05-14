@@ -1,4 +1,5 @@
 // TODO: this is not implemented yet
+/* eslint-disable */
 
 export default defineUnlistedScript(() => {
 	const originalFetch = window.fetch
