@@ -56,7 +56,7 @@ export async function fetchRating(id: number) {
 		'https://zerotrac.github.io/leetcode_problem_rating/data.json',
 	)
 	const arr = await res.json()
-	const result = arr.find((item: any) => item.ID === id)
+	const result = arr.find(({ ID }: { ID: number }) => ID === id)
 
 	if (result == null) return 'N/A'
 

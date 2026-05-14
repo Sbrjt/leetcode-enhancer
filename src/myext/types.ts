@@ -1,11 +1,12 @@
-import type * as Monaco from 'monaco-editor'
+import type { editor } from 'monaco-editor'
 
 declare global {
 	interface Window {
-		monaco: typeof Monaco
+		monaco: {
+			editor: typeof editor
+		}
 	}
 }
-
 export type Question = {
 	id: number
 	slug: string
