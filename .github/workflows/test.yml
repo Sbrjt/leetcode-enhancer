@@ -1,10 +1,12 @@
 name: Dev Build
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
+    branches: [main]
+    paths-ignore: ['**/*.md']
+  push:
+    branches: [main]
+    paths-ignore: ['**/*.md']
 
 jobs:
   build:
@@ -23,15 +25,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Prettier
+        run: npm run format
+
+      - name: ESLint
+        run: npm run lint
+
       - name: Build extensions
         run: |
           npm run build
           npm run build:firefox
 
+      - name: Run AMO linter
+        run: npx addons-linter .output/firefox-mv3
+
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: extension-${{ github.sha }}
+          name: ${{ github.sha }}
           path: '.output'
           include-hidden-files: true
           if-no-files-found: error
