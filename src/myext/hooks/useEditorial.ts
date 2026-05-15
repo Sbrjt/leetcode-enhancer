@@ -17,7 +17,7 @@ export default function useEditorial(question: Question | null, url: string) {
 			// console.log('editorial', question.id)
 
 			subBtn.href = getEditorialLink(question.id, question.title)
-			subBtn.innerText = 'Go to editorial'
+			subBtn.innerText = 'View screenshot'
 			return true
 		}
 
