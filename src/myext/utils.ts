@@ -23,9 +23,15 @@ export function observeElement(callback: MutationCallback) {
  * @example getRange(1500) // "1000-1999"
  */
 export function getRange(num: number) {
-	const start = Math.floor((num - 1) / 999) * 999 + 1
-	const end = start + 999
-	return `${start}-${end}`
+	if (num <= 999) {
+		return '1-999'
+	} else if (num <= 1999) {
+		return '1000-1999'
+	} else if (num <= 2999) {
+		return '2000-2999'
+	}
+
+	throw new Error(`Unsupported number: ${num}`)
 }
 
 export async function fetchQuestion(slug: string) {
