@@ -1,13 +1,12 @@
 // this hook provides alternate links to premium questions
 
-import { useStorageItem } from '@/src/lib/hooks'
-import { Question } from '../types'
+import { Question } from '../../../types'
 import {
 	getScreenshotLink,
 	observeElement,
 	searchGfG,
 	searchLintCode,
-} from '../utils'
+} from '../../../utils/lib'
 
 export default function usePremium(question: Question | null) {
 	const [isEnabled, _] = useStorageItem('premiumLinks')

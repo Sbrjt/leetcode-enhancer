@@ -1,8 +1,7 @@
 // show copy button
 
-import { useStorageItem } from '@/src/lib/hooks'
-import type { Question } from '../types'
-import { htmlToMd, observeElement } from '../utils'
+import type { Question } from '../../../types'
+import { htmlToMd, observeElement } from '../../../utils/lib'
 
 export default function useCopy(question: Question | null) {
 	const [isEnabled, _] = useStorageItem('copyButton')

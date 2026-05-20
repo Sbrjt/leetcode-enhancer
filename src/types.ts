@@ -1,12 +1,3 @@
-import type { editor } from 'monaco-editor'
-
-declare global {
-	interface Window {
-		monaco: {
-			editor: typeof editor
-		}
-	}
-}
 export type Question = {
 	id: number
 	slug: string
@@ -27,5 +18,15 @@ export type QuestionData = {
 		dislikes: number
 		isPaidOnly: boolean
 		questionFrontendId: string
+	}
+}
+
+import type { editor } from 'monaco-editor'
+
+declare global {
+	interface Window {
+		monaco: {
+			editor: typeof editor
+		}
 	}
 }

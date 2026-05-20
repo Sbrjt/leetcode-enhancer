@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import App from './myext/App'
+import App from './App'
 
 export default defineContentScript({
 	matches: ['https://leetcode.com/problems/*'],
