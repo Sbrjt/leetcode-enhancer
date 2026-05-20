@@ -1,8 +1,7 @@
 // show dislikes count
 
-import { useStorageItem } from '@/src/lib/hooks'
-import type { Question } from '../types'
-import { formatDislikes, observeElement } from '../utils'
+import type { Question } from '../../../types'
+import { formatDislikes, observeElement } from '../../../utils/lib'
 
 export default function useDislike(question: Question | null) {
 	const [isEnabled, _] = useStorageItem('dislikeButton')

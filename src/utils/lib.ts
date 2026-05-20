@@ -1,5 +1,40 @@
 import TurndownService from 'turndown'
-import type { GraphQLResponse, QuestionData } from './types'
+import type { GraphQLResponse, QuestionData } from '../types'
+
+export const SETTINGS = [
+	{ key: 'enabled', label: 'Extension enabled' },
+	{ key: 'rating', label: 'Problem difficulty rating' },
+	{ key: 'formatOnRun', label: 'Format on run' },
+	{ key: 'autocomplete', label: 'Enable autocomplete' },
+	{ key: 'copyButton', label: 'Copy code button' },
+	{ key: 'dislikeButton', label: 'Return dislike button' },
+	{
+		key: 'premiumLinks',
+		label: 'Links to similar problems on other platforms',
+	},
+	{ key: 'premiumEditorial', label: 'Screenshots of premium editorials' },
+]
+
+export async function getBrowserDetails() {
+	if (import.meta.env.FIREFOX) {
+		// @ts-ignore
+		return await browser.runtime.getBrowserInfo()
+	}
+
+	if (import.meta.env.CHROME) {
+		// @ts-ignore
+		const ua = await navigator.userAgentData.getHighEntropyValues([
+			'fullVersionList',
+		])
+		return ua.fullVersionList
+	}
+
+	//  fallback
+	return {
+		name: 'unknown',
+		version: navigator.userAgent,
+	}
+}
 
 export const sleep = (ms: number) =>
 	new Promise((resolve) => setTimeout(resolve, ms))
@@ -64,7 +99,9 @@ export async function fetchRating(id: number) {
 	const arr = await res.json()
 	const result = arr.find(({ ID }: { ID: number }) => ID === id)
 
-	if (result == null) return 'N/A'
+	if (result == null) {
+		return 'N/A'
+	}
 
 	return result.Rating.toFixed(0)
 }

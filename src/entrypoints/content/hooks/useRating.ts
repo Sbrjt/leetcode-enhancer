@@ -1,8 +1,7 @@
 // this hook searches for difficulty level and inserts difficulty rating
 
-import { useStorageItem } from '@/src/lib/hooks'
-import { Question } from '../types'
-import { fetchRating, observeElement } from '../utils'
+import { Question } from '../../../types'
+import { fetchRating, observeElement } from '../../../utils/lib'
 
 export default function useRating(question: Question | null) {
 	const [isEnabled, _] = useStorageItem('rating')

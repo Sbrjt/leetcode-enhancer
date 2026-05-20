@@ -1,8 +1,7 @@
 // this hook provides alternate link for premium editorial
 
-import { useStorageItem } from '@/src/lib/hooks'
-import { Question } from '../types'
-import { getEditorialLink, observeElement } from '../utils'
+import { Question } from '../../../types'
+import { getEditorialLink, observeElement } from '../../../utils/lib'
 
 export default function useEditorial(question: Question | null, url: string) {
 	const [isEnabled, _] = useStorageItem('premiumEditorial')
@@ -38,5 +37,5 @@ export default function useEditorial(question: Question | null, url: string) {
 		})
 
 		return () => observer.disconnect()
-	}, [question, url])
+	}, [question, url, isEnabled])
 }

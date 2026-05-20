@@ -1,7 +1,5 @@
 // format code when user hovers over submit/run button
 
-import { useStorageItem } from '@/src/lib/hooks'
-
 export default function useFormatter(url: string) {
 	const [isEnabled, _] = useStorageItem('formatOnRun')
 

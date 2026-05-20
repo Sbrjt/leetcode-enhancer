@@ -6,9 +6,7 @@ import {
 	LuTerminal,
 } from 'react-icons/lu'
 import { browser } from 'wxt/browser'
-import pkg from '../../package.json'
-import { Switch } from '../components/switch'
-import { getBrowserDetails } from '../lib/utils'
+import pkg from '../../../package.json'
 
 function App() {
 	const [isEnabled, setIsEnabled] = useState(true)

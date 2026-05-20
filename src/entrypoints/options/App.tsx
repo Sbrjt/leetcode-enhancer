@@ -1,7 +1,3 @@
-import { Switch } from '../components/switch'
-import { useStorageItem } from '../lib/hooks'
-import { SETTINGS } from '../lib/utils'
-
 function App() {
 	return (
 		<div className='p-8 bg-gray-900 text-white min-h-screen flex flex-col items-center justify-start'>

@@ -20,10 +20,11 @@ export default defineConfig({
 		},
 	},
 	modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
+	srcDir: 'src',
+	// entrypointsDir: 'src',
 	autoIcons: {
 		baseIconPath: resolve('public/icon.svg'),
 	},
-	entrypointsDir: 'src',
 	vite: () => ({
 		plugins: [tailwindcss()],
 	}),
