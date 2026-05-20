@@ -1,9 +1,13 @@
 // format code when user hovers over submit/run button
 
-import { useEffect } from 'react'
+import { useStorageItem } from '@/src/lib/hooks'
 
 export default function useFormatter(url: string) {
+	const [isEnabled, _] = useStorageItem('formatOnRun')
+
 	useEffect(() => {
+		if (!isEnabled) return
+
 		function formatCode() {
 			const formatBtn = document.querySelector<HTMLButtonElement>(
 				'button:has(svg[data-icon="align-left"])',
@@ -17,5 +21,7 @@ export default function useFormatter(url: string) {
 		)
 
 		runBtn?.addEventListener('click', formatCode)
-	}, [url])
+
+		return () => runBtn?.removeEventListener('click', formatCode)
+	}, [url, isEnabled])
 }

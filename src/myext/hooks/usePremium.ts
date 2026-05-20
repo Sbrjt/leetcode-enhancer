@@ -1,5 +1,6 @@
 // this hook provides alternate links to premium questions
 
+import { useStorageItem } from '@/src/lib/hooks'
 import { Question } from '../types'
 import {
 	getScreenshotLink,
@@ -9,8 +10,10 @@ import {
 } from '../utils'
 
 export default function usePremium(question: Question | null) {
+	const [isEnabled, _] = useStorageItem('premiumLinks')
+
 	useEffect(() => {
-		if (question == null || !question.premium) return
+		if (question == null || !question.premium || !isEnabled) return
 
 		const run = () => {
 			// console.log('premium:', question.id)
@@ -70,5 +73,5 @@ export default function usePremium(question: Question | null) {
 		})
 
 		return () => observer.disconnect()
-	}, [question])
+	}, [question, isEnabled])
 }

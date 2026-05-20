@@ -6,7 +6,14 @@ export default defineContentScript({
 	cssInjectionMode: 'ui',
 
 	async main(ctx) {
-		injectScript('/patchMonaco.js', { keepInDom: true })
+		const enabled = await storage.getItem('sync:enabled')
+		const autocomplete = await storage.getItem('sync:autocomplete')
+
+		if (enabled === false) return
+
+		if (autocomplete) {
+			injectScript('/patchMonaco.js', { keepInDom: true })
+		}
 
 		const ui = createIntegratedUi(ctx, {
 			position: 'inline',
