@@ -45,7 +45,13 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ github.sha }}
-          path: '.output'
-          include-hidden-files: true
+          name: ChromeExtension
+          path: '.output/chrome-mv3'
+          if-no-files-found: error
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: FirefoxExtension
+          path: '.output/firefox-mv3'
           if-no-files-found: error
