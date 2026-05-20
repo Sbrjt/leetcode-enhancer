@@ -1,6 +1,7 @@
 import eslintReact from '@eslint-react/eslint-plugin'
 import eslint from '@eslint/js'
 import eslintConfigPrettier from 'eslint-config-prettier'
+import pluginGitHubAction from 'eslint-plugin-github-action'
 import noUnsanitized from 'eslint-plugin-no-unsanitized'
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
@@ -12,6 +13,7 @@ export default defineConfig(
 	tseslint.configs.recommended,
 	noUnsanitized.configs.recommended,
 	eslintReact.configs['recommended-typescript'],
+	pluginGitHubAction.configs.recommended,
 	{
 		languageOptions: { globals: { ...globals.webextensions } },
 		rules: {
