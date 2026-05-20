@@ -1,11 +1,19 @@
 // this hook provides alternate link for premium editorial
 
+import { useStorageItem } from '@/src/lib/hooks'
 import { Question } from '../types'
 import { getEditorialLink, observeElement } from '../utils'
 
 export default function useEditorial(question: Question | null, url: string) {
+	const [isEnabled, _] = useStorageItem('premiumEditorial')
+
 	useEffect(() => {
-		if (question == null || question.premium || !url.includes('editorial'))
+		if (
+			question == null ||
+			question.premium ||
+			!url.includes('editorial') ||
+			!isEnabled
+		)
 			return
 
 		const run = () => {

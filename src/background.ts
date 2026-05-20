@@ -1,5 +1,5 @@
 export default defineBackground(() => {
-	browser.runtime.onMessage.addListener((msg, _sender, _sendResponse) => {
+	browser.runtime.onMessage.addListener(async (msg, _sender, _sendResponse) => {
 		if (msg.type === 'SEARCH') {
 			browser.search.query({
 				text: msg.query,
@@ -9,13 +9,12 @@ export default defineBackground(() => {
 			return
 		}
 
-		// if (msg.type === 'FETCH_PAGE') {
-		// 	fetch(msg.url)
-		// 		.then((r) => r.text())
-		// 		.then((html) => sendResponse({ html }))
-		// 		.catch((err) => sendResponse({ error: err.message }))
+		if (msg.type === 'RELOAD_TAB') {
+			const tabs = await browser.tabs.query({ url: 'https://leetcode.com/*' })
 
-		// 	return
-		// }
+			for (const tab of tabs) {
+				browser.tabs.reload(tab.id!)
+			}
+		}
 	})
 })

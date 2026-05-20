@@ -10,8 +10,9 @@ export function useStorageItem<T>(key: string, store: StorageArea = 'sync') {
 
 		load()
 
-		const unwatch = storage.watch<T>(storageKey, (newValue) => {
+		const unwatch = storage.watch<T>(storageKey, async (newValue) => {
 			setValue(newValue)
+			browser.runtime.sendMessage({ type: 'RELOAD_TAB' })
 		})
 
 		return unwatch

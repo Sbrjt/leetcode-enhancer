@@ -1,13 +1,19 @@
 // show dislikes count
 
+import { useStorageItem } from '@/src/lib/hooks'
 import type { Question } from '../types'
 import { formatDislikes, observeElement } from '../utils'
 
 export default function useDislike(question: Question | null) {
+	const [isEnabled, _] = useStorageItem('dislikeButton')
+
 	useEffect(() => {
-		if (question == null) return
+		if (question == null || !isEnabled) return
+
+		let injected: HTMLElement | null = null
 
 		const observer = observeElement(async () => {
+			// find the div with dislike button
 			const div = document
 				.querySelector('svg[data-icon="thumbs-down"]')
 				?.closest<HTMLDivElement>('div')
@@ -21,10 +27,14 @@ export default function useDislike(question: Question | null) {
 
 				btn?.classList.remove('gap-2')
 				btn?.classList.add('gap-1')
+				injected = newDiv
+				observer.disconnect()
 			}
-			observer.disconnect()
 		})
 
-		return () => observer.disconnect()
-	}, [question])
+		return () => {
+			observer.disconnect()
+			injected?.remove()
+		}
+	}, [question, isEnabled])
 }

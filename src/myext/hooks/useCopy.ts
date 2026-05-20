@@ -1,11 +1,14 @@
 // show copy button
 
+import { useStorageItem } from '@/src/lib/hooks'
 import type { Question } from '../types'
 import { htmlToMd, observeElement } from '../utils'
 
 export default function useCopy(question: Question | null) {
+	const [isEnabled, _] = useStorageItem('copyButton')
+
 	useEffect(() => {
-		if (question == null) return
+		if (question == null || !isEnabled) return
 
 		const observer = observeElement(async () => {
 			const div = document.querySelector(
@@ -23,7 +26,7 @@ export default function useCopy(question: Question | null) {
 		})
 
 		return () => observer.disconnect()
-	}, [question])
+	}, [question, isEnabled])
 }
 
 async function copyQuestion(question: Question) {

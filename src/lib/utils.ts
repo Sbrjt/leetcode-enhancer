@@ -1,4 +1,5 @@
 export const SETTINGS = [
+	{ key: 'enabled', label: 'Extension enabled' },
 	{ key: 'rating', label: 'Problem difficulty rating' },
 	{ key: 'formatOnRun', label: 'Format on run' },
 	{ key: 'autocomplete', label: 'Enable autocomplete' },
