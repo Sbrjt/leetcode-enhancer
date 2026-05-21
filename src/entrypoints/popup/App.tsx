@@ -1,3 +1,6 @@
+import pkg from '@/../package.json'
+import { Switch } from '@/components/switch'
+import { useStorageItem } from '@/hooks/useStore'
 import {
 	LuChevronRight,
 	LuGithub,
@@ -6,19 +9,19 @@ import {
 	LuTerminal,
 } from 'react-icons/lu'
 import { browser } from 'wxt/browser'
-import pkg from '../../../package.json'
 
 function App() {
-	const [isEnabled, setIsEnabled] = useState(true)
+	const [isEnabled, setIsEnabled] = useStorageItem<boolean>('enabled')
 
 	const toggleEnabled = () => {
 		setIsEnabled(!isEnabled)
+		browser.runtime.sendMessage({ type: 'RELOAD_TAB' })
 	}
 
 	return (
 		<div className='w-xs bg-[#1a1a1a] text-white p-6 font-sans flex flex-col items-center gap-6'>
 			<Header />
-			<EnableExtension isEnabled={isEnabled} onToggle={toggleEnabled} />
+			<EnableExtension isEnabled={isEnabled ?? true} onToggle={toggleEnabled} />
 			<Settings />
 			<BMC />
 			<Pills />

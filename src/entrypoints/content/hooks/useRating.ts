@@ -1,40 +1,39 @@
 // this hook searches for difficulty level and inserts difficulty rating
-
-import { Question } from '../../../types'
-import { fetchRating, observeElement } from '../../../utils/lib'
+import { useStorageItem } from '@/hooks/useStore'
+import { Question } from '@/types'
+import { fetchRating, makeSignal } from '@/utils/lib'
+import elementReady from 'element-ready'
 
 export default function useRating(question: Question | null) {
 	const [isEnabled, _] = useStorageItem('rating')
 
 	useEffect(() => {
-		if (question == null || !isEnabled) return
+		if (isEnabled === false || question == null) return
 
-		let injected: HTMLElement
+		let ratingSpan: HTMLSpanElement | null
 
-		const observer = observeElement(async () => {
-			const ratingDiv = document.querySelector<HTMLDivElement>(
+		const { controller, signal } = makeSignal()
+
+		;(async () => {
+			const ratingDiv = await elementReady<HTMLDivElement>(
 				'div[class*="text-difficulty"]',
+				{ signal, stopOnDomReady: false },
 			)
 
 			if (!ratingDiv) return
 
-			let ratingSpan = ratingDiv.querySelector<HTMLSpanElement>('span')
-
-			if (!ratingSpan) {
-				ratingSpan = document.createElement('span')
-				injected = ratingSpan
-				ratingDiv.appendChild(ratingSpan)
-			}
-
+			ratingSpan = document.createElement('span')
 			const rating = await fetchRating(question.id)
 			ratingSpan.textContent = `- ${rating}`
 
-			observer.disconnect()
-		})
+			if (signal.aborted) return
+
+			ratingDiv.appendChild(ratingSpan)
+		})()
 
 		return () => {
-			observer.disconnect()
-			injected?.remove()
+			controller.abort()
+			ratingSpan?.remove()
 		}
 	}, [question, isEnabled])
 }

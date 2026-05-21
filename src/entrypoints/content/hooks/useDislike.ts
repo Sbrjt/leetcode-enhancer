@@ -1,38 +1,47 @@
 // show dislikes count
 
-import type { Question } from '../../../types'
-import { formatDislikes, observeElement } from '../../../utils/lib'
+import { useStorageItem } from '@/hooks/useStore'
+import type { Question } from '@/types'
+import { formatDislikes, makeSignal } from '@/utils/lib'
+import elementReady from 'element-ready'
 
 export default function useDislike(question: Question | null) {
 	const [isEnabled, _] = useStorageItem('dislikeButton')
 
 	useEffect(() => {
-		if (question == null || !isEnabled) return
+		if (isEnabled === false || question == null) return
+
+		const { controller, signal } = makeSignal()
+
+		// Find the div with dislike button
+		// Inject the dislike count
 
 		let injected: HTMLElement | null = null
 
-		const observer = observeElement(async () => {
-			// find the div with dislike button
-			const div = document
-				.querySelector('svg[data-icon="thumbs-down"]')
-				?.closest<HTMLDivElement>('div')
+		;(async () => {
+			const div = await elementReady<HTMLDivElement>(
+				'div:has(> svg[data-icon="thumbs-down"])',
+				{
+					signal,
+					stopOnDomReady: false,
+				},
+			)
+			const dislikeBtn = div?.closest('button')
 
-			const btn = div?.closest('button')
+			if (!div || !dislikeBtn) return
 
-			if (div) {
-				const newDiv = document.createElement('div')
-				newDiv.textContent = formatDislikes(question.dislikes)
-				div.insertAdjacentElement('afterend', newDiv)
+			injected = document.createElement('div')
+			injected.textContent = formatDislikes(question.dislikes)
 
-				btn?.classList.remove('gap-2')
-				btn?.classList.add('gap-1')
-				injected = newDiv
-				observer.disconnect()
-			}
-		})
+			if (signal.aborted) return
+
+			div.after(injected)
+			dislikeBtn.classList.remove('gap-2')
+			dislikeBtn.classList.add('gap-1')
+		})()
 
 		return () => {
-			observer.disconnect()
+			controller.abort()
 			injected?.remove()
 		}
 	}, [question, isEnabled])

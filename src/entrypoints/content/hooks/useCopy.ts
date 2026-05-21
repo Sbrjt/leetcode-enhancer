@@ -1,41 +1,43 @@
 // show copy button
-
-import type { Question } from '../../../types'
-import { htmlToMd, observeElement } from '../../../utils/lib'
+import { useStorageItem } from '@/hooks/useStore'
+import type { Question } from '@/types'
+import { copyQuestion, makeSignal } from '@/utils/lib'
+import elementReady from 'element-ready'
 
 export default function useCopy(question: Question | null) {
-	const [isEnabled, _] = useStorageItem('copyButton')
+	const [isEnabled, _] = useStorageItem<boolean>('copyButton')
 
 	useEffect(() => {
-		if (question == null || !isEnabled) return
+		if (isEnabled === false || question == null) return
 
-		const observer = observeElement(async () => {
-			const div = document.querySelector(
-				'img[alt="premium lock icon"]',
-			)?.parentElement
+		const { controller, signal } = makeSignal()
 
-			if (div) {
-				const copy = div.cloneNode() as HTMLElement
-				copy.textContent = 'Copy'
-				copy.onclick = () => copyQuestion(question)
-				div.parentElement!.append(copy)
-			}
+		// Find the "Companies" button
+		// Create a clone for "Copy" button
 
-			observer.disconnect()
-		})
+		let copyBtn: HTMLElement | undefined
 
-		return () => observer.disconnect()
+			//
+		;(async () => {
+			const div = await elementReady(
+				'div:has(> img[alt="premium lock icon"])',
+				{ signal, stopOnDomReady: false },
+			)
+
+			if (!div) return
+
+			copyBtn = div.cloneNode() as HTMLElement
+			copyBtn.textContent = 'Copy'
+			copyBtn.onclick = () => copyQuestion(question!)
+
+			if (signal.aborted) return
+
+			div.parentElement!.append(copyBtn)
+		})()
+
+		return () => {
+			controller.abort()
+			copyBtn?.remove()
+		}
 	}, [question, isEnabled])
-}
-
-async function copyQuestion(question: Question) {
-	const text =
-		'## ' +
-		question.id +
-		'. ' +
-		question.title +
-		'\n' +
-		htmlToMd(question.content)
-
-	await navigator.clipboard.writeText(text)
 }

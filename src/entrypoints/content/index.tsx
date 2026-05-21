@@ -6,12 +6,12 @@ export default defineContentScript({
 	cssInjectionMode: 'ui',
 
 	async main(ctx) {
-		const enabled = await storage.getItem('sync:enabled')
-		const autocomplete = await storage.getItem('sync:autocomplete')
+		const enabled = await storage.getItem<boolean>('sync:enabled')
+		const autocomplete = await storage.getItem<boolean>('sync:autocomplete')
 
 		if (enabled === false) return
 
-		if (autocomplete) {
+		if (autocomplete !== false) {
 			injectScript('/patchMonaco.js', { keepInDom: true })
 		}
 

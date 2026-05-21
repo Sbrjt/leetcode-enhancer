@@ -1,5 +1,5 @@
 import TurndownService from 'turndown'
-import type { GraphQLResponse, QuestionData } from '../types'
+import type { GraphQLResponse, Question, QuestionData } from '../types'
 
 export const SETTINGS = [
 	{ key: 'enabled', label: 'Extension enabled' },
@@ -14,6 +14,18 @@ export const SETTINGS = [
 	},
 	{ key: 'premiumEditorial', label: 'Screenshots of premium editorials' },
 ]
+
+export const makeSignal = (timeoutMs = 60 * 1000) => {
+	const controller = new AbortController()
+
+	return {
+		controller,
+		signal: AbortSignal.any([
+			controller.signal,
+			AbortSignal.timeout(timeoutMs),
+		]),
+	}
+}
 
 export async function getBrowserDetails() {
 	if (import.meta.env.FIREFOX) {
@@ -97,6 +109,7 @@ export async function fetchRating(id: number) {
 		'https://zerotrac.github.io/leetcode_problem_rating/data.json',
 	)
 	const arr = await res.json()
+
 	const result = arr.find(({ ID }: { ID: number }) => ID === id)
 
 	if (result == null) {
@@ -145,6 +158,18 @@ export function formatDislikes(n: number) {
 		notation: 'compact',
 		maximumFractionDigits: 1,
 	}).format(n)
+}
+
+export async function copyQuestion(question: Question) {
+	const text =
+		'## ' +
+		question.id +
+		'. ' +
+		question.title +
+		'\n' +
+		htmlToMd(question.content)
+
+	await navigator.clipboard.writeText(text)
 }
 
 const turndownService = new TurndownService()
