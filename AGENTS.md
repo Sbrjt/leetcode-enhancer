@@ -1,3 +1,14 @@
+## General
+
+- This project uses WXT.
+  https://wxt.dev/guide
+
+- WXT uses `unimport`, so many react hooks browser-extension APIs, and WXT framework utilities are auto-imported. (Eg: `useState`, `defineBackground`, `browser`)
+
+- NEVER modify files inside `node_modules`.
+
+## Debugging
+
 To debug issues, follow these steps:
 
 Enable remote debugging in `wxt.config`:
@@ -16,11 +27,8 @@ Use a Puppeteer script like the following to inspect logs:
 import puppeteer from 'puppeteer-core'
 import { setTimeout as sleep } from 'timers/promises'
 
-const REMOTE_DEBUGGING_URL = 'http://localhost:9222'
-const SETTLE_MS = 15000
-
 const browser = await puppeteer.connect({
-	browserURL: REMOTE_DEBUGGING_URL,
+	browserURL: 'http://localhost:9222',
 	defaultViewport: null,
 })
 
@@ -43,9 +51,7 @@ page.on('pageerror', (err) => {
 // Other page.on listeners: requestfailed, request, frameattached
 
 console.log('Attached:', page.url())
-await sleep(SETTLE_MS)
+await sleep(15000)
 ```
 
 Modify this script as needed to take autonomous control of the browser.
-
-NEVER modify files inside `node_modules`.

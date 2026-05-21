@@ -37,13 +37,13 @@
 
 You can also:
 
-- Download it manually from the [latest release](https://github.com/Sbrjt/leetcode-enhancer/releases/latest)
+- Download it from the [latest release](https://github.com/Sbrjt/leetcode-enhancer/releases/latest)
 - Try the latest GitHub Actions [artifact build](https://github.com/Sbrjt/leetcode-enhancer/actions/workflows/ci.yml)
 - Build it yourself from source (see below)
 
 <details>
-  <summary>Build Instructions</summary>
-  <br>
+<summary><strong>Build Instructions</strong></summary>
+<br>
 
 Requirements:
 
@@ -70,8 +70,6 @@ npm run build
 npm run build:firefox
 ```
 
-Find all scripts in `package.json`.
-
 To Load:
 
 - Chrome: go to `chrome://extensions`, turn on devoloper mode and click on "Load unpacked".
@@ -82,6 +80,27 @@ To Load:
 
 Note: If you need extra help, just create an issue and I will help.
 
+The extension uses the wxt framework. See [docs](https://wxt.dev/guide/essentials/entrypoints.html).
+
+Project Structure
+
+```bash
+📂 /
+    📁 .output/                 # find build outputs here
+    📁 public/                  # static assets
+    📂 src/
+        📁 entrypoints/
+            📄 background.ts    # background service worker
+            📂 content/         # content scripts
+            📂 popup/
+            📂 options/
+        📁 components/
+        📁 hooks/
+        📁 utils/
+    📄 wxt.config.ts            # manifest, vite, configs etc.
+    📄 package.json
+```
+
 </details>
 
 ### 🤗 Credits
@@ -89,6 +108,9 @@ Note: If you need extra help, just create an issue and I will help.
 - [leetcode_problem_rating](https://github.com/zerotrac/leetcode_problem_rating)
 - [leetcode-screenshotter](https://github.com/akhilkammila/leetcode-screenshotter)
 - [wxt](https://github.com/wxt-dev/wxt)
+
+> [!CAUTION]
+> If LeetCode updates its UI, this extension may break.
 
 <!-- If you like my project, please gimme a star! ⭐💫
 

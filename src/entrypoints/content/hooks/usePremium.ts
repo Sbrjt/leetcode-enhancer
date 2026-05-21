@@ -1,39 +1,48 @@
-// this hook provides alternate links to premium questions
+// show alternate links to premium questions
 
-import { Question } from '../../../types'
+import { useStorageItem } from '@/hooks/useStore'
+import { Question } from '@/types'
 import {
 	getScreenshotLink,
-	observeElement,
+	makeSignal,
 	searchGfG,
 	searchLintCode,
-} from '../../../utils/lib'
+} from '@/utils/lib'
+import elementReady from 'element-ready'
 
 export default function usePremium(question: Question | null) {
 	const [isEnabled, _] = useStorageItem('premiumLinks')
 
 	useEffect(() => {
-		if (question == null || !question.premium || !isEnabled) return
+		if (isEnabled === false || question == null || !question.premium) return
 
-		const run = () => {
-			// console.log('premium:', question.id)
+		const { controller, signal } = makeSignal()
 
-			const subBtn = Array.from(
-				document.querySelectorAll<HTMLAnchorElement>('a[href^="/subscribe"]'),
-			).find((a) => a.textContent === 'Subscribe')
+		let subBtn: HTMLAnchorElement | undefined
+		let btnDiv: HTMLDivElement | undefined
 
-			if (!subBtn) return false
+			// Find the "subscribe" button, hide it
+			// Create a clones for other button
+		;(async () => {
+			subBtn = await elementReady<HTMLAnchorElement>('a[href^="/subscribe"]', {
+				predicate: (a) => a.textContent === 'Subscribe',
+				signal,
+				stopOnDomReady: false,
+			})
 
-			const btn2 = document.createElement('a')
-			btn2.textContent = 'View screenshot'
-			btn2.className = subBtn.className
-			btn2.target = '_blank'
-			btn2.href = getScreenshotLink(question.id, question.title)
+			if (!subBtn) return
 
 			const btn1 = document.createElement('a')
-			btn1.textContent = 'View question'
+			btn1.textContent = 'View screenshot'
 			btn1.className = subBtn.className
 			btn1.target = '_blank'
-			btn1.href = `https://leetcode.ca/all/${question.id}.html`
+			btn1.href = getScreenshotLink(question.id, question.title)
+
+			const btn2 = document.createElement('a')
+			btn2.textContent = 'View question'
+			btn2.className = subBtn.className
+			btn2.target = '_blank'
+			btn2.href = `https://leetcode.ca/all/${question.id}.html`
 
 			const btn3 = document.createElement('button')
 			btn3.className = subBtn.className
@@ -49,28 +58,23 @@ export default function usePremium(question: Question | null) {
 				searchLintCode(question.title)
 			}
 
-			const btnDiv = document.createElement('div')
+			btnDiv = document.createElement('div')
 			btnDiv.classList.add('gap-2', 'flex')
-			btnDiv.appendChild(btn1)
 			btnDiv.appendChild(btn2)
+			btnDiv.appendChild(btn1)
 			btnDiv.appendChild(btn3)
 			btnDiv.appendChild(btn4)
 
-			subBtn.insertAdjacentElement('afterend', btnDiv)
-			subBtn.remove()
-			return true
+			if (signal.aborted) return
+
+			subBtn.after(btnDiv)
+			subBtn.hidden = true
+		})()
+
+		return () => {
+			controller.abort()
+			btnDiv?.remove()
+			if (subBtn) subBtn.hidden = false
 		}
-
-		if (run()) {
-			return
-		}
-
-		const observer = observeElement(() => {
-			if (run()) {
-				observer.disconnect()
-			}
-		})
-
-		return () => observer.disconnect()
 	}, [question, isEnabled])
 }

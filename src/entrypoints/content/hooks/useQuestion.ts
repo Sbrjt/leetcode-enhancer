@@ -1,7 +1,7 @@
 // this hook updates question state on url change
 
-import { Question } from '../../../types'
-import { fetchQuestion, observeElement } from '../../../utils/lib'
+import { Question } from '@/types'
+import { fetchQuestion, observeElement } from '@/utils/lib'
 
 export default function useQuestion() {
 	const [url, setUrl] = useState(location.href)

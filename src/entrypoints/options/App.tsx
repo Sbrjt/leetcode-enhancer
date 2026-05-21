@@ -1,3 +1,7 @@
+import { Switch } from '@/components/switch'
+import { useStorageItem } from '@/hooks/useStore'
+import { SETTINGS } from '@/utils/lib'
+
 function App() {
 	return (
 		<div className='p-8 bg-gray-900 text-white min-h-screen flex flex-col items-center justify-start'>
@@ -20,7 +24,7 @@ function SettingItem({ setting }: { setting: (typeof SETTINGS)[0] }) {
 	return (
 		<div className='flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10'>
 			<label className='text-sm font-medium'>{setting.label}</label>
-			<Switch checked={value as boolean} onChange={() => setValue(!value)} />
+			<Switch checked={value ?? true} onChange={() => setValue(!value)} />
 		</div>
 	)
 }

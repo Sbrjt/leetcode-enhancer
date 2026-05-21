@@ -31,6 +31,6 @@ export default defineConfig({
 	webExt: {
 		chromiumProfile: resolve('.wxt/chrome-data'),
 		keepProfileChanges: true,
-		// 	disabled: true,
+		startUrls: ['leetcode.com/problems/two-sum'],
 	},
 })
