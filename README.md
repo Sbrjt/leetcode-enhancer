@@ -29,6 +29,8 @@
 
 - Contest notification
 - Code snippets
+- Company tags
+- Hide/show certain stuffs
 
 ### 📥 Download
 
@@ -42,47 +44,53 @@ You can also:
 - Build it yourself from source (see below)
 
 <details>
-<summary><strong>Build Instructions</strong></summary>
+<summary><strong>Running locally</strong></summary>
 <br>
 
-Requirements:
+This extension uses the wxt framework. See [docs](https://wxt.dev/guide/essentials/entrypoints.html).
+
+### Requirements
 
 - OS: any
 - Node.js >= 18
 
-Install:
+Clone the repo and install dependencies:
 
 ```bash
+git clone https://github.com/Sbrjt/leetcode-enhancer
+cd leetcode-enhancer
+cp .env.example .env
+
 npm i
 ```
 
-Development server (hot reload):
+### Dev server
 
 ```bash
 npm run dev
 npm run dev:firefox
 ```
 
-Build:
+This launches a new Chrome profile with the extension installed. Hot reload is enabled.
+
+### Building
 
 ```bash
 npm run build
 npm run build:firefox
 ```
 
-To Load:
+Find the compiled files inside `.output/`.
 
-- Chrome: go to `chrome://extensions`, turn on devoloper mode and click on "Load unpacked".
+How to load:
 
-- Firefox: go to `about:debugging#/runtime/this-firefox` and click on "Load Temporary Add-on".
+- Chrome: go to `chrome://extensions`, turn on devoloper mode and click on "Load unpacked". [Video](https://youtu.be/Ta-YTDhiBIQ?t=82).
 
-- Find outputs in `.output/` folder.
+- Firefox: go to `about:debugging#/runtime/this-firefox` and click on "Load Temporary Add-on". [Doc](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox).
 
-Note: If you need extra help, just create an issue and I will help.
+- Select suitable build in `.output/` folder.
 
-The extension uses the wxt framework. See [docs](https://wxt.dev/guide/essentials/entrypoints.html).
-
-Project Structure
+### Project Structure
 
 ```bash
 📂 /
@@ -100,6 +108,8 @@ Project Structure
     📄 wxt.config.ts            # manifest, vite, configs etc.
     📄 package.json
 ```
+
+Note: If you need extra help, just create an issue and I will help.
 
 </details>
 

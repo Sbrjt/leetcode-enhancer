@@ -10,6 +10,8 @@ export default defineUnlistedScript(async () => {
 			quickSuggestions: { other: true },
 			selectionHighlight: true,
 			bracketPairColorization: { enabled: true },
+			// @ts-ignore
+			wordBasedSuggestions: 'allDocuments',
 		})
 	}
 })
