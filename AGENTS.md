@@ -7,6 +7,8 @@
 
 - NEVER modify files inside `node_modules`.
 
+- To run: `npm run dev`
+
 ## Debugging
 
 To debug issues, follow these steps:
@@ -49,6 +51,9 @@ page.on('pageerror', (err) => {
 })
 
 // Other page.on listeners: requestfailed, request, frameattached
+
+// To mimic user:
+// await page.keyboard.press('KeyA')
 
 console.log('Attached:', page.url())
 await sleep(15000)

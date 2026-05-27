@@ -1,0 +1,11 @@
+.copy-injected:active {
+	transform: scale(0.9);
+	transition: transform 0.5s ease;
+	animation: blink 0.5s;
+}
+
+@keyframes blink {
+	100% {
+		opacity: 0;
+	}
+}
