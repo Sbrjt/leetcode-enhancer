@@ -17,4 +17,4 @@ web-ext.config.ts
 .vscode/*
 .env
 
-scripts/
+.scripts/
