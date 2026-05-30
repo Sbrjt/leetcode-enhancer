@@ -1,3 +1,4 @@
+import useCompany from './hooks/useCompany'
 import useCopy from './hooks/useCopy'
 import useDislike from './hooks/useDislike'
 import useEditorial from './hooks/useEditorial'
@@ -14,6 +15,7 @@ function App() {
 	usePremium(question)
 	useDislike(question)
 	useCopy(question)
+	useCompany(question)
 	useEditorial(question, url)
 
 	return (

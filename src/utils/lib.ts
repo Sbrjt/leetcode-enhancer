@@ -13,6 +13,7 @@ export const SETTINGS = [
 		label: 'Links to similar problems on other platforms',
 	},
 	{ key: 'premiumEditorial', label: 'Screenshots of premium editorials' },
+	{ key: 'premiumTags', label: 'Company tags of questions' },
 ]
 
 export const makeSignal = (timeoutMs = 60 * 1000) => {
@@ -137,6 +138,21 @@ export function getEditorialLink(questionId: number, questionTitle: string) {
 
 	const link = `${base}${range}/${paddedNum}. ${questionTitle}.png`
 	return link
+}
+
+export async function getCompanies(id: number) {
+	const res = await fetch(
+		'https://raw.githubusercontent.com/zubyj/leetcode-explained/main/src/assets/data/problem_data.json',
+	)
+	const { questions } = await res.json()
+
+	if (questions == null) return 'N/A'
+
+	const result = questions
+		.find((q: any) => q.frontend_id === id)
+		?.companies?.map(({ name }: any) => name)
+
+	return result ?? []
 }
 
 export function searchGfG(question: string) {
