@@ -12,6 +12,8 @@ export type Question = {
 	slug: string
 	title: string
 	content: string
+	difficulty: 'Easy' | 'Medium' | 'Hard'
+	tags: string[]
 	premium: boolean
 	dislikes: number
 }
@@ -24,6 +26,8 @@ export type QuestionData = {
 	question: {
 		title: string
 		content: string
+		difficulty: 'Easy' | 'Medium' | 'Hard'
+		topicTags: { name: string }[]
 		dislikes: number
 		isPaidOnly: boolean
 		questionFrontendId: string

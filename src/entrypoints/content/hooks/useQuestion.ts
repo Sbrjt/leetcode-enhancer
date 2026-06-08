@@ -48,7 +48,6 @@ export default function useQuestion() {
 			setQuestion(q)
 
 			const t = await getTab()
-			console.log(t)
 
 			setQuestions((prev) => ({
 				...(prev ?? {}),

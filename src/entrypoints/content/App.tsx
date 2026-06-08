@@ -3,6 +3,7 @@ import useCopy from './hooks/useCopy'
 import useDislike from './hooks/useDislike'
 import useEditorial from './hooks/useEditorial'
 import useFormatter from './hooks/useFormatter'
+import useNotion from './hooks/useNotion'
 import usePremium from './hooks/usePremium'
 import useQuestion from './hooks/useQuestion'
 import useRating from './hooks/useRating'
@@ -17,6 +18,7 @@ function App() {
 	useCopy(question)
 	useCompany(question)
 	useEditorial(question, url)
+	useNotion()
 
 	return (
 		<>

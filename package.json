@@ -22,10 +22,12 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
+		"@notionhq/client": "^5.22.0",
 		"element-ready": "^9.0.2",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
 		"react-icons": "^5.6.0",
+		"react-router-dom": "^7.15.1",
 		"turndown": "^7.2.4"
 	},
 	"devDependencies": {

@@ -4,6 +4,7 @@ import { useSyncStore } from '@/utils/useStore'
 import {
 	LuChevronRight,
 	LuGithub,
+	LuHistory,
 	LuSettings,
 	LuStar,
 	LuTerminal,
@@ -23,6 +24,7 @@ function App() {
 			<Header />
 			<EnableExtension isEnabled={isEnabled ?? true} onToggle={toggleEnabled} />
 			<Settings />
+			<Notion />
 			<BMC />
 			<Pills />
 			<Footer />
@@ -76,6 +78,28 @@ function Settings() {
 				className='text-white/30 group-hover:text-white/60'
 			/>
 		</a>
+	)
+}
+
+function Notion() {
+	return (
+		<button
+			onClick={async () => {
+				const window = await browser.windows.getCurrent()
+				await browser.sidePanel.setOptions({ path: 'sidepanel.html#/notion' })
+				await browser.sidePanel.open({ windowId: window.id! })
+			}}
+			className='w-full bg-white/5 border border-white/5 hover:bg-white/10 text-white/90 text-sm font-bold p-4 rounded-2xl transition-all flex items-center justify-between'
+		>
+			<div className='flex items-center gap-3'>
+				<LuHistory size={18} className='text-white/60' />
+				Save in Notion
+			</div>
+			<LuChevronRight
+				size={16}
+				className='text-white/30 group-hover:text-white/60'
+			/>
+		</button>
 	)
 }
 

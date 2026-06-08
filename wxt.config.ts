@@ -15,7 +15,8 @@ export default defineConfig({
 					use_dynamic_url: true,
 				},
 			],
-			permissions: ['search', 'storage'],
+			host_permissions: ['https://api.notion.com/*'],
+			permissions: ['search', 'storage', 'sidePanel'],
 			key: CHROME_PUBLIC_KEY,
 			browser_specific_settings: {
 				gecko: {
