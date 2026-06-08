@@ -1,12 +1,12 @@
 // show dislikes count
 
-import { useStorageItem } from '@/hooks/useStore'
 import type { Question } from '@/types'
 import { formatDislikes, makeSignal } from '@/utils/lib'
+import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useDislike(question: Question | null) {
-	const [isEnabled, _] = useStorageItem('dislikeButton')
+	const [isEnabled, _] = useSyncStore('dislikeButton')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

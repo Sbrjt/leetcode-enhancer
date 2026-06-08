@@ -89,6 +89,10 @@ export async function fetchQuestion(slug: string) {
 					question(titleSlug: "${slug}") {
 						questionFrontendId
 						title
+						difficulty
+						topicTags {
+							name
+						}
 						isPaidOnly
 						dislikes
 						content
@@ -166,6 +170,12 @@ export function searchLintCode(question: string) {
 	browser.runtime.sendMessage({
 		type: 'SEARCH',
 		query: `${question} site:lintcode.com`,
+	})
+}
+
+export async function getTab() {
+	return await browser.runtime.sendMessage({
+		type: 'GET_TAB',
 	})
 }
 

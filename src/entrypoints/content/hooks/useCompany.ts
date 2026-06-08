@@ -1,12 +1,12 @@
 // add company tag buttons
 
-import { useStorageItem } from '@/hooks/useStore'
 import type { Question } from '@/types'
 import { makeSignal } from '@/utils/lib'
+import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useCompany(question: Question | null) {
-	const [isEnabled, _] = useStorageItem<boolean>('premiumTags')
+	const [isEnabled, _] = useSyncStore<boolean>('premiumTags')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

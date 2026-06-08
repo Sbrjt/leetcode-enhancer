@@ -1,6 +1,5 @@
 // show alternate links to premium questions
 
-import { useStorageItem } from '@/hooks/useStore'
 import { Question } from '@/types'
 import {
 	getScreenshotLink,
@@ -8,10 +7,11 @@ import {
 	searchGfG,
 	searchLintCode,
 } from '@/utils/lib'
+import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function usePremium(question: Question | null) {
-	const [isEnabled, _] = useStorageItem('premiumLinks')
+	const [isEnabled, _] = useSyncStore('premiumLinks')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null || !question.premium) return
