@@ -1,11 +1,11 @@
-// add company tag buttons
+// inject company tags
 
 import type { Question } from '@/types'
 import { makeSignal } from '@/utils/lib'
 import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
-export default function useCompany(question: Question | null) {
+export default function useTags(question: Question | null) {
 	const [isEnabled, _] = useSyncStore<boolean>('premiumTags')
 
 	useEffect(() => {
@@ -31,8 +31,10 @@ export default function useCompany(question: Question | null) {
 			injected = div.parentElement!.cloneNode() as HTMLElement
 
 			for (const company of companies) {
-				const pill = div.cloneNode() as HTMLElement
+				const pill = document.createElement('a')
+				pill.className = div.className
 				pill.classList.add('border')
+				pill.href = `https://leetcode.com/company/${company}`
 
 				const img = document.createElement('img')
 				img.width = img.height = 12

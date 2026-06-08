@@ -1,7 +1,8 @@
 // this hook provides alternate link for premium editorial
 
 import { Question } from '@/types'
-import { getEditorialLink, makeSignal } from '@/utils/lib'
+import { getEditorialLink } from '@/utils/api'
+import { makeSignal } from '@/utils/lib'
 import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
