@@ -1,12 +1,12 @@
 // this hook provides alternate link for premium editorial
 
-import { useStorageItem } from '@/hooks/useStore'
 import { Question } from '@/types'
 import { getEditorialLink, makeSignal } from '@/utils/lib'
+import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useEditorial(question: Question | null, url: string) {
-	const [isEnabled, _] = useStorageItem('premiumEditorial')
+	const [isEnabled, _] = useSyncStore('premiumEditorial')
 
 	useEffect(() => {
 		if (

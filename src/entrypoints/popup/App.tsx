@@ -1,6 +1,6 @@
 import pkg from '@/../package.json'
 import { Switch } from '@/components/switch'
-import { useStorageItem } from '@/hooks/useStore'
+import { useSyncStore } from '@/utils/useStore'
 import {
 	LuChevronRight,
 	LuGithub,
@@ -11,7 +11,7 @@ import {
 import { browser } from 'wxt/browser'
 
 function App() {
-	const [isEnabled, setIsEnabled] = useStorageItem<boolean>('enabled')
+	const [isEnabled, setIsEnabled] = useSyncStore<boolean>('enabled')
 
 	const toggleEnabled = () => {
 		setIsEnabled(!isEnabled)
@@ -140,9 +140,23 @@ function Pills() {
 }
 
 function Footer() {
+	const ratingUrl =
+		import.meta.env.CHROME ? pkg.links.chromeWebStore : pkg.links.firefoxAddon
+
 	return (
-		<div className='text-xs text-white/40'>
-			Made with <span className='text-red-500'>💖</span> by Shubhrajit Sadhukhan
+		<div className='flex flex-col items-center gap-4 mt-1'>
+			<a
+				href={ratingUrl}
+				target='_blank'
+				className='text-[11px] text-white/30 italic text-center hover:text-white/60 transition-colors'
+			>
+				Enjoyed my extension? <br />
+				Don't forget to leave a rating, please :)
+			</a>
+			<div className='text-[10px] text-white/20'>
+				Made with <span className='text-red-500/30'>💖</span> by Shubhrajit
+				Sadhukhan
+			</div>
 		</div>
 	)
 }

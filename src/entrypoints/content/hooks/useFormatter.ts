@@ -1,11 +1,11 @@
 // format code when user hovers over submit/run button
 
-import { useStorageItem } from '@/hooks/useStore'
 import { makeSignal } from '@/utils/lib'
+import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useFormatter(url: string) {
-	const [isEnabled, _] = useStorageItem('formatOnRun')
+	const [isEnabled, _] = useSyncStore('formatOnRun')
 
 	useEffect(() => {
 		if (isEnabled === false) return

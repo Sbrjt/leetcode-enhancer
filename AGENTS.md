@@ -1,13 +1,32 @@
 ## General
 
 - This project uses WXT.
-  https://wxt.dev/guide
+  - Entrypoints: https://wxt.dev/guide/essentials/entrypoints.html
+  - project structure: https://wxt.dev/guide/essentials/project-structure.html
 
-- WXT uses `unimport`, so many react hooks browser-extension APIs, and WXT framework utilities are auto-imported. (Eg: `useState`, `defineBackground`, `browser`)
+- WXT uses `unimport`, so many React hooks, browser extension APIs, and WXT utilities are auto-imported.
+  - Examples: `useState`, `defineBackground`, `browser` are auto-imported.
+  - Avoid adding unnecessary imports for these APIs.
 
-- NEVER modify files inside `node_modules`.
+- Use WXT's browser polyfill (`browser`) for extension APIs.
+  - Do not use `chrome.*` APIs directly.
 
-- To run: `npm run dev`
+- Content scripts use `elementReady` (a wrapper around `MutationObserver`).
+
+- Always clean up side effects created in pages.
+  - Remove event listeners.
+  - Disconnect mutation observers.
+  - Remove injected DOM elements.
+  - Ensure cleanup runs on component unmount/re-render to prevent leaks across navigations.
+
+- Use hash-based routing with React Router.
+  - Browser extensions do not support normal history routing because Chrome handles `/` routes.
+
+- Notion integration uses access tokens.
+  - As Notion does not support PKCE.
+  - But PATs get full access to user workspace which is not ideal.
+
+* NEVER modify files inside `node_modules`.
 
 ## Debugging
 
@@ -52,7 +71,7 @@ page.on('pageerror', (err) => {
 
 // Other page.on listeners: requestfailed, request, frameattached
 
-// To mimic user:
+// To mimic user typing:
 // await page.keyboard.press('KeyA')
 
 console.log('Attached:', page.url())

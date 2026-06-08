@@ -3,7 +3,7 @@ import App from './App'
 import './style.css'
 
 export default defineContentScript({
-	matches: ['https://leetcode.com/problems/*'],
+	matches: ['https://leetcode.com/*'],
 
 	async main(ctx) {
 		const enabled = await storage.getItem<boolean>('sync:enabled')

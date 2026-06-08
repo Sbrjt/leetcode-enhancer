@@ -1,5 +1,4 @@
 import { Switch } from '@/components/switch'
-import { useStorageItem } from '@/hooks/useStore'
 import { SETTINGS } from '@/utils/lib'
 
 function App() {
@@ -19,7 +18,7 @@ function App() {
 }
 
 function SettingItem({ setting }: { setting: (typeof SETTINGS)[0] }) {
-	const [value, setValue] = useStorageItem<boolean>(setting.key)
+	const [value, setValue] = useSyncStore<boolean>(setting.key)
 
 	return (
 		<div className='flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10'>
