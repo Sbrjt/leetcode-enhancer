@@ -1,12 +1,9 @@
 // show alternate links to premium questions
 
 import { Question } from '@/types'
-import {
-	getScreenshotLink,
-	makeSignal,
-	searchGfG,
-	searchLintCode,
-} from '@/utils/lib'
+import { getScreenshotLink } from '@/utils/api'
+import { makeSignal, searchGfG, searchLintCode } from '@/utils/lib'
+
 import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 

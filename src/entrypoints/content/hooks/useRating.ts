@@ -1,6 +1,7 @@
 // this hook searches for difficulty level and inserts difficulty rating
 import { Question } from '@/types'
-import { fetchRating, makeSignal } from '@/utils/lib'
+import { fetchRating } from '@/utils/api'
+import { makeSignal } from '@/utils/lib'
 import { useSyncStore } from '@/utils/useStore'
 import elementReady from 'element-ready'
 

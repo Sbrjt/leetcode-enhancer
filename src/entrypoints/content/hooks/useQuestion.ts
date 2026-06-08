@@ -1,45 +1,28 @@
 // this hook updates question state on url change
 
 import { Question } from '@/types'
-import { fetchQuestion, getTab, observeElement } from '@/utils/lib'
+import { fetchQuestion } from '@/utils/api'
+import { getTab } from '@/utils/lib'
 import { useSessionStore } from '@/utils/useStore'
 
-export default function useQuestion() {
-	const [url, setUrl] = useState(location.href)
-	const slug = url.match(/problems\/([^/]+)/)?.[1]
-
+export default function useQuestion(url: string) {
 	const [question, setQuestion] = useState<Question | null>(null)
 	const [_, setQuestions] =
 		useSessionStore<Record<number, Question>>('questions')
-
-	useEffect(() => {
-		const observer = observeElement(() => {
-			setUrl(location.href)
-		})
-		return () => observer.disconnect()
-	}, [])
+	const slug = url.match(/problems\/([^/]+)/)?.[1]
 
 	useEffect(() => {
 		;(async () => {
 			setQuestion(null)
 			if (!slug) return
 
-			const {
-				questionFrontendId,
-				title,
-				isPaidOnly,
-				dislikes,
-				content,
-				difficulty,
-				topicTags,
-			} = await fetchQuestion(slug)
+			const { questionFrontendId, title, isPaidOnly, dislikes, content } =
+				await fetchQuestion(slug)
 
 			const q: Question = {
 				id: Number(questionFrontendId),
 				slug,
 				title,
-				difficulty,
-				tags: topicTags.map((tag) => tag.name),
 				dislikes,
 				content,
 				premium: isPaidOnly,
@@ -48,7 +31,6 @@ export default function useQuestion() {
 			setQuestion(q)
 
 			const t = await getTab()
-			console.log(t)
 
 			setQuestions((prev) => ({
 				...(prev ?? {}),
