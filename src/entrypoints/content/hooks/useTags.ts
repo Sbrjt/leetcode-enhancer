@@ -35,6 +35,7 @@ export default function useTags(question: Question | null) {
 				pill.className = div.className
 				pill.classList.add('border')
 				pill.href = `https://leetcode.com/company/${company}`
+				pill.target = '_blank'
 
 				const img = document.createElement('img')
 				img.width = img.height = 12

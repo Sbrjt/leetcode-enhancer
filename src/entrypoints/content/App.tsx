@@ -1,3 +1,4 @@
+import useCompany from './hooks/useCompany'
 import useCopy from './hooks/useCopy'
 import useDislike from './hooks/useDislike'
 import useEditorial from './hooks/useEditorial'
@@ -19,6 +20,8 @@ function App() {
 	useCopy(question)
 	useTags(question)
 	useEditorial(question, url)
+
+	useCompany(url)
 
 	return null
 }

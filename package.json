@@ -22,10 +22,17 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
+		"@radix-ui/react-scroll-area": "^1.2.10",
+		"@radix-ui/react-select": "^2.2.6",
+		"@tanstack/react-table": "^8.21.3",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
 		"element-ready": "^9.0.2",
+		"papaparse": "^5.5.3",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
 		"react-icons": "^5.6.0",
+		"tailwind-merge": "^3.6.0",
 		"turndown": "^7.2.4"
 	},
 	"devDependencies": {
@@ -35,6 +42,7 @@
 		"@types/addons-linter": "~6.16.1",
 		"@types/lodash.debounce": "^4.0.9",
 		"@types/node": "^25.7.0",
+		"@types/papaparse": "^5.5.2",
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"@types/turndown": "^5.0.6",
