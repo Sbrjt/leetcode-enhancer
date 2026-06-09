@@ -1,4 +1,5 @@
 import type { GraphQLResponse, QuestionData } from '@/types'
+import Papa from 'papaparse'
 
 function getRange(num: number) {
 	if (num <= 999) {
@@ -88,3 +89,43 @@ export async function getCompanies(id: number) {
 
 	return result ?? []
 }
+
+export async function getQuestions(company: string) {
+	const baseUrl =
+		'https://raw.githubusercontent.com/snehasishroy/leetcode-companywise-interview-questions/master'
+
+	const time = {
+		'thirty-days': '30D',
+		'three-months': '3M',
+		'six-months': '6M',
+		'more-than-six-months': '',
+	}
+
+	const json = []
+
+	for (const [key, value] of Object.entries(time)) {
+		const res = await fetch(`${baseUrl}/${company.toLowerCase()}/${key}.csv`)
+		const csv = await res.text()
+
+		const { data } = Papa.parse(csv, {
+			header: true,
+			skipEmptyLines: 'greedy',
+		})
+
+		json.push(
+			...data.map((row: any) => ({
+				...row,
+				Time: value,
+			})),
+		)
+	}
+
+	return json
+}
+
+/* 
+Data sources used:
+- https://zerotrac.github.io/leetcode_problem_rating
+- https://github.com/akhilkammila/leetcode-screenshotter
+- https://github.com/snehasishroy/leetcode-companywise-interview-questions
+*/
