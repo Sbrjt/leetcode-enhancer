@@ -1,14 +1,20 @@
+import { CompanyQuestion } from '@/types'
+import { ColumnDef } from '@tanstack/react-table'
 import { DataTable } from './ui/data-table'
 
-function QuestionsTable({ questions }: any) {
-	return <DataTable columns={columns} data={questions ?? []} pageSize={15} />
+function QuestionsTable({ questions }: { questions: CompanyQuestion[] }) {
+	return (
+		<div className='mt-10 w-full'>
+			<DataTable columns={columns} data={questions} pageSize={15} />
+		</div>
+	)
 }
 
-const columns = [
+const columns: ColumnDef<CompanyQuestion>[] = [
 	{ accessorKey: 'ID' },
 	{
 		accessorKey: 'Title',
-		cell: ({ row }: { row: any }) => {
+		cell: ({ row }) => {
 			const { Title, URL } = row.original
 			return <a href={URL}>{Title}</a>
 		},

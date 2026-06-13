@@ -1,4 +1,6 @@
+import { SETTINGS } from '@/utils/lib'
 import type { editor } from 'monaco-editor'
+
 declare global {
 	interface Window {
 		monaco: {
@@ -29,3 +31,28 @@ export type QuestionData = {
 		questionFrontendId: string
 	}
 }
+
+export type ProblemRating = {
+	Rating: number
+	ID: number
+	Title: string
+	ContestSlug: string
+	ProblemIndex: string
+}
+
+export type CompanyMapping = {
+	ID: number
+	company: string[]
+}
+
+export type CompanyQuestion = {
+	ID: string
+	URL: string
+	Title: string
+	Difficulty: string
+	'Acceptance %': string
+	'Frequency %': string
+	Time?: string
+}
+
+export type Settings = (typeof SETTINGS)[number]['key']

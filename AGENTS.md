@@ -2,14 +2,14 @@
 
 - This project uses WXT.
   - Entrypoints: https://wxt.dev/guide/essentials/entrypoints.html
-  - project structure: https://wxt.dev/guide/essentials/project-structure.html
+  - Project structure: https://wxt.dev/guide/essentials/project-structure.html
 
 - WXT uses `unimport`, so many React hooks, browser extension APIs, and WXT utilities are auto-imported.
-  - Examples: `useState`, `defineBackground`, `browser` are auto-imported.
+  - Eg: `useState`, `defineBackground`, `browser` are auto-imported.
   - Avoid adding unnecessary imports for these APIs.
 
 - Use WXT's browser polyfill (`browser`) for extension APIs.
-  - Do not use `chrome.*` APIs directly.
+  - Do not use `chrome.*`.
 
 - Content scripts use `elementReady` (a wrapper around `MutationObserver`).
 
@@ -22,11 +22,16 @@
 - Use hash-based routing with React Router.
   - Browser extensions do not support normal history routing because Chrome handles `/` routes.
 
-- Notion integration uses access tokens.
-  - As Notion does not support PKCE.
-  - But PATs get full access to user workspace which is not ideal.
+- Content scripts inject styles directly into LeetCode pages.
+  - Keep all custom CSS conflict-free.
+  - Some components reuse LeetCode's existing classes for visual consistency, even though those classes are not defined in this project’s stylesheet.
 
-* NEVER modify files inside `node_modules`.
+- Prefer existing shadcn components over building custom UI components
+  - Do not use shadcn CLI.
+
+- NEVER modify files inside `node_modules`.
+
+- Use `react-icons`. Do not create inline SVGs.
 
 ## Debugging
 

@@ -2,11 +2,11 @@
 import { Question } from '@/types'
 import { fetchRating } from '@/utils/api'
 import { makeSignal } from '@/utils/lib'
-import { useSyncStore } from '@/utils/useStore'
+import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useRating(question: Question | null) {
-	const [isEnabled, _] = useSyncStore('rating')
+	const [isEnabled] = useFeatureEnabled('rating')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

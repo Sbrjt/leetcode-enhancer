@@ -4,11 +4,11 @@ import { Question } from '@/types'
 import { getScreenshotLink } from '@/utils/api'
 import { makeSignal, searchGfG, searchLintCode } from '@/utils/lib'
 
-import { useSyncStore } from '@/utils/useStore'
+import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function usePremium(question: Question | null) {
-	const [isEnabled, _] = useSyncStore('premiumLinks')
+	const [isEnabled] = useFeatureEnabled('premiumQuestion')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null || !question.premium) return

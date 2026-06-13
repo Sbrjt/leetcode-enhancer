@@ -1,3 +1,5 @@
+import type { Settings } from '@/types'
+
 type Updater<T> = T | null | ((prev: T | null) => T | null)
 
 function useStore<T>(key: string, store: StorageArea) {
@@ -39,6 +41,10 @@ export function useSessionStore<T>(key: string) {
 
 export function useSyncStore<T>(key: string) {
 	return useStore<T>(key, 'sync')
+}
+
+export function useFeatureEnabled(flag: Settings) {
+	return useSyncStore<boolean>(flag)
 }
 
 // Docs: https://wxt.dev/storage#watchers

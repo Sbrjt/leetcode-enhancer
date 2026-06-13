@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
 	})
 
 	return (
-		<div className='w-full'>
+		<div className='w-full '>
 			{controls && (
 				<div className='pb-4 w-full -z-10 -mt-12 flex justify-end'>
 					{/* <Input
@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
 				</div>
 			)}
 
-			<div className='rounded-md border  shadow-xs'>
+			<div className='rounded-md border bg-sd-card  shadow-xs'>
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (

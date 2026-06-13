@@ -1,5 +1,11 @@
-import type { GraphQLResponse, QuestionData } from '@/types'
-import Papa from 'papaparse'
+import type {
+	CompanyMapping,
+	CompanyQuestion,
+	GraphQLResponse,
+	ProblemRating,
+	QuestionData,
+} from '@/types'
+import { parseCsv } from '@/utils/lib'
 
 function getRange(num: number) {
 	if (num <= 999) {
@@ -40,21 +46,22 @@ export async function fetchQuestion(slug: string) {
 	return data.question
 }
 
+/**
+ * Fetches problem difficulty ratings from [zerotrac/leetcode_problem_rating](https://github.com/zerotrac/leetcode_problem_rating)
+ */
 export async function fetchRating(id: number) {
+	// TODO: cache it!
 	const res = await fetch(
 		'https://zerotrac.github.io/leetcode_problem_rating/data.json',
 	)
-	const arr = await res.json()
-
-	const result = arr.find(({ ID }: { ID: number }) => ID === id)
-
-	if (result == null) {
-		return 'N/A'
-	}
-
-	return result.Rating.toFixed(0)
+	const arr: ProblemRating[] = await res.json()
+	const rating = arr.find(({ ID }) => ID === id)?.Rating.toFixed(0)
+	return rating ?? 'N/A'
 }
 
+/**
+ * Generates a link to the problem screenshot from [akhilkammila/leetcode-screenshotter](https://github.com/akhilkammila/leetcode-screenshotter)
+ */
 export function getScreenshotLink(questionId: number, questionTitle: string) {
 	const range = getRange(questionId)
 	const paddedNum = String(questionId).padStart(3, '0')
@@ -65,6 +72,9 @@ export function getScreenshotLink(questionId: number, questionTitle: string) {
 	return link
 }
 
+/**
+ * Generates a link to the editorial screenshot from [akhilkammila/leetcode-screenshotter](https://github.com/akhilkammila/leetcode-screenshotter)
+ */
 export function getEditorialLink(questionId: number, questionTitle: string) {
 	const range = getRange(questionId)
 	const paddedNum = String(questionId).padStart(3, '0')
@@ -75,57 +85,44 @@ export function getEditorialLink(questionId: number, questionTitle: string) {
 	return link
 }
 
-export async function getCompanies(id: number) {
+export async function getCompanyTags(problemId: number) {
 	const res = await fetch(
-		'https://raw.githubusercontent.com/zubyj/leetcode-explained/main/src/assets/data/problem_data.json',
+		'https://raw.githubusercontent.com/Sbrjt/leetcode-companywise-interview-questions/master/problem_company_mapping.json',
 	)
-	const { questions } = await res.json()
-
-	if (questions == null) return 'N/A'
-
-	const result = questions
-		.find((q: any) => q.frontend_id === id)
-		?.companies?.map(({ name }: any) => name)
-
-	return result ?? []
+	const arr: CompanyMapping[] = await res.json()
+	const tags = arr.find(({ ID }) => ID === problemId)?.company
+	return tags ?? []
 }
 
+/**
+ * Fetches company-wise interview questions from [snehasishroy/leetcode-companywise-interview-questions](https://github.com/snehasishroy/leetcode-companywise-interview-questions)
+ */
 export async function getQuestions(company: string) {
 	const baseUrl =
 		'https://raw.githubusercontent.com/snehasishroy/leetcode-companywise-interview-questions/master'
 
-	const time = {
-		'thirty-days': '30D',
-		'three-months': '3M',
-		'six-months': '6M',
+	const files = {
+		all: '',
 		'more-than-six-months': '',
+		'six-months': '6M',
+		'three-months': '3M',
+		'thirty-days': '30D',
 	}
 
-	const json = []
+	const questions: Record<string, CompanyQuestion> = {}
 
-	for (const [key, value] of Object.entries(time)) {
-		const res = await fetch(`${baseUrl}/${company.toLowerCase()}/${key}.csv`)
+	// Process questions from oldest → newest
+	// Questions appear in multiple CSVs
+	// The final Time value wins
+	for (const [file, Time] of Object.entries(files)) {
+		const res = await fetch(`${baseUrl}/${company.toLowerCase()}/${file}.csv`)
 		const csv = await res.text()
+		const rows = await parseCsv<CompanyQuestion>(csv)
 
-		const { data } = Papa.parse(csv, {
-			header: true,
-			skipEmptyLines: 'greedy',
-		})
-
-		json.push(
-			...data.map((row: any) => ({
-				...row,
-				Time: value,
-			})),
-		)
+		for (const row of rows) {
+			questions[row.ID] = { ...row, Time }
+		}
 	}
 
-	return json
+	return Object.values(questions)
 }
-
-/* 
-Data sources used:
-- https://zerotrac.github.io/leetcode_problem_rating
-- https://github.com/akhilkammila/leetcode-screenshotter
-- https://github.com/snehasishroy/leetcode-companywise-interview-questions
-*/

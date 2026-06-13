@@ -1,11 +1,11 @@
 // show copy button
 import type { Question } from '@/types'
 import { copyQuestion, makeSignal } from '@/utils/lib'
-import { useSyncStore } from '@/utils/useStore'
+import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useCopy(question: Question | null) {
-	const [isEnabled, _] = useSyncStore<boolean>('copyButton')
+	const [isEnabled] = useFeatureEnabled('copyButton')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

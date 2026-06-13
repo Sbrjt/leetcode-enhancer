@@ -1,6 +1,6 @@
 import pkg from '@/../package.json'
 import { Switch } from '@/components/switch'
-import { useSyncStore } from '@/utils/useStore'
+import { useFeatureEnabled } from '@/utils/useStore'
 import {
 	LuChevronRight,
 	LuGithub,
@@ -11,7 +11,7 @@ import {
 import { browser } from 'wxt/browser'
 
 function App() {
-	const [isEnabled, setIsEnabled] = useSyncStore<boolean>('enabled')
+	const [isEnabled, setIsEnabled] = useFeatureEnabled('enabled')
 
 	const toggleEnabled = () => {
 		setIsEnabled(!isEnabled)
