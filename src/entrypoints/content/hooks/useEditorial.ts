@@ -3,11 +3,11 @@
 import { Question } from '@/types'
 import { getEditorialLink } from '@/utils/api'
 import { makeSignal } from '@/utils/lib'
-import { useSyncStore } from '@/utils/useStore'
+import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useEditorial(question: Question | null, url: string) {
-	const [isEnabled, _] = useSyncStore('premiumEditorial')
+	const [isEnabled] = useFeatureEnabled('editorial')
 
 	useEffect(() => {
 		if (

@@ -1,5 +1,6 @@
 import { Switch } from '@/components/switch'
 import { SETTINGS } from '@/utils/lib'
+import { useFeatureEnabled } from '@/utils/useStore'
 
 function App() {
 	return (
@@ -17,8 +18,8 @@ function App() {
 	)
 }
 
-function SettingItem({ setting }: { setting: (typeof SETTINGS)[0] }) {
-	const [value, setValue] = useSyncStore<boolean>(setting.key)
+function SettingItem({ setting }: { setting: (typeof SETTINGS)[number] }) {
+	const [value, setValue] = useFeatureEnabled(setting.key)
 
 	return (
 		<div className='flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10'>

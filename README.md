@@ -22,14 +22,15 @@
 - Enable autocomplete (partial)
 - Copy code button
 - Return dislike button
-- Links to similar problems on other platforms for premium problems
+- Alternate links to premium problems
 - Screenshots of premium editorials
+- Company tags
+- Company-wise questions
 
 ### ⏳ Todos
 
 - Contest notification
 - Code snippets
-- Company tags
 - Hide/show certain stuffs
 
 ### 📥 Download
@@ -117,6 +118,7 @@ Note: If you need extra help, just create an issue and I will help.
 
 - [leetcode_problem_rating](https://github.com/zerotrac/leetcode_problem_rating)
 - [leetcode-screenshotter](https://github.com/akhilkammila/leetcode-screenshotter)
+- [leetcode-companywise-interview-questions](https://github.com/snehasishroy/leetcode-companywise-interview-questions)
 - [wxt](https://github.com/wxt-dev/wxt)
 
 > [!CAUTION]

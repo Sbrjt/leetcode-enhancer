@@ -1,6 +1,7 @@
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'node:path'
 import { env } from 'process'
+import removeConsole from 'vite-plugin-remove-console'
 import { defineConfig } from 'wxt'
 
 export default defineConfig({
@@ -28,7 +29,14 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
 	srcDir: 'src',
 	autoIcons: { baseIconPath: resolve('public/icon.svg') },
-	vite: () => ({ plugins: [tailwindcss()] }),
+	vite: (configEnv) => ({
+		plugins: [
+			tailwindcss(),
+			...(configEnv.mode === 'production' ?
+				[removeConsole({ includes: ['log'] })]
+			:	[]),
+		],
+	}),
 	webExt: {
 		chromiumProfile: resolve('.wxt/chrome-data'),
 		keepProfileChanges: true,

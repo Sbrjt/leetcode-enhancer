@@ -2,11 +2,11 @@
 
 import type { Question } from '@/types'
 import { formatDislikes, makeSignal } from '@/utils/lib'
-import { useSyncStore } from '@/utils/useStore'
+import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useDislike(question: Question | null) {
-	const [isEnabled, _] = useSyncStore('dislikeButton')
+	const [isEnabled] = useFeatureEnabled('dislikeButton')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

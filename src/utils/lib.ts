@@ -1,10 +1,10 @@
 import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import Papa from 'papaparse'
 import TurndownService from 'turndown'
 import type { Question } from '../types'
 
 export function cn(...inputs: ClassValue[]) {
-	return twMerge(clsx(inputs))
+	return clsx(inputs)
 }
 
 export const SETTINGS = [
@@ -15,12 +15,13 @@ export const SETTINGS = [
 	{ key: 'copyButton', label: 'Copy code button' },
 	{ key: 'dislikeButton', label: 'Return dislike button' },
 	{
-		key: 'premiumLinks',
-		label: 'Links to similar problems on other platforms',
+		key: 'premiumQuestion',
+		label: 'Alternate links to premium problems',
 	},
-	{ key: 'premiumEditorial', label: 'Screenshots of premium editorials' },
-	{ key: 'premiumTags', label: 'Company tags of questions' },
-]
+	{ key: 'editorial', label: 'Screenshots of premium editorials' },
+	{ key: 'tags', label: 'Company tags of question' },
+	{ key: 'questionBank', label: 'Company-wise questions' },
+] as const
 
 export async function getBrowserDetails() {
 	if (import.meta.env.FIREFOX) {
@@ -110,6 +111,17 @@ export async function copyQuestion(question: Question) {
 		htmlToMd(question.content)
 
 	await navigator.clipboard.writeText(text)
+}
+
+export function parseCsv<T>(csv: string) {
+	return new Promise<T[]>((resolve) => {
+		Papa.parse<T>(csv, {
+			header: true,
+			skipEmptyLines: 'greedy',
+			worker: true,
+			complete: (results) => resolve(results.data),
+		})
+	})
 }
 
 const turndownService = new TurndownService()

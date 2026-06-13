@@ -9,7 +9,7 @@ export default function useQuestion(url: string) {
 	const [question, setQuestion] = useState<Question | null>(null)
 	const [_, setQuestions] =
 		useSessionStore<Record<number, Question>>('questions')
-	const slug = url.match(/problems\/([^/]+)/)?.[1]
+	const slug = url.match(/leetcode.com\/problems\/([^/]+)/)?.[1]
 
 	useEffect(() => {
 		;(async () => {
