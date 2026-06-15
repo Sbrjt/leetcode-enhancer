@@ -57,6 +57,8 @@
 		"monaco-editor": "^0.53.0",
 		"npm-check": "^3.2.10",
 		"prettier": "^3.8.3",
+		"prettier-plugin-classnames": "^0.10.2",
+		"prettier-plugin-merge": "^0.10.1",
 		"prettier-plugin-organize-imports": "^4.3.0",
 		"prettier-plugin-tailwindcss": "^0.8.0",
 		"tailwindcss": "^4.2.2",

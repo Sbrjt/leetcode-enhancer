@@ -59,9 +59,9 @@ export function DataTable<TData, TValue>({
 	})
 
 	return (
-		<div className='w-full '>
+		<div className='w-full'>
 			{controls && (
-				<div className='pb-4 w-full -z-10 -mt-12 flex justify-end'>
+				<div className='-z-10 -mt-12 flex w-full justify-end pb-4'>
 					{/* <Input
 						placeholder='🔎 Filter'
 						value={globalFilter ?? ''}
@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
 				</div>
 			)}
 
-			<div className='rounded-md border bg-sd-card  shadow-xs'>
+			<div className='bg-sd-card rounded-md border shadow-xs'>
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
 									{row.getVisibleCells().map((cell) => (
 										<TableCell
 											key={cell.id}
-											className='ps-5 break-all max-w-40'
+											className='max-w-40 ps-5 break-all'
 										>
 											<ScrollArea className='flex max-h-20 flex-col'>
 												{flexRender(
@@ -137,7 +137,8 @@ function Head({ header, controls }: { header: any; controls: boolean }) {
 
 	return controls ?
 			<div
-				className='group flex items-center w-fit py-1 rounded hover:bg-gray-300 my-1 hover:cursor-pointer'
+				className='group my-1 flex w-fit items-center rounded py-1
+					hover:cursor-pointer hover:bg-gray-300'
 				onClick={() => {
 					const nextSort = (sort + 1) % 3
 					setSort(nextSort)
@@ -157,7 +158,9 @@ function Head({ header, controls }: { header: any; controls: boolean }) {
 					<LuChevronUp className='ml-2 h-4 w-4' />
 				: sortingStates[sort] === 'desc' ?
 					<LuChevronDown className='ml-2 h-4 w-4' />
-				:	<LuChevronsUpDown className='ml-2 h-4 w-4 group-hover:opacity-100 opacity-0' />
+				:	<LuChevronsUpDown
+						className='ml-2 h-4 w-4 opacity-0 group-hover:opacity-100'
+					/>
 				}
 			</div>
 		:	<>{title}</>

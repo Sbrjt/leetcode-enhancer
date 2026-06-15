@@ -7,5 +7,7 @@
 }
 
 @utility pill {
-	@apply bg-white/5 hover:bg-white/10 text-[10px] font-bold py-1.5 px-3 rounded-full border border-white/5 transition-all cursor-pointer no-underline text-white flex items-center gap-1.5;
+	@apply flex cursor-pointer items-center gap-1.5 rounded-full border
+		border-white/5 bg-white/5 px-3 py-1.5 text-[10px] font-bold text-white
+		no-underline transition-all hover:bg-white/10;
 }

@@ -28,7 +28,9 @@ function PopUp({ companies }: Props) {
 				More
 				<FaChevronDown size={10} />
 			</PopoverTrigger>
-			<PopoverContent className='bg-lc-layer-01 dark:bg-dark-lc-background-index w-80'>
+			<PopoverContent
+				className='bg-lc-layer-01 dark:bg-dark-lc-background-index w-80'
+			>
 				<div className='flex'>
 					<ScrollArea className='max-h-40'>
 						<div className='flex flex-wrap justify-center gap-2'>

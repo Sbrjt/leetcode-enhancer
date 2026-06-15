@@ -19,7 +19,10 @@ function App() {
 	}
 
 	return (
-		<div className='w-xs bg-[#1a1a1a] text-white p-6 font-sans flex flex-col items-center gap-6'>
+		<div
+			className='flex w-xs flex-col items-center gap-6 bg-[#1a1a1a] p-6
+				font-sans text-white'
+		>
 			<Header />
 			<EnableExtension isEnabled={isEnabled ?? true} onToggle={toggleEnabled} />
 			<Settings />
@@ -33,7 +36,7 @@ function App() {
 function Header() {
 	return (
 		<div className='flex items-center gap-3 self-start'>
-			<img src='/icon.svg' alt='Logo' className='w-auto h-10' />
+			<img src='/icon.svg' alt='Logo' className='h-10 w-auto' />
 			<div className='flex flex-col'>
 				<h1 className='text-lg font-bold'>LeetCode Enhancer</h1>
 				<div className='text-xs text-white/40'>v{pkg.version}</div>
@@ -50,9 +53,12 @@ function EnableExtension({
 	onToggle: () => void
 }) {
 	return (
-		<div className='w-full bg-white/5 border border-white/5 rounded-2xl p-4 flex items-center justify-between'>
+		<div
+			className='flex w-full items-center justify-between rounded-2xl border
+				border-white/5 bg-white/5 p-4'
+		>
 			<div className='flex flex-col'>
-				<span className='font-bold text-[15px]'>Enable extension</span>
+				<span className='text-[15px] font-bold'>Enable extension</span>
 				<span className='text-xs text-white/40'>Active on this page</span>
 			</div>
 			<Switch checked={isEnabled} onChange={onToggle} />
@@ -65,7 +71,9 @@ function Settings() {
 		<a
 			href={browser.runtime.getURL('/options.html')}
 			target='_blank'
-			className='w-full bg-white/5 border border-white/5 hover:bg-white/10 text-white/90 text-sm font-bold p-4 rounded-2xl transition-all flex items-center justify-between'
+			className='flex w-full items-center justify-between rounded-2xl border
+				border-white/5 bg-white/5 p-4 text-sm font-bold text-white/90
+				transition-all hover:bg-white/10'
 		>
 			<div className='flex items-center gap-3'>
 				<LuSettings size={18} className='text-white/60' />
@@ -84,7 +92,7 @@ function BMC() {
 		<a
 			href={pkg.links.funding}
 			target='_blank'
-			className='w-full rounded-xl h-12 bg-[#FFDD00]'
+			className='h-12 w-full rounded-xl bg-[#FFDD00]'
 		>
 			<img
 				src='/bmc.svg'
@@ -97,7 +105,7 @@ function BMC() {
 
 function Pills() {
 	return (
-		<div className='flex flex-wrap justify-center gap-2 mt-1'>
+		<div className='mt-1 flex flex-wrap justify-center gap-2'>
 			<a href={pkg.homepage} target='_blank' className='pill'>
 				<LuGithub size={12} />
 				GitHub
@@ -144,11 +152,12 @@ function Footer() {
 		import.meta.env.CHROME ? pkg.links.chromeWebStore : pkg.links.firefoxAddon
 
 	return (
-		<div className='flex flex-col items-center gap-4 mt-1'>
+		<div className='mt-1 flex flex-col items-center gap-4'>
 			<a
 				href={ratingUrl}
 				target='_blank'
-				className='text-[11px] text-white/30 italic text-center hover:text-white/60 transition-colors'
+				className='text-center text-[11px] text-white/30 italic
+					transition-colors hover:text-white/60'
 			>
 				Enjoyed my extension? <br />
 				Don't forget to leave a rating, please :)

@@ -6,7 +6,12 @@ const config: Config = {
 	semi: false,
 	experimentalTernaries: true,
 	useTabs: true,
-	plugins: ['prettier-plugin-organize-imports'],
+	plugins: [
+		'prettier-plugin-organize-imports',
+		'prettier-plugin-tailwindcss',
+		'prettier-plugin-classnames',
+		'prettier-plugin-merge',
+	],
 }
 
 export default config
