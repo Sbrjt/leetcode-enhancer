@@ -1,5 +1,7 @@
 ## General
 
+- Follow YAGNI principles. Use caveman mode.
+
 - This project uses WXT.
   - Entrypoints: https://wxt.dev/guide/essentials/entrypoints.html
   - Project structure: https://wxt.dev/guide/essentials/project-structure.html
