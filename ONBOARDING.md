@@ -124,9 +124,7 @@ useEffect(() => {
 		target.src = 'https://c.tenor.com/x8v1oNUOmg4AAAAd/'
 	})()
 
-	return () => {
-		controller.abort()
-	}
+	return () => controller.abort()
 }, [])
 ```
 

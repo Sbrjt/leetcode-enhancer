@@ -6,7 +6,7 @@ import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useRating(question: Question | null) {
-	const [isEnabled] = useFeatureEnabled('rating')
+	const [isEnabled] = useFeatureEnabled('showRating')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return
@@ -24,11 +24,10 @@ export default function useRating(question: Question | null) {
 			if (!ratingDiv) return
 
 			ratingSpan = document.createElement('a')
-			const { rating, contest } = await fetchRating(question.id)
-			console.log({ rating, contest })
+			const rating = await fetchRating(question.id)
 
-			ratingSpan.textContent = `- ${rating}`
-			ratingSpan.href = `/contest/${contest}`
+			ratingSpan.textContent = `- ${rating?.toFixed(0) ?? 'N/A'}`
+			ratingSpan.href = 'https://zerotrac.github.io/leetcode_problem_rating/'
 			ratingSpan.target = '_blank'
 
 			if (signal.aborted) return

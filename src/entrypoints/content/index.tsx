@@ -7,11 +7,11 @@ export default defineContentScript({
 
 	async main(ctx) {
 		const enabled = await storage.getItem<boolean>('sync:enabled')
-		const autocomplete = await storage.getItem<boolean>('sync:autocomplete')
+		const autoComplete = await storage.getItem<boolean>('sync:autoComplete')
 
 		if (enabled === false) return
 
-		if (autocomplete !== false) {
+		if (autoComplete !== false) {
 			injectScript('/patchMonaco.js', { keepInDom: true })
 		}
 

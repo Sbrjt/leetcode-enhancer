@@ -6,7 +6,7 @@ import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useDislike(question: Question | null) {
-	const [isEnabled] = useFeatureEnabled('dislikeButton')
+	const [isEnabled] = useFeatureEnabled('returnDislike')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

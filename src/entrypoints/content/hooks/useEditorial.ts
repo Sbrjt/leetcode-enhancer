@@ -7,7 +7,7 @@ import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useEditorial(question: Question | null, url: string) {
-	const [isEnabled] = useFeatureEnabled('editorial')
+	const [isEnabled] = useFeatureEnabled('premiumScreenshots')
 
 	useEffect(() => {
 		if (

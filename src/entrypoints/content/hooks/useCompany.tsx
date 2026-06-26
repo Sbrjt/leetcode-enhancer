@@ -9,7 +9,7 @@ import { createRoot, type Root } from 'react-dom/client'
 export default function useCompany(url: string) {
 	const company = url.match(/company\/([^/]+)/)?.[1]
 	const [questions, setQuestions] = useState<CompanyQuestion[] | null>(null)
-	const [isEnabled] = useFeatureEnabled('questionBank')
+	const [isEnabled] = useFeatureEnabled('companyQuestions')
 
 	useEffect(() => {
 		;(async () => {

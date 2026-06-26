@@ -7,6 +7,11 @@ import type {
 } from '@/types'
 import { parseCsv } from '@/utils/lib'
 
+/**
+ * @example
+ * getRange(500) // '1-999'
+ * getRange(1500) // '1000-1999'
+ */
 function getRange(num: number) {
 	if (num <= 999) {
 		return '1-999'
@@ -14,11 +19,16 @@ function getRange(num: number) {
 		return '1000-1999'
 	} else if (num <= 2999) {
 		return '2000-2999'
+	} else if (num <= 3999) {
+		return '3000-3999'
 	}
 
 	throw new Error(`Unsupported number: ${num}`)
 }
 
+/**
+ * Fetches the question details from LeetCode's GraphQL API
+ */
 export async function fetchQuestion(slug: string) {
 	const res = await fetch('https://leetcode.com/graphql', {
 		body: JSON.stringify({
@@ -54,13 +64,8 @@ export async function fetchRating(id: number) {
 		'https://zerotrac.github.io/leetcode_problem_rating/data.json',
 	)
 	const arr: ProblemRating[] = await res.json()
-
 	const problem = arr.find(({ ID }) => ID === id)
-
-	return {
-		rating: problem?.Rating.toFixed(0) ?? 'N/A',
-		contest: problem?.ContestSlug,
-	}
+	return problem?.Rating
 }
 
 /**

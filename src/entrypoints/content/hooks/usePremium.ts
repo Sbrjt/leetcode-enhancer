@@ -8,7 +8,7 @@ import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function usePremium(question: Question | null) {
-	const [isEnabled] = useFeatureEnabled('premiumQuestion')
+	const [isEnabled] = useFeatureEnabled('premiumScreenshots')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null || !question.premium) return

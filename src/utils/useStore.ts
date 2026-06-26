@@ -1,38 +1,41 @@
-import type { Settings } from '@/types'
+import type { SettingKey } from '@/types'
+import { SETTINGS } from '@/utils/lib'
 
-type Updater<T> = T | null | ((prev: T | null) => T | null)
-
+/**
+ * A hook to read/write in the browser extension storage.
+ *
+ * @example
+ * ```ts
+ * const [value, setValue] = useStore("username", "local");
+ * console.log(value);
+ * setValue("shub");
+ * ```
+ */
 function useStore<T>(key: string, store: StorageArea) {
 	const storageKey: StorageItemKey = `${store}:${key}`
 	const [value, setValue] = useState<T | null>(null)
 
+	// sync: storage → react
 	useEffect(() => {
-		const load = async () => {
-			const v = await storage.getItem<T>(storageKey)
-			setValue(v)
-		}
+		;(async () => {
+			const val = await storage.getItem<T>(storageKey)
+			setValue(val)
+		})()
 
-		load()
-
-		const unwatch = storage.watch<T>(storageKey, async (newValue) => {
-			setValue(newValue)
+		const unwatch = storage.watch<T>(storageKey, (val) => {
+			setValue(val)
 		})
 
-		return unwatch
+		return () => unwatch()
 	}, [storageKey])
 
-	const updateValue = async (valueOrUpdater: Updater<T>) => {
-		const prev = await storage.getItem<T>(storageKey)
+	// sync: react → storage
+	useEffect(() => {
+		if (value == null) return
+		storage.setItem(storageKey, value)
+	}, [value])
 
-		const next =
-			typeof valueOrUpdater === 'function' ?
-				(valueOrUpdater as (prev: T | null) => T | null)(prev)
-			:	valueOrUpdater
-
-		await storage.setItem(storageKey, next)
-	}
-
-	return [value, updateValue] as const
+	return [value, setValue] as const
 }
 
 export function useSessionStore<T>(key: string) {
@@ -43,8 +46,13 @@ export function useSyncStore<T>(key: string) {
 	return useStore<T>(key, 'sync')
 }
 
-export function useFeatureEnabled(flag: Settings) {
-	return useSyncStore<boolean>(flag)
+/**
+ * A hook to manage the enabled/disabled state of a settings flag.
+ * Falls back to the default setting if not set.
+ */
+export function useFeatureEnabled(flag: SettingKey) {
+	const [value, setValue] = useSyncStore<boolean>(flag)
+	return [value ?? SETTINGS[flag].default, setValue] as const
 }
 
 // Docs: https://wxt.dev/storage#watchers

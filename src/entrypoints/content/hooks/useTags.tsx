@@ -9,7 +9,7 @@ import elementReady from 'element-ready'
 import { createRoot, type Root } from 'react-dom/client'
 
 export default function useTags(question: Question | null) {
-	const [isEnabled] = useFeatureEnabled('tags')
+	const [isEnabled] = useFeatureEnabled('companyQuestions')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

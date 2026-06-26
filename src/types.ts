@@ -9,6 +9,8 @@ declare global {
 	}
 }
 
+type ValueOf<T> = T[keyof T]
+
 export type Question = {
 	id: number
 	slug: string
@@ -55,4 +57,6 @@ export type CompanyQuestion = {
 	Time?: string
 }
 
-export type Settings = (typeof SETTINGS)[number]['key']
+export type SettingKey = keyof typeof SETTINGS
+
+export type Setting = ValueOf<typeof SETTINGS> & { key: SettingKey }

@@ -1,4 +1,5 @@
 import { Switch } from '@/components/switch'
+import { Setting, SettingKey } from '@/types'
 import { SETTINGS } from '@/utils/lib'
 import { useFeatureEnabled } from '@/utils/useStore'
 
@@ -13,15 +14,18 @@ function App() {
 				<h1 className='text-2xl font-bold'>LeetCode Enhancer Options</h1>
 			</div>
 			<div className='mt-5 flex w-full max-w-md flex-col gap-4'>
-				{SETTINGS.map((setting) => (
-					<SettingItem key={setting.key} setting={setting} />
+				{Object.entries(SETTINGS).map(([key, setting]) => (
+					<SettingItem
+						key={key}
+						setting={{ key: key as SettingKey, ...setting }}
+					/>
 				))}
 			</div>
 		</div>
 	)
 }
 
-function SettingItem({ setting }: { setting: (typeof SETTINGS)[number] }) {
+function SettingItem({ setting }: { setting: Setting }) {
 	const [value, setValue] = useFeatureEnabled(setting.key)
 
 	return (
@@ -30,7 +34,10 @@ function SettingItem({ setting }: { setting: (typeof SETTINGS)[number] }) {
 				border-white/10 bg-white/5 p-3'
 		>
 			<label className='text-sm font-medium'>{setting.label}</label>
-			<Switch checked={value ?? true} onChange={() => setValue(!value)} />
+			<Switch
+				checked={value ?? setting.default}
+				onChange={() => setValue(!value)}
+			/>
 		</div>
 	)
 }

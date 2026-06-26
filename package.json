@@ -12,7 +12,7 @@
 		"zip": "wxt zip",
 		"zip:firefox": "wxt zip -b firefox --mv3",
 		"typecheck": "tsc",
-		"lint": "eslint src .github/workflows",
+		"lint": "eslint src",
 		"lint:fix": "npm run lint --fix",
 		"format": "prettier --check .",
 		"format:fix": "prettier --write .",

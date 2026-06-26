@@ -7,45 +7,22 @@ export function cn(...inputs: ClassValue[]) {
 	return clsx(inputs)
 }
 
-export const SETTINGS = [
-	{ key: 'enabled', label: 'Extension enabled' },
-	{ key: 'rating', label: 'Problem difficulty rating' },
-	{ key: 'formatOnRun', label: 'Format on run' },
-	{ key: 'autocomplete', label: 'Enable autocomplete' },
-	{ key: 'copyButton', label: 'Copy code button' },
-	{ key: 'dislikeButton', label: 'Return dislike button' },
-	{
-		key: 'premiumQuestion',
-		label: 'Alternate links to premium problems',
-	},
-	{ key: 'editorial', label: 'Screenshots of premium editorials' },
-	{ key: 'tags', label: 'Company tags of question' },
-	{ key: 'questionBank', label: 'Company-wise questions' },
-] as const
-
-export async function getBrowserDetails() {
-	if (import.meta.env.FIREFOX) {
-		// @ts-ignore
-		return await browser.runtime.getBrowserInfo()
-	}
-
-	if (import.meta.env.CHROME) {
-		// @ts-ignore
-		const ua = await navigator.userAgentData.getHighEntropyValues([
-			'fullVersionList',
-		])
-		return ua.fullVersionList
-	}
-
-	//  fallback
-	return {
-		name: 'unknown',
-		version: navigator.userAgent,
-	}
-}
-
 export const sleep = (ms: number) =>
 	new Promise((resolve) => setTimeout(resolve, ms))
+
+export const SETTINGS = {
+	enabled: { label: 'Extension enabled', default: true },
+	showRating: { label: 'Problem difficulty rating', default: true },
+	formatOnRun: { label: 'Format on run', default: true },
+	autoComplete: { label: 'Enable auto-complete', default: true },
+	copyCode: { label: 'Copy code button', default: true },
+	returnDislike: { label: 'Return dislike button', default: true },
+	premiumScreenshots: {
+		label: 'Screenshots of premium editorials and questions',
+		default: true,
+	},
+	companyQuestions: { label: 'Company questions and tags', default: true },
+} as const
 
 export const makeSignal = (timeoutMs = 60 * 1000) => {
 	const controller = new AbortController()
@@ -59,9 +36,10 @@ export const makeSignal = (timeoutMs = 60 * 1000) => {
 	}
 }
 
+/**
+ * My custom wrapper for MutationObserver
+ */
 export function observeElement(callback: MutationCallback) {
-	// my custom wrapper for MutationObserver
-
 	const observer = new MutationObserver(callback)
 	// const observer = new MutationObserver(debounce(callback, 200))
 	observer.observe(document.body, { childList: true, subtree: true })
@@ -94,6 +72,13 @@ export async function getTab() {
 	})
 }
 
+/**
+ * Formats the number of dislikes compactly.
+ *
+ * @example
+ * formatDislikes(1500) // '1.5K'
+ * formatDislikes(9000000) // '9M'
+ */
 export function formatDislikes(n: number) {
 	return new Intl.NumberFormat('en', {
 		notation: 'compact',
@@ -139,3 +124,24 @@ turndownService.addRule('exampleAsBlockquote', {
 })
 
 export const htmlToMd = (html: string) => turndownService.turndown(html)
+
+export async function getBrowserDetails() {
+	if (import.meta.env.FIREFOX) {
+		// @ts-ignore
+		return await browser.runtime.getBrowserInfo()
+	}
+
+	if (import.meta.env.CHROME) {
+		// @ts-ignore
+		const ua = await navigator.userAgentData.getHighEntropyValues([
+			'fullVersionList',
+		])
+		return ua.fullVersionList
+	}
+
+	//  fallback
+	return {
+		name: 'unknown',
+		version: navigator.userAgent,
+	}
+}

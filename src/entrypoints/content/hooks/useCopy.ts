@@ -5,7 +5,7 @@ import { useFeatureEnabled } from '@/utils/useStore'
 import elementReady from 'element-ready'
 
 export default function useCopy(question: Question | null) {
-	const [isEnabled] = useFeatureEnabled('copyButton')
+	const [isEnabled] = useFeatureEnabled('copyCode')
 
 	useEffect(() => {
 		if (isEnabled === false || question == null) return

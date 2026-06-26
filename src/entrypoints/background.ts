@@ -21,4 +21,19 @@ export default defineBackground(() => {
 	browser.storage.session.setAccessLevel({
 		accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS',
 	})
+
+	browser.runtime.onInstalled.addListener(async () => {
+		console.log('installed')
+
+		const { premium } = await browser.storage.sync.get(['premiumScreenshots'])
+
+		if (premium == null) {
+			browser.storage.sync.set({ premium: true })
+		}
+
+		const { company } = await browser.storage.sync.get(['companyQuestions'])
+		if (company == null) {
+			browser.storage.sync.set({ company: true })
+		}
+	})
 })
