@@ -35,6 +35,8 @@
 
 - Use `react-icons`. Do not create inline SVGs.
 
+- Save all scripts in `/.scripts`.
+
 ## Debugging
 
 To debug issues, follow these steps:
@@ -50,7 +52,7 @@ Enable remote debugging in `wxt.config`:
 Use a Puppeteer script like the following to inspect logs:
 
 ```js
-// npm i puppeteer-core -g
+// npm i puppeteer-core -D
 
 import puppeteer from 'puppeteer-core'
 import { setTimeout as sleep } from 'timers/promises'
