@@ -6,7 +6,7 @@
 	"homepage": "https://github.com/Sbrjt/leetcode-enhancer",
 	"scripts": {
 		"dev": "wxt --level log",
-		"dev:firefox": "wxt -b firefox --level log",
+		"dev:firefox": "wxt -b firefox --level log --mv3",
 		"build": "wxt build",
 		"build:firefox": "wxt build -b firefox --mv3",
 		"zip": "wxt zip",

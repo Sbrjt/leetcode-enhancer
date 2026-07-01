@@ -2,13 +2,10 @@
 
 import { Question } from '@/types'
 import { fetchQuestion } from '@/utils/api'
-import { getTab } from '@/utils/lib'
-import { useSessionStore } from '@/utils/useStore'
 
 export default function useQuestion(url: string) {
 	const [question, setQuestion] = useState<Question | null>(null)
-	const [_, setQuestions] =
-		useSessionStore<Record<number, Question>>('questions')
+	// const [_, setQuestions] = useSessionStore<Record<number, Question>>('questions')
 	const slug = url.match(/leetcode.com\/problems\/([^/]+)/)?.[1]
 
 	useEffect(() => {
@@ -30,12 +27,13 @@ export default function useQuestion(url: string) {
 
 			setQuestion(q)
 
-			const t = await getTab()
+			// doesn't work in firefox
+			// const t = await getTab()
 
-			setQuestions((prev) => ({
-				...(prev ?? {}),
-				[t]: q,
-			}))
+			// setQuestions((prev) => ({
+			// 	...(prev ?? {}),
+			// 	[t]: q,
+			// }))
 		})()
 	}, [slug])
 

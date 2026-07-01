@@ -35,30 +35,33 @@
 
 - Use `react-icons`. Do not create inline SVGs.
 
+- Save all scripts in `/.scripts`.
+
 ## Debugging
 
 To debug issues, follow these steps:
 
 Enable remote debugging in `wxt.config`:
 
-```
+```js
     webExt: {
         chromiumArgs: ['--remote-debugging-port=9222'],
+		    // firefoxArgs: ['--remote-debugging-port=9222'],
     }
 ```
 
 Use a Puppeteer script like the following to inspect logs:
 
 ```js
-// npm i puppeteer-core -g
+// npm i puppeteer-core -D
 
 import puppeteer from 'puppeteer-core'
 import { setTimeout as sleep } from 'timers/promises'
 
 const browser = await puppeteer.connect({
 	browserURL: 'http://localhost:9222',
-	defaultViewport: null,
 })
+// Firefox exposes BiDi at ws://127.0.0.1:9222/session
 
 const url = `https://leetcode.com/problems/two-sum/`
 const page = await browser.newPage()
