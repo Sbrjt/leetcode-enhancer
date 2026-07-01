@@ -20,12 +20,14 @@ export default function useDislike(question: Question | null) {
 
 		;(async () => {
 			const div = await elementReady<HTMLDivElement>(
-				'div:has(> svg[data-icon="thumbs-down"])',
+				'div:has(> svg[class*="thumbs-down"])',
 				{
 					signal,
 					stopOnDomReady: false,
 				},
 			)
+			console.log(div)
+
 			const dislikeBtn = div?.closest('button')
 
 			if (!div || !dislikeBtn) return

@@ -29,6 +29,7 @@ export default function useCopy(question: Question | null) {
 			copyBtn = div.cloneNode() as HTMLElement
 			copyBtn.textContent = 'Copy'
 			copyBtn.classList.add('copy-injected')
+			copyBtn.setAttribute('role', 'button')
 			copyBtn.onclick = () => copyQuestion(question!)
 
 			if (signal.aborted) return

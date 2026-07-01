@@ -6,7 +6,12 @@ import { DataTable } from './ui/data-table'
 function QuestionsTable({ questions }: { questions: CompanyQuestion[] }) {
 	return (
 		<div className='mt-10 w-full'>
-			<DataTable columns={columns} data={questions} pageSize={15} />
+			<DataTable
+				columns={columns}
+				data={questions}
+				pageSize={15}
+				ariaLabel='Company problems'
+			/>
 			<div
 				className='mt-5 flex items-center justify-center border-t border-dashed
 					pt-4 text-xs text-zinc-500 dark:text-zinc-400'

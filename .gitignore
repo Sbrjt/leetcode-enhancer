@@ -18,3 +18,8 @@ web-ext.config.ts
 .env
 
 .scripts/
+
+# Playwright
+/test-results/
+/playwright-report/
+.chrome-data

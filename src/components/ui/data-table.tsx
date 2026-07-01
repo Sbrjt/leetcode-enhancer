@@ -27,6 +27,7 @@ interface DataTableProps<TData, TValue> {
 	controls?: boolean
 	filter?: string
 	pageSize?: number
+	ariaLabel: string
 }
 
 export function DataTable<TData, TValue>({
@@ -34,6 +35,7 @@ export function DataTable<TData, TValue>({
 	data,
 	controls = true,
 	pageSize,
+	ariaLabel,
 }: DataTableProps<TData, TValue>) {
 	const [globalFilter, setGlobalFilter] = useState<any>([])
 	const [sorting, setSorting] = useState<SortingState>([])
@@ -75,7 +77,7 @@ export function DataTable<TData, TValue>({
 			)}
 
 			<div className='bg-sd-card rounded-md border shadow-xs'>
-				<Table>
+				<Table aria-label={ariaLabel}>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>

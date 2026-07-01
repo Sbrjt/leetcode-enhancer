@@ -11,7 +11,7 @@ export default function useRating(question: Question | null) {
 	useEffect(() => {
 		if (isEnabled === false || question == null) return
 
-		let ratingSpan: HTMLAnchorElement | null
+		let ratingAnchor: HTMLAnchorElement | null
 
 		const { controller, signal } = makeSignal()
 
@@ -23,21 +23,21 @@ export default function useRating(question: Question | null) {
 
 			if (!ratingDiv) return
 
-			ratingSpan = document.createElement('a')
+			ratingAnchor = document.createElement('a')
 			const rating = await fetchRating(question.id)
 
-			ratingSpan.textContent = `- ${rating?.toFixed(0) ?? 'N/A'}`
-			ratingSpan.href = 'https://zerotrac.github.io/leetcode_problem_rating/'
-			ratingSpan.target = '_blank'
+			ratingAnchor.textContent = `- ${rating?.toFixed(0) ?? 'N/A'}`
+			ratingAnchor.href = 'https://zerotrac.github.io/leetcode_problem_rating/'
+			ratingAnchor.target = '_blank'
 
 			if (signal.aborted) return
 
-			ratingDiv.appendChild(ratingSpan)
+			ratingDiv.appendChild(ratingAnchor)
 		})()
 
 		return () => {
 			controller.abort()
-			ratingSpan?.remove()
+			ratingAnchor?.remove()
 		}
 	}, [question, isEnabled])
 }

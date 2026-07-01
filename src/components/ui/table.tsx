@@ -1,12 +1,17 @@
 import { cn } from '@/utils/lib'
 
-function Table({ className, ...props }: React.ComponentProps<'table'>) {
+function Table({
+	className,
+	'aria-label': ariaLabel,
+	...props
+}: React.ComponentProps<'table'>) {
 	return (
 		<div
 			data-slot='table-container'
 			className='relative w-full overflow-x-auto'
 		>
 			<table
+				aria-label={ariaLabel}
 				data-slot='table'
 				className={cn('w-full caption-bottom text-sm', className)}
 				{...props}
