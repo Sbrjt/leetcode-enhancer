@@ -16,7 +16,7 @@ export default defineConfig({
 					use_dynamic_url: true,
 				},
 			],
-			permissions: ['search', 'storage'],
+			permissions: ['search', 'storage', '<all_urls>'],
 			key: CHROME_PUBLIC_KEY,
 			browser_specific_settings: {
 				gecko: {
@@ -41,5 +41,6 @@ export default defineConfig({
 		chromiumProfile: resolve('.wxt/chrome-data'),
 		keepProfileChanges: true,
 		startUrls: ['leetcode.com/problems/two-sum'],
+		firefoxArgs: ['--remote-debugging-port=9222'],
 	},
 })
