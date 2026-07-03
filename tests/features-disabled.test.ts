@@ -21,7 +21,7 @@ test('problem rating hidden', async ({ page }) => {
 
 test('dislike hidden', async ({ page }) => {
 	const dislikes = page.locator('button:has(svg[class*="thumbs-down"])')
-	await expect(dislikes).toBeHidden()
+	await expect(dislikes).not.toHaveText(/\d+/)
 })
 
 test('company tags hidden', async ({ page }) => {

@@ -1,0 +1,20 @@
+name: 'Setup'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: 'lts/*'
+        cache: 'npm'
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci --silent
+
+    - name: Build extensions
+      shell: bash
+      run: |
+        npm run build
+        npm run build:firefox

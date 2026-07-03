@@ -26,7 +26,6 @@ export default function useDislike(question: Question | null) {
 					stopOnDomReady: false,
 				},
 			)
-			console.log(div)
 
 			const dislikeBtn = div?.closest('button')
 

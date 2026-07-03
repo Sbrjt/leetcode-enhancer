@@ -64,9 +64,8 @@ test('premium problem', async ({ page }) => {
 	]
 
 	await Promise.all(
-		elements.map((btn) => {
-			expect(btn).toBeVisible()
-		}),
+		elements.map((btn) => expect(btn).toBeVisible()),
+		//
 	)
 })
 

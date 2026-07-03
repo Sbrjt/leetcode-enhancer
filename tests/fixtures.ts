@@ -25,6 +25,7 @@ export const test = base.extend<Fixtures>({
 			headless: false,
 		})
 
+		// @ts-ignore
 		await use(context)
 		await context.close()
 	},
