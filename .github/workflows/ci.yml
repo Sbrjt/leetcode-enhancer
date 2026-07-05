@@ -62,7 +62,7 @@ jobs:
       - name: Run Playwright tests
         run: xvfb-run npm test
 
-  build:
+  artifact:
     runs-on: ubuntu-latest
     needs: [typecheck, format, lint, test]
     steps:

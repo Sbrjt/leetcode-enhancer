@@ -60,7 +60,7 @@ Note: If you need extra help, just create an issue and I will help.
     📄 package.json
 ```
 
-This extension uses the wxt framework. See [docs](https://wxt.dev/guide/essentials/entrypoints.html).
+This extension uses the WXT framework. Get started with the docs on [project structure](https://wxt.dev/guide/essentials/project-structure.html) and [entrypoints](https://wxt.dev/guide/essentials/entrypoints.html). If you're new to browser extensions, check out this [playlist](https://www.youtube.com/playlist?list=PL73_IyyS-6PWIlsGL9c_dX7lTtBElzBPd).
 
 <details>
 <summary>Using element-ready</summary>

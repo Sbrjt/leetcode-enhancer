@@ -77,3 +77,5 @@ test('premium editorial', async ({ page }) => {
 	const btn = page.getByRole('link', { name: 'View screenshot' })
 	await expect(btn).toBeVisible()
 })
+
+// auto format not tested
