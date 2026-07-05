@@ -40,7 +40,7 @@ export default function useFormatter(url: string) {
 
 function formatCode() {
 	const formatBtn = document.querySelector<HTMLButtonElement>(
-		'button:has(svg[data-icon="align-left"])',
+		'button:has(svg[class*="align-left"])',
 	)
 
 	formatBtn?.click()
