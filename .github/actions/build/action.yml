@@ -1,0 +1,8 @@
+runs:
+  using: 'composite'
+  steps:
+    - name: Build extensions
+      shell: bash
+      run: |
+        npm run build
+        npm run build:firefox

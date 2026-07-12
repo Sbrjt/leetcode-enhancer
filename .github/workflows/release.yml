@@ -35,6 +35,7 @@ jobs:
         run: |
           npm run zip
           npm run zip:firefox
+
       - name: Release
         uses: softprops/action-gh-release@v2.5.0
         with:

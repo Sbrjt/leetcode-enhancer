@@ -1,0 +1,10 @@
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Playwright
+      shell: bash
+      run: npx playwright install --with-deps
+
+    - name: Run Playwright tests
+      shell: bash
+      run: xvfb-run npm test
