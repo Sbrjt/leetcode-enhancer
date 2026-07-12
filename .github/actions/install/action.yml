@@ -1,5 +1,3 @@
-name: 'Setup'
-
 runs:
   using: 'composite'
   steps:
@@ -12,9 +10,3 @@ runs:
     - name: Install dependencies
       shell: bash
       run: npm ci --silent
-
-    - name: Build extensions
-      shell: bash
-      run: |
-        npm run build
-        npm run build:firefox

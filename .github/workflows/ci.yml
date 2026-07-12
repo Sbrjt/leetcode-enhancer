@@ -3,27 +3,49 @@ name: Build and Test
 on:
   pull_request:
     branches: [main]
-    paths-ignore: ['**/*.md']
   push:
     branches: [main]
-    paths-ignore: ['**/*.md']
 
 env:
   CHROME_PUBLIC_KEY: ${{ vars.CHROME_PUBLIC_KEY }}
   FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
 
 jobs:
-  typecheck:
+  artifact:
     runs-on: ubuntu-latest
+    needs: [typecheck, format, lint, test]
     steps:
       - &checkout_step
         name: Checkout
         uses: actions/checkout@v6
 
-      - &setup_step
-        name: Setup
-        uses: ./.github/actions/setup
+      - &install_step
+        name: Install
+        uses: ./.github/actions/install
 
+      - &build_step
+        name: Build
+        uses: ./.github/actions/build
+
+      - name: Upload Chrome Extension
+        uses: actions/upload-artifact@v7
+        with:
+          name: chrome-extension
+          path: '.output/chrome-mv3'
+          if-no-files-found: error
+
+      - name: Upload Firefox Extension
+        uses: actions/upload-artifact@v7
+        with:
+          name: firefox-extension
+          path: '.output/firefox-mv3'
+          if-no-files-found: error
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - *checkout_step
+      - *install_step
       - name: Type check
         run: npm run typecheck
 
@@ -31,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - *checkout_step
-      - *setup_step
+      - *install_step
 
       - name: Prettier
         run: npm run format
@@ -40,7 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - *checkout_step
-      - *setup_step
+      - *install_step
+      - *build_step
 
       - name: ESLint
         run: npm run lint .github/workflows
@@ -54,31 +77,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - *checkout_step
-      - *setup_step
+      - *install_step
+      - *build_step
 
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: xvfb-run npm test
-
-  artifact:
-    runs-on: ubuntu-latest
-    needs: [typecheck, format, lint, test]
-    steps:
-      - *checkout_step
-      - *setup_step
-
-      - name: Upload Chrome Extension
-        uses: actions/upload-artifact@v7
-        with:
-          name: ChromeExtension
-          path: '.output/chrome-mv3'
-          if-no-files-found: error
-
-      - name: Upload Firefox Extension
-        uses: actions/upload-artifact@v7
-        with:
-          name: FirefoxExtension
-          path: '.output/firefox-mv3'
-          if-no-files-found: error
+      - name: Playwright Test
+        uses: ./.github/actions/test

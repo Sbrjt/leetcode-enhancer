@@ -1,0 +1,25 @@
+name: Weekly Test
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+
+env:
+  CHROME_PUBLIC_KEY: ${{ vars.CHROME_PUBLIC_KEY }}
+  FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install
+        uses: ./.github/actions/install
+
+      - name: Build
+        uses: ./.github/actions/build
+
+      - name: Playwright Test
+        uses: ./.github/actions/test
