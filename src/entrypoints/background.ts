@@ -25,15 +25,14 @@ export default defineBackground(() => {
 	browser.runtime.onInstalled.addListener(async () => {
 		browser.runtime.setUninstallURL('https://tally.so/r/VLA4Bj')
 
-		const { premium } = await browser.storage.sync.get(['premiumScreenshots'])
-
-		if (premium == null) {
-			browser.storage.sync.set({ premium: true })
+		const premiumScreenshots = await storage.getItem('sync:premiumScreenshots')
+		if (premiumScreenshots == null) {
+			await storage.setItem('sync:premiumScreenshots', true)
 		}
 
-		const { company } = await browser.storage.sync.get(['companyQuestions'])
-		if (company == null) {
-			browser.storage.sync.set({ company: true })
+		const companyQuestions = await storage.getItem('sync:companyQuestions')
+		if (companyQuestions == null) {
+			await storage.setItem('sync:companyQuestions', true)
 		}
 	})
 })
