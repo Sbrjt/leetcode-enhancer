@@ -23,7 +23,7 @@ export default defineBackground(() => {
 	})
 
 	browser.runtime.onInstalled.addListener(async () => {
-		console.log('installed')
+		browser.runtime.setUninstallURL('https://tally.so/r/VLA4Bj')
 
 		const { premium } = await browser.storage.sync.get(['premiumScreenshots'])
 
