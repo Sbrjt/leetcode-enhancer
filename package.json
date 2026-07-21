@@ -1,5 +1,5 @@
 {
-	"name": "leetcode-enhancer",
+	"name": "Enhancer for Leetcode",
 	"description": "A browser extension to improve the LeetCode experience",
 	"version": "0.0.0-dev",
 	"type": "module",

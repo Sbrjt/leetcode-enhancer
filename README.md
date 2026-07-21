@@ -1,4 +1,4 @@
-## LeetCode Enhancer
+## Enhancer for LeetCode
 
 > A browser extension to improve the LeetCode experience.
 
@@ -14,7 +14,10 @@
     <a href="https://github.com/Sbrjt/leetcode-enhancer/releases/latest">
         <img src="https://img.shields.io/github/v/release/Sbrjt/leetcode-enhancer.svg?logo=github&color=blue"></a>
     <a href="https://wxt.dev">
-        <img src="https://img.shields.io/badge/Built with-WXT-blue?logo=wxt&logoColor=white" alt="Built with WXT"></a>
+        <img src="https://img.shields.io/badge/Built with-WXT-blue?logo=wxt&logoColor=white"></a>
+    <a href="https://github.com/Sbrjt/leetcode-enhancer/actions/workflows/cron.yml">
+        <img src="https://github.com/Sbrjt/leetcode-enhancer/actions/workflows/cron.yml/badge.svg"></a>
+</a>
 </div>
 
 ### ✨ Features
