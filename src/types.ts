@@ -20,9 +20,7 @@ export type Question = {
 	dislikes: number
 }
 
-export type GraphQLResponse<T> = {
-	data: T
-}
+export type GraphQLResponse<T> = { data: T }
 
 export type QuestionData = {
 	question: {
@@ -60,3 +58,20 @@ export type CompanyQuestion = {
 export type SettingKey = keyof typeof SETTINGS
 
 export type Setting = ValueOf<typeof SETTINGS> & { key: SettingKey }
+
+export type StriverData = {
+	sub_steps: {
+		topics: {
+			yt_link: string | null
+			lc_link: string | null
+			// question_title: string
+			// post_link: string
+		}[]
+	}[]
+}
+
+export type NeetcodeData = {
+	problem: string
+	link: string
+	video: string
+}[]

@@ -1,4 +1,4 @@
-import { Switch } from '@/components/switch'
+import { Switch } from '@/components/ui/switch'
 import { Setting, SettingKey } from '@/types'
 import { SETTINGS } from '@/utils/lib'
 import { useFeatureEnabled } from '@/utils/useStore'

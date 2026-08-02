@@ -3,13 +3,6 @@ import Papa from 'papaparse'
 import TurndownService from 'turndown'
 import type { Question } from '../types'
 
-export function cn(...inputs: ClassValue[]) {
-	return clsx(inputs)
-}
-
-export const sleep = (ms: number) =>
-	new Promise((resolve) => setTimeout(resolve, ms))
-
 export const SETTINGS = {
 	enabled: { label: 'Extension enabled', default: true },
 	showRating: { label: 'Problem difficulty rating', default: true },
@@ -22,7 +15,18 @@ export const SETTINGS = {
 		default: true,
 	},
 	companyQuestions: { label: 'Company questions and tags', default: true },
+	videoSolution: {
+		label: 'Video solutions from Neetcode and Striver',
+		default: true,
+	},
 } as const
+
+export function cn(...inputs: ClassValue[]) {
+	return clsx(inputs)
+}
+
+export const sleep = (ms: number) =>
+	new Promise((resolve) => setTimeout(resolve, ms))
 
 export const makeSignal = (timeoutMs = 60 * 1000) => {
 	const controller = new AbortController()
@@ -144,4 +148,23 @@ export async function getBrowserDetails() {
 		name: 'unknown',
 		version: navigator.userAgent,
 	}
+}
+
+/**
+ * @example
+ * getRange(500) // '1-999'
+ * getRange(1500) // '1000-1999'
+ */
+export function getRange(num: number) {
+	if (num <= 999) {
+		return '1-999'
+	} else if (num <= 1999) {
+		return '1000-1999'
+	} else if (num <= 2999) {
+		return '2000-2999'
+	} else if (num <= 3999) {
+		return '3000-3999'
+	}
+
+	throw new Error(`Unsupported number: ${num}`)
 }

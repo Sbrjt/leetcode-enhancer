@@ -1,5 +1,5 @@
 import pkg from '@/../package.json'
-import { Switch } from '@/components/switch'
+import { Switch } from '@/components/ui/switch'
 import { useFeatureEnabled } from '@/utils/useStore'
 import {
 	LuChevronRight,

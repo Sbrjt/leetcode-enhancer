@@ -25,7 +25,7 @@ export default function useEditorial(question: Question | null, url: string) {
 		let subBtn: HTMLElement | undefined
 		let ssBtn: HTMLAnchorElement | undefined
 
-			//
+		//
 		;(async () => {
 			subBtn = await elementReady<HTMLAnchorElement>('a[href^="/subscribe"]', {
 				predicate: (a) => a.textContent === 'Subscribe',
