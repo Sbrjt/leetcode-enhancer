@@ -18,8 +18,8 @@ export default function usePremium(question: Question | null) {
 		let subBtn: HTMLAnchorElement | undefined
 		let btnDiv: HTMLDivElement | undefined
 
-			// Find the "subscribe" button, hide it
-			// Create a clones for other button
+		// Find the "subscribe" button, hide it
+		// Create a clones for other button
 		;(async () => {
 			subBtn = await elementReady<HTMLAnchorElement>('a[href^="/subscribe"]', {
 				predicate: (a) => a.textContent === 'Subscribe',

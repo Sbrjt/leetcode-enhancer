@@ -27,9 +27,10 @@
 - Enable autocomplete (partial)
 - Copy code button
 - Return dislike button
+
 <!--
 - Premium problems and editorials
-- Company questions and tags  
+- Company questions and tags
   -->
 
 ### ⏳ Todos

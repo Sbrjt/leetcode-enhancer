@@ -4,7 +4,6 @@ about: Create a report to help us improve
 title: ''
 labels: bug
 assignees: ''
-
 ---
 
 ### What's the issue?
@@ -17,12 +16,13 @@ A screenshot is often enough. If it already explains the problem, you don't need
 
 ### If not...
 
-* How can we reproduce it?
-* What did you expect to happen instead?
+- How can we reproduce it?
+- What did you expect to happen instead?
 
-### Debug logs 
-- Browser 
-- Version 
+### Debug logs
+
+- Browser
+- Version
 - etc.
 
 ### Anything else?

@@ -17,7 +17,7 @@ export default function useCopy(question: Question | null) {
 
 		let copyBtn: HTMLElement | undefined
 
-			//
+		//
 		;(async () => {
 			const div = await elementReady(
 				'div:has(> img[alt="premium lock icon"])',

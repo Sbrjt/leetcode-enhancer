@@ -16,7 +16,7 @@ export default function useFormatter(url: string) {
 		const { controller, signal } = makeSignal()
 		let runBtn: HTMLButtonElement | undefined
 
-			//
+		//
 		;(async () => {
 			runBtn = await elementReady<HTMLButtonElement>(
 				'button[aria-label="Run"]',
