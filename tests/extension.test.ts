@@ -1,4 +1,5 @@
-import { expect, test as base } from './fixtures'
+import { type Page } from '@playwright/test'
+import { test as base, expect } from './fixtures'
 
 const test = base.extend<{ extensionUrl: string }>({
 	extensionUrl: async ({ background }, use) => {
@@ -7,14 +8,22 @@ const test = base.extend<{ extensionUrl: string }>({
 	},
 })
 
-test('popup page', async ({ page, extensionUrl }) => {
-	await page.goto(`${extensionUrl}/popup.html`)
-	await expect(page.locator('h1')).toHaveText('LeetCode Enhancer')
-})
+test.describe(() => {
+	let page: Page
 
-test('options page', async ({ page, extensionUrl }) => {
-	await page.goto(`${extensionUrl}/options.html`)
-	await expect(page.locator('h1')).toHaveText('LeetCode Enhancer Options')
+	test.beforeAll(async ({ extensionContext }) => {
+		page = await extensionContext.newPage()
+	})
+
+	test('popup page', async ({ extensionUrl }) => {
+		await page.goto(`${extensionUrl}/popup.html`)
+		await expect(page.locator('h1')).toHaveText('LeetCode Enhancer')
+	})
+
+	test('options page', async ({ extensionUrl }) => {
+		await page.goto(`${extensionUrl}/options.html`)
+		await expect(page.locator('h1')).toHaveText('LeetCode Enhancer Options')
+	})
 })
 
 /* 

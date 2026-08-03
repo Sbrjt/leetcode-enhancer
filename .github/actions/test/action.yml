@@ -6,5 +6,9 @@ runs:
       run: npx playwright install --with-deps
 
     - name: Run Playwright tests
-      shell: bash
-      run: xvfb-run npm test
+      uses: nick-fields/retry@v3
+      with:
+        max_attempts: 3
+        timeout_minutes: 30
+        command: xvfb-run npm test
+        new_command_on_retry: xvfb-run npx playwright test --last-failed

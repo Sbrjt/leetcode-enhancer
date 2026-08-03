@@ -12,27 +12,31 @@ import path from 'path'
 
 const extension = path.resolve('.output/chrome-mv3')
 
-type Fixtures = { context: BrowserContext; background: Worker }
+type WorkerFixtures = { extensionContext: BrowserContext }
+type Fixtures = { background: Worker }
 
-export const test = base.extend<Fixtures>({
-	context: async ({}, use) => {
-		const context = await chromium.launchPersistentContext('', {
-			channel: 'chromium',
-			args: [
-				`--disable-extensions-except=${extension}`,
-				`--load-extension=${extension}`,
-			],
-			headless: false,
-		})
+export const test = base.extend<Fixtures, WorkerFixtures>({
+	extensionContext: [
+		async ({}, use) => {
+			const context = await chromium.launchPersistentContext('', {
+				channel: 'chromium',
+				args: [
+					`--disable-extensions-except=${extension}`,
+					`--load-extension=${extension}`,
+				],
+				headless: false,
+			})
 
-		// @ts-ignore
-		await use(context)
-		await context.close()
-	},
+			// @ts-ignore
+			await use(context)
+			await context.close()
+		},
+		{ scope: 'worker' },
+	],
 
-	background: async ({ context }, use) => {
-		let [sw] = context.serviceWorkers()
-		if (!sw) sw = await context.waitForEvent('serviceworker')
+	background: async ({ extensionContext }, use) => {
+		let [sw] = extensionContext.serviceWorkers()
+		if (!sw) sw = await extensionContext.waitForEvent('serviceworker')
 		await use(sw)
 	},
 })
