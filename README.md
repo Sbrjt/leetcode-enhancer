@@ -27,6 +27,7 @@
 - Enable autocomplete (partial)
 - Copy code button
 - Return dislike button
+- Video solutions by neetcode and striver
 
 <!--
 - Premium problems and editorials

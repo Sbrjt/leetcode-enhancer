@@ -6,6 +6,7 @@ import useFormatter from './hooks/useFormatter'
 import usePremium from './hooks/usePremium'
 import useQuestion from './hooks/useQuestion'
 import useRating from './hooks/useRating'
+import useSolutionVideos from './hooks/useSolutionVideos'
 import useTags from './hooks/useTags'
 import useUrl from './hooks/useUrl'
 
@@ -18,9 +19,10 @@ function App() {
 	usePremium(question)
 	useDislike(question)
 	useCopy(question)
+	useSolutionVideos(question, url)
+
 	useTags(question)
 	useEditorial(question, url)
-
 	useCompany(url)
 
 	return null

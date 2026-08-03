@@ -2,29 +2,12 @@ import type {
 	CompanyMapping,
 	CompanyQuestion,
 	GraphQLResponse,
+	NeetcodeData,
 	ProblemRating,
 	QuestionData,
+	StriverData,
 } from '@/types'
-import { parseCsv } from '@/utils/lib'
-
-/**
- * @example
- * getRange(500) // '1-999'
- * getRange(1500) // '1000-1999'
- */
-function getRange(num: number) {
-	if (num <= 999) {
-		return '1-999'
-	} else if (num <= 1999) {
-		return '1000-1999'
-	} else if (num <= 2999) {
-		return '2000-2999'
-	} else if (num <= 3999) {
-		return '3000-3999'
-	}
-
-	throw new Error(`Unsupported number: ${num}`)
-}
+import { getRange, parseCsv } from '@/utils/lib'
 
 /**
  * Fetches the question details from LeetCode's GraphQL API
@@ -134,6 +117,51 @@ export async function getQuestions(company: string) {
 	}
 
 	return Object.values(questions)
+}
+
+function getVideoId(ytLink: string) {
+	const url = new URL(ytLink)
+
+	if (url.hostname === 'youtu.be') {
+		return url.pathname.slice(1)
+	} else if (url.hostname.includes('youtube.com')) {
+		return url.searchParams.get('v')
+	}
+}
+
+/**
+ * Fetches video links of Striver from [hitarth-gg/CP](https://github.com/hitarth-gg/CP)
+ */
+export async function getStriver(problemSlug: string) {
+	const lcLink = `https://leetcode.com/problems/${problemSlug}/`
+
+	const res = await fetch(
+		'https://raw.githubusercontent.com/hitarth-gg/CP/main/striver-a2z.json',
+	)
+	const json: StriverData[] = await res.json()
+
+	const ytLink = json
+		.flatMap((step) => step.sub_steps)
+		.flatMap((subStep) => subStep.topics)
+		.find((topic) => topic.lc_link === lcLink)?.yt_link
+
+	if (ytLink == null) {
+		return undefined
+	}
+
+	return getVideoId(ytLink) ?? undefined
+}
+
+/**
+ * Fetches video links from [neetcode-gh/leetcode](https://github.com/neetcode-gh/leetcode)
+ */
+export async function getNeetcode(problemSlug: string) {
+	const res = await fetch(
+		'https://raw.githubusercontent.com/neetcode-gh/leetcode/main/.problemSiteData.json',
+	)
+	const json: NeetcodeData = await res.json()
+	const videoId = json.find(({ link }) => link === `${problemSlug}/`)?.video
+	return videoId
 }
 
 // TODO: cache the apis!

@@ -65,7 +65,7 @@ This extension uses the WXT framework. Get started with the docs on [project str
 <details>
 <summary>Using element-ready</summary>
 
-Let's say you're on LeetCode and want to select the main logo.
+Let's say you're on [leetcode.com](https://leetcode.com/problems/two-sum/) and want to select the main logo.
 
 Right-click on the logo in the top-left, and select Inspect to open DevTools. You'll find something like:
 
@@ -73,7 +73,7 @@ Right-click on the logo in the top-left, and select Inspect to open DevTools. Yo
 <img
     class="h-full"
     alt="LeetCode Logo"
-    src="/_next/static/images/logo-dark-c96c407d175e36c81e236fcfdd682a0b.png"
+    src="/_next/static/images/logo-dark.png"
 />
 ```
 
@@ -83,14 +83,16 @@ To select this element, you can use:
 document.querySelector(`img[alt="LeetCode Logo"]`)
 ```
 
-(Try pasting that into the browser console—you'll get the `<img>` element.)
+(Try pasting this into the browser console—you'll get the `<img>` element.)
 
-To modify it:
+Now let's try to modify it:
 
 ```js
 const img = document.querySelector(`img[alt="LeetCode Logo"]`)
 img.src = 'https://c.tenor.com/x8v1oNUOmg4AAAAd/'
 ```
+
+:)
 
 Most UI customizations in this extension work exactly like this.
 
@@ -145,5 +147,7 @@ You'll find all the hooks here: [`src/entrypoints/content/hooks`](./src/entrypoi
 - [leetcode_problem_rating](https://github.com/zerotrac/leetcode_problem_rating)
 - [leetcode-screenshotter](https://github.com/akhilkammila/leetcode-screenshotter)
 - [leetcode-companywise-interview-questions](https://github.com/snehasishroy/leetcode-companywise-interview-questions)
+- [neetcode](https://github.com/neetcode-gh/leetcode)
+- [hitarth-gg/CP](https://github.com/hitarth-gg/CP)
 - [element-ready](https://github.com/sindresorhus/element-ready)
 - [wxt](https://github.com/wxt-dev/wxt)
