@@ -1,3 +1,4 @@
+import { gfm } from '@truto/turndown-plugin-gfm'
 import { type ClassValue, clsx } from 'clsx'
 import Papa from 'papaparse'
 import TurndownService from 'turndown'
@@ -113,41 +114,44 @@ export function parseCsv<T>(csv: string) {
 	})
 }
 
-const turndownService = new TurndownService()
+const turndownService = new TurndownService({ preformattedCode: true })
+
+turndownService.use(gfm)
 
 turndownService.addRule('exampleAsBlockquote', {
-	filter: 'pre',
-	replacement: (content) =>
-		'\n' +
-		content
-			.trim()
-			.split('\n')
-			.map((line) => '> ' + line + '\n>\n')
-			.join('') +
-		'\n',
+	filter: (node) =>
+		node.nodeName === 'PRE' || node.classList.contains('example-block'),
+
+	// prefix every line with "> " to create markdown blockquote
+	replacement: (content) => content.trim().replace(/^/gm, '> '),
 })
 
 export const htmlToMd = (html: string) => turndownService.turndown(html)
 
-export async function getBrowserDetails() {
+export async function getDebugInfo() {
+	const debugInfo: Record<string, unknown> = {
+		extensionVersion: browser.runtime.getManifest().version,
+	}
+
 	if (import.meta.env.FIREFOX) {
 		// @ts-ignore
-		return await browser.runtime.getBrowserInfo()
+		debugInfo.browser = await browser.runtime.getBrowserInfo()
+		debugInfo.platform = await browser.runtime.getPlatformInfo()
 	}
 
 	if (import.meta.env.CHROME) {
 		// @ts-ignore
 		const ua = await navigator.userAgentData.getHighEntropyValues([
 			'fullVersionList',
+			'architecture',
+			'platform',
 		])
-		return ua.fullVersionList
+
+		debugInfo.browser = ua.fullVersionList
+		debugInfo.platform = { os: ua.platform, arch: ua.architecture }
 	}
 
-	//  fallback
-	return {
-		name: 'unknown',
-		version: navigator.userAgent,
-	}
+	return debugInfo
 }
 
 /**

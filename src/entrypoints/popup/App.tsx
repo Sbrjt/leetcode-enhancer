@@ -1,4 +1,4 @@
-import pkg from '@/../package.json'
+import { links } from '@/../package.json'
 import { Switch } from '@/components/ui/switch'
 import { useFeatureEnabled } from '@/utils/useStore'
 import {
@@ -90,7 +90,7 @@ function Settings() {
 function BMC() {
 	return (
 		<a
-			href={pkg.links.funding}
+			href={links.funding}
 			target='_blank'
 			className='h-12 w-full rounded-xl bg-[#FFDD00]'
 		>

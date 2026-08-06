@@ -1,3 +1,5 @@
+import { links } from '@/../package.json'
+
 export default defineBackground(() => {
 	browser.runtime.onMessage.addListener(async (msg, _sender, _sendResponse) => {
 		if (msg.type === 'SEARCH') {
@@ -23,16 +25,12 @@ export default defineBackground(() => {
 	})
 
 	browser.runtime.onInstalled.addListener(async () => {
-		browser.runtime.setUninstallURL('https://tally.so/r/VLA4Bj')
+		browser.runtime.setUninstallURL(links.uninstall)
 
-		const premiumScreenshots = await storage.getItem('sync:premiumScreenshots')
-		if (premiumScreenshots == null) {
-			await storage.setItem('sync:premiumScreenshots', true)
-		}
-
-		const companyQuestions = await storage.getItem('sync:companyQuestions')
-		if (companyQuestions == null) {
-			await storage.setItem('sync:companyQuestions', true)
-		}
+		// temporary
+		browser.storage.sync.set({
+			premiumScreenshots: true,
+			companyQuestions: true,
+		})
 	})
 })

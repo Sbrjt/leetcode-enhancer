@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@eslint-react/eslint-plugin": "^5.17.3",
 		"@tanstack/react-table": "^8.21.3",
+		"@truto/turndown-plugin-gfm": "^1.0.3",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"element-ready": "^9.0.2",
@@ -77,6 +78,7 @@
 	"links": {
 		"chromeWebStore": "https://chromewebstore.google.com/detail/leetcode-enhancer/cpoclfijojgjiafnlgnhjalkaiabcjch",
 		"firefoxAddon": "https://addons.mozilla.org/en-US/firefox/addon/leetcodeenhancer/",
-		"funding": "https://ko-fi.com/sbrjt"
+		"funding": "https://ko-fi.com/sbrjt",
+		"uninstall": "https://leetcode-enhancer.fillout.com/feedback"
 	}
 }
