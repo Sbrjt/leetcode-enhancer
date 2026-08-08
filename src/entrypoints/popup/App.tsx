@@ -1,5 +1,6 @@
-import { links } from '@/../package.json'
+import pkg from '@/../package.json'
 import { Switch } from '@/components/ui/switch'
+import { getDebugInfo } from '@/utils/lib'
 import { useFeatureEnabled } from '@/utils/useStore'
 import {
 	LuChevronRight,
@@ -90,7 +91,7 @@ function Settings() {
 function BMC() {
 	return (
 		<a
-			href={links.funding}
+			href={pkg.links.funding}
 			target='_blank'
 			className='h-12 w-full rounded-xl bg-[#FFDD00]'
 		>
@@ -135,7 +136,7 @@ function Pills() {
 
 			<button
 				onClick={async () => {
-					const info = await getBrowserDetails()
+					const info = await getDebugInfo()
 					navigator.clipboard.writeText(JSON.stringify(info, null, 2))
 				}}
 				className='pill'
