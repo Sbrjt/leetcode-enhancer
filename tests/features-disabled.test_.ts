@@ -1,6 +1,8 @@
 import { type Page } from '@playwright/test'
 import { expect, test } from './fixtures'
 
+const PROBLEM_1 = 'https://leetcode.com/problems/stone-game-iii'
+
 test.describe(() => {
 	let page: Page
 
@@ -15,13 +17,11 @@ test.describe(() => {
 			}),
 		)
 
-		await page.goto(
-			'https://leetcode.com/problems/check-if-the-rectangle-corner-is-reachable/',
-		)
+		await page.goto(PROBLEM_1)
 	})
 
 	test('problem rating hidden', async () => {
-		const rating = page.getByRole('link', { name: '3774' })
+		const rating = page.getByRole('link', { name: '2027' })
 		await expect(rating).toBeHidden()
 	})
 
@@ -31,7 +31,7 @@ test.describe(() => {
 	})
 
 	test('company tags hidden', async () => {
-		const companyTags = page.getByText('amazongoogleuber')
+		const companyTags = page.getByText('googlemeta')
 		await expect(companyTags).toBeHidden()
 	})
 })

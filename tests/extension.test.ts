@@ -27,10 +27,10 @@ test.describe(() => {
 })
 
 /* 
-To record/inspect:
+// To record/inspect:
 
 test('record', async ({ page }) => {
 	test.setTimeout(0)
 	await page.pause()
-})	
-*/
+})
+ */

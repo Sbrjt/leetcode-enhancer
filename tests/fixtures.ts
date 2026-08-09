@@ -1,6 +1,8 @@
 // Test setup
 // https://playwright.dev/docs/chrome-extensions#testing
 // Using patchright to prevent bot detection
+// Make sure to run npm run build before running tests
+// If CAPTCHA appears, solve it manually
 
 import {
 	test as base,
@@ -24,6 +26,7 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
 					`--disable-extensions-except=${extension}`,
 					`--load-extension=${extension}`,
 				],
+				recordVideo: { dir: path.resolve('test-results/videos') },
 				headless: false,
 			})
 
