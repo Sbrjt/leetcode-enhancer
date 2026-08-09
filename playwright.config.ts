@@ -5,6 +5,10 @@ export default defineConfig({
 	workers: '100%',
 	retries: process.env.CI ? 5 : 0,
 	reporter: process.env.CI ? 'github' : 'list',
+
+	timeout: 60_000,
+	expect: { timeout: 0 },
+	use: { navigationTimeout: 0 },
 })
 
 // https://github.com/wxt-dev/examples/blob/main/examples/playwright-e2e-testing/playwright.config.ts

@@ -3,7 +3,7 @@ runs:
   steps:
     - name: Install Playwright
       shell: bash
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps --no-shell chromium
 
     - name: Run Playwright tests
       uses: nick-fields/retry@v3

@@ -1,6 +1,7 @@
 // Test setup
 // https://playwright.dev/docs/chrome-extensions#testing
 // Using patchright to prevent bot detection
+// Make sure to run npm run build before running tests
 
 import {
 	test as base,

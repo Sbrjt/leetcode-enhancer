@@ -1,20 +1,15 @@
 import { type Page } from '@playwright/test'
 import { expect, test } from './fixtures'
 
-const PROBLEM_URL =
-	'https://leetcode.com/problems/check-if-the-rectangle-corner-is-reachable/'
+const PROBLEM_1 = 'https://leetcode.com/problems/stone-game-iii'
+const PROBLEM_2 = 'https://leetcode.com/problems/meeting-rooms-ii'
 
 test.describe(() => {
 	let page: Page
 
 	test.beforeAll(async ({ extensionContext }) => {
 		page = await extensionContext.newPage()
-		await page.goto(PROBLEM_URL)
-	})
-
-	test('problem rating', async () => {
-		const rating = page.getByRole('link', { name: '3774' })
-		await expect(rating).toBeVisible()
+		await page.goto(PROBLEM_1)
 	})
 
 	test('dislike', async () => {
@@ -32,7 +27,17 @@ test.describe(() => {
 		await copyBtn.click()
 
 		const text = await page.evaluate(() => navigator.clipboard.readText())
-		expect(text).toContain('Check if the Rectangle Corner Is Reachable')
+		expect(text).toContain('Stone Game III')
+	})
+
+	test('company tags', async () => {
+		const companyTags = page.getByText('googlemeta')
+		await expect(companyTags).toBeVisible()
+	})
+
+	test('problem rating', async () => {
+		const rating = page.getByRole('link', { name: '2027' })
+		await expect(rating).toBeVisible()
 	})
 
 	test('auto complete', async () => {
@@ -44,9 +49,11 @@ test.describe(() => {
 		await expect(suggestions.first()).toBeVisible()
 	})
 
-	test('company tags', async () => {
-		const companyTags = page.getByText('amazongoogleuber')
-		await expect(companyTags).toBeVisible()
+	test('premium editorial', async () => {
+		await page.goto(`${PROBLEM_1}/editorial`)
+
+		const btn = page.getByRole('link', { name: 'View screenshot' })
+		await expect(btn).toBeVisible()
 	})
 })
 
@@ -65,7 +72,7 @@ test.describe(() => {
 	})
 
 	test('premium problem', async () => {
-		await page.goto('https://leetcode.com/problems/meeting-rooms-ii')
+		await page.goto(PROBLEM_2)
 
 		const elements = [
 			page.getByRole('link', { name: 'View question' }),
@@ -78,15 +85,6 @@ test.describe(() => {
 			elements.map((btn) => expect(btn).toBeVisible()),
 			//
 		)
-	})
-
-	test('premium editorial', async () => {
-		await page.goto(
-			'https://leetcode.com/problems/minimum-value-to-get-positive-step-by-step-sum/editorial',
-		)
-
-		const btn = page.getByRole('link', { name: 'View screenshot' })
-		await expect(btn).toBeVisible()
 	})
 })
 
