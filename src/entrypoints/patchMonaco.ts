@@ -1,18 +1,18 @@
 import elementReady from 'element-ready'
 
+const OPTIONS = {
+	quickSuggestions: { other: true },
+	selectionHighlight: true,
+	bracketPairColorization: { enabled: true },
+	wordBasedSuggestions: 'allDocuments',
+}
+
 export default defineUnlistedScript(async () => {
 	await elementReady('.monaco-editor', { stopOnDomReady: false })
 
-	const editors = window.monaco.editor.getEditors?.() || []
-
-	for (const editor of editors) {
-		editor.updateOptions({
-			quickSuggestions: { other: true },
-			selectionHighlight: true,
-			bracketPairColorization: { enabled: true },
-			// @ts-ignore
-			wordBasedSuggestions: 'allDocuments',
-		})
+	for (const editor of window.monaco.editor.getEditors?.() || []) {
+		editor.updateOptions(OPTIONS)
+		editor.onDidChangeConfiguration(() => editor.updateOptions(OPTIONS))
 	}
 })
 
