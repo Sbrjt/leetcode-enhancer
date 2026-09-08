@@ -1,6 +1,6 @@
 import { CompanyQuestion } from '@/types'
 import { ColumnDef } from '@tanstack/react-table'
-import { LuGithub } from 'react-icons/lu'
+import { LuGithub, LuCircleCheck, LuCircleX } from 'react-icons/lu'
 import { DataTable } from './ui/data-table'
 
 function QuestionsTable({ questions }: { questions: CompanyQuestion[] }) {
@@ -46,7 +46,24 @@ const columns: ColumnDef<CompanyQuestion>[] = [
 	{ accessorKey: 'Time' },
 	{ accessorKey: 'Difficulty' },
 	{ accessorKey: 'Frequency %' },
-	{ accessorKey: 'Completed' },
+	{
+		accessorKey: 'Status',
+		header: 'Status',
+		cell: ({ row }) => {
+			const status = row.original.Status
+			if (status == 'ac') {
+				return (
+					<LuCircleCheck className='h-4 w-4 text-green-500' title='Solved' />
+				)
+			}
+			if (status === 'notac') {
+				return (
+					<LuCircleX className='h-4 w-4 text-orange-500' title='Attempted' />
+				)
+			}
+			return <span className='text-zinc-300 dark:text-zinc-600'>-</span>
+		},
+	},
 ]
 
 export default QuestionsTable

@@ -2,7 +2,7 @@
 
 import QuestionsTable from '@/components/QuestionsTable'
 import { CompanyQuestion } from '@/types'
-import { getQuestions } from '@/utils/api'
+import { getQuestions, fetchAllQuestionStatuses } from '@/utils/api'
 import elementReady from 'element-ready'
 import { createRoot, type Root } from 'react-dom/client'
 
@@ -15,8 +15,20 @@ export default function useCompany(url: string) {
 		;(async () => {
 			setQuestions(null)
 			if (!company) return
-			const q = await getQuestions(company)
-			setQuestions(q)
+			const [q, statuses] = await Promise.all([
+				getQuestions(company),
+				fetchAllQuestionStatuses(),
+			])
+			const questionsWithStatus = q.map((question) => {
+				const urlObj = new URL(question.URL)
+				const slug = urlObj.pathname.split('/').filter(Boolean)[1]
+
+				return {
+					...question,
+					Status: slug ? (statuses[slug] ?? null) : null,
+				}
+			})
+			setQuestions(questionsWithStatus)
 		})()
 	}, [company])
 
