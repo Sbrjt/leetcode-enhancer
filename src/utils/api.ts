@@ -187,7 +187,7 @@ export async function fetchQuestionStatus(slug: string) {
 	const res = await fetch('https://leetcode.com/graphql', {
 		body: JSON.stringify({
 			query: `query questionStatus($titleSlug: String!) {
-							QuestionsTable(titleSlug: $titleSlug) {
+							question(titleSlug: $titleSlug) {
 									status
 							}
 					}`,
