@@ -17,7 +17,7 @@ export default function useCompany(url: string) {
 			if (!company) return
 			const [q, statuses] = await Promise.all([
 				getQuestions(company),
-				fetchAllQuestionStatuses(),
+				fetchAllQuestionStatuses().catch(() => ({})),
 			])
 			const questionsWithStatus = q.map((question) => {
 				const urlObj = new URL(question.URL)
