@@ -6,6 +6,7 @@ import type {
 	ProblemRating,
 	QuestionData,
 	StriverData,
+	QuestionStatusData,
 } from '@/types'
 import { getRange, parseCsv } from '@/utils/lib'
 
@@ -162,6 +163,63 @@ export async function getNeetcode(problemSlug: string) {
 	const json: NeetcodeData = await res.json()
 	const videoId = json.find(({ link }) => link === `${problemSlug}/`)?.video
 	return videoId
+}
+
+/**
+ * Extracts the CSRF token from the browser cookies.
+ * Note: THis only works in context with DOM access (like COntent Scripts).
+ */
+function getCSRFToken() {
+	if (typeof document !== 'undefined') {
+		const match = document.cookie.match(/(?:^|;) ?csrftoken=([^;]*)(?:;|$)/)
+		return match ? match[1] : null
+	}
+	return null
+}
+
+/**
+ * Fetches the user's completion status for a specific problem.
+ * Returns 'ac' (solved), 'notac' (attempted), or null (unattempted).
+ */
+export async function fetchQuestionStatus(slug: string) {
+	const csrfToken = getCSRFToken()
+
+	const res = await fetch('https://leetcode.com/graphql', {
+		body: JSON.stringify({
+			query: `query questionStatus($titleSlug: String!) {
+							QuestionsTable(titleSlug: $titleSlug) {
+									status
+							}
+					}`,
+			variables: { titleSlug: slug },
+		}),
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			...(csrfToken ? { 'x-csrftoken': csrfToken } : {}),
+		},
+	})
+
+	const { data }: GraphQLResponse<QuestionStatusData> = await res.json()
+	return data.question?.status ?? null
+}
+
+/**
+ * Fetches the user's completion status for ALL LeetCode questions in one request.
+ * Returns a dictionary mapping the problem slug to its status.
+ */
+export async function fetchAllQuestionStatuses() {
+	const res = await fetch('https://leetcode.com/api/problems/all/')
+	if (!res.ok) return {}
+
+	const data = await res.json()
+	const statusMap: Record<string, 'ac' | 'notac' | null> = {}
+
+	for (const item of data.stat_status_pairs) {
+		statusMap[item.stat.question__title_slug] = item.status
+	}
+
+	return statusMap
 }
 
 // TODO: cache the apis!

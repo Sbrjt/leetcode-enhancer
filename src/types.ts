@@ -53,6 +53,7 @@ export type CompanyQuestion = {
 	'Acceptance %': string
 	'Frequency %': string
 	Time?: string
+	Status?: 'ac' | 'notac' | null
 }
 
 export type SettingKey = keyof typeof SETTINGS
@@ -75,3 +76,9 @@ export type NeetcodeData = {
 	link: string
 	video: string
 }[]
+
+export type QuestionStatusData = {
+	question: {
+		status: 'ac' | 'notac' | null
+	} | null
+}

@@ -46,6 +46,7 @@ const columns: ColumnDef<CompanyQuestion>[] = [
 	{ accessorKey: 'Time' },
 	{ accessorKey: 'Difficulty' },
 	{ accessorKey: 'Frequency %' },
+	{ accessorKey: 'Completed' },
 ]
 
 export default QuestionsTable
