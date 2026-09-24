@@ -1,4 +1,3 @@
----
 name: Bug report
 description: Create a report to help us improve
 labels: ["bug"]
@@ -23,12 +22,12 @@ body:
     attributes:
       label: Debug logs
       placeholder: |
-        Copy the debug logs using the "Copy logs" button in the popup and paste them here.
         - Browser
         - Browser Version
         - Extension Version
         - etc.
-        
+
+        Copy the debug logs using the "Copy logs" button in the popup and paste them here.
 
   - type: textarea
     attributes:
