@@ -1,0 +1,41 @@
+name: Bug report
+description: Create a report to help us improve
+labels: ['bug']
+
+body:
+  - type: textarea
+    attributes:
+      label: What's the issue?
+      placeholder: Tell us what you ran into.
+
+  - type: textarea
+    attributes:
+      label: Can you show us?
+      placeholder: |
+        A screenshot is often enough.
+
+        If not...
+        - How can we reproduce it?
+        - What did you expect to happen instead?
+
+  - type: textarea
+    attributes:
+      label: Debug logs
+      placeholder: |
+        - Browser
+        - Browser Version
+        - Extension Version
+        - etc.
+
+        Copy the debug logs using the "Copy logs" button in the popup and paste them here.
+
+  - type: textarea
+    attributes:
+      label: Anything else?
+      placeholder: Share any additional details you think are useful.
+
+  - type: checkboxes
+    attributes:
+      label: '​'
+      options:
+        - label: I want to work on this issue
