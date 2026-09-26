@@ -1,34 +1,35 @@
 // show company questions
 
 import QuestionsTable from '@/components/QuestionsTable'
-import { CompanyQuestion } from '@/types'
-import { getQuestions, fetchAllQuestionStatuses } from '@/utils/api'
+import { type CompanyQuestionWithStatus } from '@/types'
+import { fetchAllQuestionStatuses, getQuestions } from '@/utils/api'
 import elementReady from 'element-ready'
 import { createRoot, type Root } from 'react-dom/client'
 
 export default function useCompany(url: string) {
 	const company = url.match(/company\/([^/]+)/)?.[1]
-	const [questions, setQuestions] = useState<CompanyQuestion[] | null>(null)
+	const [questions, setQuestions] = useState<
+		CompanyQuestionWithStatus[] | null
+	>(null)
 	const [isEnabled] = useFeatureEnabled('companyQuestions')
 
 	useEffect(() => {
 		;(async () => {
 			setQuestions(null)
-			if (!company) return
-			const [q, statuses] = await Promise.all([
-				getQuestions(company),
-				fetchAllQuestionStatuses().catch(() => ({})),
-			])
-			const questionsWithStatus = q.map((question) => {
-				const urlObj = new URL(question.URL)
-				const slug = urlObj.pathname.split('/').filter(Boolean)[1]
 
-				return {
+			if (!company) return
+
+			const [fetchedQuestions, statuses] = await Promise.all([
+				getQuestions(company),
+				fetchAllQuestionStatuses(),
+			])
+
+			setQuestions(
+				fetchedQuestions.map((question) => ({
 					...question,
-					Status: slug ? (statuses[slug] ?? null) : null,
-				}
-			})
-			setQuestions(questionsWithStatus)
+					Status: statuses[question.ID],
+				})),
+			)
 		})()
 	}, [company])
 

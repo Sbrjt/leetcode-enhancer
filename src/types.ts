@@ -53,7 +53,10 @@ export type CompanyQuestion = {
 	'Acceptance %': string
 	'Frequency %': string
 	Time?: string
-	Status?: 'ac' | 'notac' | null
+}
+
+export type CompanyQuestionWithStatus = CompanyQuestion & {
+	Status: QuestionStatus
 }
 
 export type SettingKey = keyof typeof SETTINGS
@@ -77,8 +80,20 @@ export type NeetcodeData = {
 	video: string
 }[]
 
-export type QuestionStatusData = {
-	question: {
-		status: 'ac' | 'notac' | null
-	} | null
+/**
+ * The status of a question:
+ * - `ac` — Accepted
+ * - `notac` — Not Accepted
+ * - `null` — Unattempted
+ */
+export type QuestionStatus = 'ac' | 'notac' | null
+
+export type QuestionswithStatus = {
+	stat_status_pairs: {
+		status: QuestionStatus
+		stat: {
+			frontend_question_id: number
+			question__title_slug: string
+		}
+	}[]
 }
