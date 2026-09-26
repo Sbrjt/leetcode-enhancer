@@ -5,6 +5,8 @@ import type {
 	NeetcodeData,
 	ProblemRating,
 	QuestionData,
+	QuestionStatus,
+	QuestionswithStatus,
 	StriverData,
 } from '@/types'
 import { getRange, parseCsv } from '@/utils/lib'
@@ -17,6 +19,7 @@ export async function fetchQuestion(slug: string) {
 		body: JSON.stringify({
 			query: `query {
 					question(titleSlug: "${slug}") {
+						questionId
 						questionFrontendId
 						title
 						difficulty
@@ -162,6 +165,24 @@ export async function getNeetcode(problemSlug: string) {
 	const json: NeetcodeData = await res.json()
 	const videoId = json.find(({ link }) => link === `${problemSlug}/`)?.video
 	return videoId
+}
+
+/**
+ * Fetches the user's completion status for ALL LeetCode questions in one request.
+ * Uses user's active LeetCode session; status is null when unauthenticated.
+ */
+export async function fetchAllQuestionStatuses() {
+	const res = await fetch('https://leetcode.com/api/problems/all/')
+	if (!res.ok) return {}
+
+	const json: QuestionswithStatus = await res.json()
+	const statusMap: Record<number | string, QuestionStatus> = {}
+
+	for (const item of json.stat_status_pairs) {
+		statusMap[item.stat.frontend_question_id] = item.status
+	}
+
+	return statusMap
 }
 
 // TODO: cache the apis!

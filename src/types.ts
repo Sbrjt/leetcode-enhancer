@@ -55,6 +55,10 @@ export type CompanyQuestion = {
 	Time?: string
 }
 
+export type CompanyQuestionWithStatus = CompanyQuestion & {
+	Status: QuestionStatus
+}
+
 export type SettingKey = keyof typeof SETTINGS
 
 export type Setting = ValueOf<typeof SETTINGS> & { key: SettingKey }
@@ -75,3 +79,21 @@ export type NeetcodeData = {
 	link: string
 	video: string
 }[]
+
+/**
+ * The status of a question:
+ * - `ac` — Accepted
+ * - `notac` — Not Accepted
+ * - `null` — Unattempted
+ */
+export type QuestionStatus = 'ac' | 'notac' | null
+
+export type QuestionswithStatus = {
+	stat_status_pairs: {
+		status: QuestionStatus
+		stat: {
+			frontend_question_id: number
+			question__title_slug: string
+		}
+	}[]
+}
