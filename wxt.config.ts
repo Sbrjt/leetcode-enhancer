@@ -1,12 +1,12 @@
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'node:path'
-import { env } from 'process'
 import removeConsole from 'vite-plugin-remove-console'
 import { defineConfig } from 'wxt'
+import pkg from './package.json'
 
 export default defineConfig({
 	manifest: () => {
-		const { CHROME_PUBLIC_KEY, FIREFOX_EXTENSION_ID } = env
+		const { CHROME_PUBLIC_KEY, FIREFOX_EXTENSION_ID } = pkg.config
 
 		return {
 			web_accessible_resources: [

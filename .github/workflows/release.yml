@@ -7,10 +7,6 @@ on:
 permissions:
   contents: write
 
-env:
-  CHROME_PUBLIC_KEY: ${{ vars.CHROME_PUBLIC_KEY }}
-  FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
-
 jobs:
   build:
     runs-on: ubuntu-latest

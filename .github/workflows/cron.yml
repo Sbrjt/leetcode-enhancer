@@ -4,10 +4,6 @@ on:
   schedule:
     - cron: '0 0 * * 0'
 
-env:
-  CHROME_PUBLIC_KEY: ${{ vars.CHROME_PUBLIC_KEY }}
-  FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
-
 jobs:
   test:
     runs-on: ubuntu-latest
