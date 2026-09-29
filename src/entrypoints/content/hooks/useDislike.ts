@@ -37,8 +37,7 @@ export default function useDislike(question: Question | null) {
 			if (signal.aborted) return
 
 			div.after(injected)
-			dislikeBtn.classList.remove('gap-2')
-			dislikeBtn.classList.add('gap-1')
+			dislikeBtn.classList.replace('gap-2', 'gap-1')
 		})()
 
 		return () => {

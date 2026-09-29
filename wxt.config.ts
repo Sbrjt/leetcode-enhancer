@@ -26,7 +26,11 @@ export default defineConfig({
 			},
 		}
 	},
-	modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
+	modules: [
+		'@wxt-dev/module-react',
+		'@wxt-dev/auto-icons',
+		'@wxt-dev/analytics/module',
+	],
 	srcDir: 'src',
 	autoIcons: { baseIconPath: resolve('public/icon.svg') },
 	vite: (configEnv) => ({

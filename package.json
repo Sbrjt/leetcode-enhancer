@@ -24,6 +24,7 @@
 		"@eslint-react/eslint-plugin": "^5.17.3",
 		"@tanstack/react-table": "^8.21.3",
 		"@truto/turndown-plugin-gfm": "^1.0.3",
+		"@wxt-dev/analytics": "^0.5.6",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"element-ready": "^9.0.2",
