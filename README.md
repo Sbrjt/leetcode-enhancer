@@ -47,17 +47,27 @@
 <a href="https://chromewebstore.google.com/detail/leetcode-enhancer/cpoclfijojgjiafnlgnhjalkaiabcjch"><img src="https://developer.chrome.com/static/docs/webstore/branding/image/HRs9MPufa1J1h5glNhut.png" alt="Get the Extension on Chrome" height="70" style="border: 1px solid transparent; border-radius:6px;"></a>
 <a href="https://addons.mozilla.org/en-US/firefox/addon/leetcodeenhancer/"><img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" height="70"></a>
 
-You can also:
+<details>
+<summary>You can also:</summary>
 
 - Download it from the [latest release](https://github.com/Sbrjt/leetcode-enhancer/releases/latest)
 - Try the latest GitHub Actions [artifact build](https://github.com/Sbrjt/leetcode-enhancer/actions/workflows/ci.yml)
 - Build it yourself from source. See [ONBOARDING.md](ONBOARDING.md).
 
-> [!CAUTION]
+</details>
+
+---
+
+> [!NOTE]
 > If LeetCode updates its UI, this extension may break.
 
 If you like my project, please gimme a star! ⭐💫
 
-<picture><img src="https://img.shields.io/badge/PRs-welcome-green.svg"></picture>
+<a href="/ONBOARDING.md">
+ <img src="https://img.shields.io/badge/PRs-welcome-green.svg"></a>
+<a href="https://ko-fi.com/sbrjt">
+  <img src="https://img.shields.io/badge/Support me-F16061?logo=ko-fi&logoColor=white"></a>
+<a href="https://x.com/messages/compose?recipient_id=1630871745233055746">
+  <img src="https://img.shields.io/badge/Ask me anything-000000?style=flat&logo=x&logoColor=white"></a>
 
 © Shubhrajit Sadhukhan :octocat:

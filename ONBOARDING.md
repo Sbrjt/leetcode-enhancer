@@ -39,8 +39,6 @@ How to load:
 
 - Select suitable build in `.output/` folder.
 
-Note: If you need extra help, just create an issue and I will help.
-
 ### Project Structure
 
 ```bash
@@ -151,3 +149,6 @@ You'll find all the hooks here: [`src/entrypoints/content/hooks`](./src/entrypoi
 - [hitarth-gg/CP](https://github.com/hitarth-gg/CP)
 - [element-ready](https://github.com/sindresorhus/element-ready)
 - [wxt](https://github.com/wxt-dev/wxt)
+
+> [!NOTE]
+> If you need extra help, just create an issue and I will help.
