@@ -27,7 +27,7 @@ export default function useCompany(url: string) {
 			setQuestions(
 				fetchedQuestions.map((question) => ({
 					...question,
-					Status: statuses[question.ID],
+					Status: statuses[question.ID] ?? null,
 				})),
 			)
 		})()
