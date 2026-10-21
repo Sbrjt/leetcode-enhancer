@@ -1,8 +1,10 @@
-// format code when user hovers over submit/run button
+// format code when user clicks on run button
 
-import { makeSignal } from '@/utils/lib'
+import { findElement, makeSignal } from '@/utils/lib'
 import { useFeatureEnabled } from '@/utils/useStore'
-import elementReady from 'element-ready'
+
+const RUN_SELECTOR = 'button[aria-label="Run"]'
+const FORMAT_SELECTOR = 'button:has(svg[class*="align-left"])'
 
 export default function useFormatter(url: string) {
 	const [isEnabled] = useFeatureEnabled('formatOnRun')
@@ -10,18 +12,15 @@ export default function useFormatter(url: string) {
 	useEffect(() => {
 		if (isEnabled === false) return
 
-		// Locate the "Run" button
+		// Locate the "Run" button ▶️
 		// Attach a click event handler
 		// Do same for Ctrl + S
+
 		const { controller, signal } = makeSignal()
 		let runBtn: HTMLButtonElement | undefined
 
-		//
 		;(async () => {
-			runBtn = await elementReady<HTMLButtonElement>(
-				'button[aria-label="Run"]',
-				{ signal, stopOnDomReady: false },
-			)
+			runBtn = await findElement<HTMLButtonElement>(RUN_SELECTOR, signal)
 
 			if (!runBtn || signal.aborted) return
 
@@ -39,13 +38,11 @@ export default function useFormatter(url: string) {
 }
 
 function formatCode() {
-	const formatBtn = document.querySelector<HTMLButtonElement>(
-		'button:has(svg[class*="align-left"])',
-	)
-
+	const formatBtn = document.querySelector<HTMLButtonElement>(FORMAT_SELECTOR)
 	formatBtn?.click()
 }
 
 const onKeyDown = (e: KeyboardEvent) => {
+	// Format code if user presses Ctrl + S
 	if ((e.ctrlKey || e.metaKey) && e.key === 's') formatCode()
 }

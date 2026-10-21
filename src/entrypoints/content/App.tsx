@@ -6,9 +6,9 @@ import useFormatter from './hooks/useFormatter'
 import usePremium from './hooks/usePremium'
 import useQuestion from './hooks/useQuestion'
 import useRating from './hooks/useRating'
-import useSolutionVideos from './hooks/useSolutionVideos'
 import useTags from './hooks/useTags'
 import useUrl from './hooks/useUrl'
+import useVideoSolution from './hooks/useVideos'
 
 function App() {
 	const { url } = useUrl()
@@ -19,7 +19,7 @@ function App() {
 	usePremium(question)
 	useDislike(question)
 	useCopy(question)
-	useSolutionVideos(question, url)
+	useVideoSolution(question, url)
 
 	useTags(question)
 	useEditorial(question, url)

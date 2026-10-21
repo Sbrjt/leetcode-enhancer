@@ -1,45 +1,50 @@
 // show copy button
+
 import type { Question } from '@/types'
-import { copyQuestion, makeSignal } from '@/utils/lib'
+import { copyQuestion, findElement } from '@/utils/lib'
+import useSignalEffect from '@/utils/useSignalEffect'
 import { useFeatureEnabled } from '@/utils/useStore'
-import elementReady from 'element-ready'
+
+type Injected = { copyBtn?: HTMLElement }
+const SELECTOR = 'div:has(> img[alt="premium lock icon"])'
 
 export default function useCopy(question: Question | null) {
 	const [isEnabled] = useFeatureEnabled('copyCode')
 
-	useEffect(() => {
-		if (isEnabled === false || question == null) return
+	useSignalEffect(
+		(signal) => {
+			if (isEnabled === false || question == null) return
 
-		const { controller, signal } = makeSignal()
+			const injected: Injected = {}
 
-		// Find the "Companies" button
-		// Create a clone for "Copy" button
+			inject(question, signal, injected)
 
-		let copyBtn: HTMLElement | undefined
+			return () => injected.copyBtn?.remove()
+		},
+		[question, isEnabled],
+	)
+}
 
-		//
-		;(async () => {
-			const div = await elementReady(
-				'div:has(> img[alt="premium lock icon"])',
-				{ signal, stopOnDomReady: false },
-			)
+async function inject(
+	question: Question,
+	signal: AbortSignal,
+	injected: Injected,
+) {
+	// Find the "Companies" badge 🔒
+	// Clone it as "Copy" button
 
-			if (!div) return
+	const companyDiv = await findElement(SELECTOR, signal)
 
-			copyBtn = div.cloneNode() as HTMLElement
-			copyBtn.textContent = 'Copy'
-			copyBtn.classList.add('copy-injected')
-			copyBtn.setAttribute('role', 'button')
-			copyBtn.onclick = () => copyQuestion(question!)
+	if (!companyDiv || signal.aborted) return
 
-			if (signal.aborted) return
+	const copyBtn = companyDiv.cloneNode() as HTMLElement
+	copyBtn.textContent = 'Copy'
+	copyBtn.classList.add('copy-injected')
+	copyBtn.setAttribute('role', 'button')
+	copyBtn.onclick = () => copyQuestion(question)
 
-			div.parentElement!.append(copyBtn)
-		})()
+	if (signal.aborted) return
 
-		return () => {
-			controller.abort()
-			copyBtn?.remove()
-		}
-	}, [question, isEnabled])
+	companyDiv.parentElement?.append(copyBtn)
+	injected.copyBtn = copyBtn
 }

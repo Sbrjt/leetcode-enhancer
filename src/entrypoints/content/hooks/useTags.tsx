@@ -3,40 +3,60 @@
 import Tags from '@/components/Tags'
 import type { Question } from '@/types'
 import { getCompanyTags } from '@/utils/api'
-import { makeSignal } from '@/utils/lib'
+import { findElement, injectReactComponent } from '@/utils/lib'
+import useSignalEffect from '@/utils/useSignalEffect'
 import { useFeatureEnabled } from '@/utils/useStore'
-import elementReady from 'element-ready'
-import { createRoot, type Root } from 'react-dom/client'
+import { type Root } from 'react-dom/client'
+
+type Injected = {
+	injectedDiv?: HTMLElement
+	root?: Root
+}
+
+const SELECTOR = 'div:has(> div > img[alt="premium lock icon"])'
+
+async function inject(
+	question: Question,
+	signal: AbortSignal,
+	injected: Injected,
+) {
+	// Find the div with the companies badge 🔒
+	// Inject company tags below it
+
+	const badgesDiv = await findElement<HTMLDivElement>(SELECTOR, signal)
+
+	if (!badgesDiv) return
+
+	const companies = await getCompanyTags(question.id)
+	if (!companies.length) return
+
+	if (signal.aborted) return
+
+	const { root, div: injectedDiv } = injectReactComponent(
+		<Tags companies={companies} />,
+	)
+	injectedDiv.className = badgesDiv.className
+	badgesDiv.after(injectedDiv)
+
+	injected.injectedDiv = injectedDiv
+	injected.root = root
+}
 
 export default function useTags(question: Question | null) {
 	const [isEnabled] = useFeatureEnabled('companyQuestions')
 
-	useEffect(() => {
-		if (isEnabled === false || question == null) return
+	useSignalEffect(
+		(signal) => {
+			if (isEnabled === false || question == null) return
 
-		const { controller, signal } = makeSignal()
-		let injected: HTMLElement | undefined
-		let root: Root | null = null
+			const injected: Injected = {}
+			inject(question, signal, injected)
 
-		;(async () => {
-			const div = await elementReady(
-				'div:has(> img[alt="premium lock icon"])',
-				{ signal, stopOnDomReady: false },
-			)
-			if (!div?.parentElement) return
-			const companies = await getCompanyTags(question.id)
-			if (!companies.length) return
-			injected = div.parentElement.cloneNode() as HTMLElement
-			root = createRoot(injected)
-			root.render(<Tags companies={companies} />)
-			if (signal.aborted) return
-			div.parentElement.after(injected)
-		})()
-
-		return () => {
-			controller.abort()
-			root?.unmount()
-			injected?.remove()
-		}
-	}, [question, isEnabled])
+			return () => {
+				injected.root?.unmount()
+				injected.injectedDiv?.remove()
+			}
+		},
+		[question, isEnabled],
+	)
 }

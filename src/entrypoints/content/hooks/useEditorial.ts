@@ -1,54 +1,69 @@
 // this hook provides alternate link for premium editorial
 
-import { Question } from '@/types'
+import type { Question } from '@/types'
 import { getEditorialLink } from '@/utils/api'
-import { makeSignal } from '@/utils/lib'
+import { findElement } from '@/utils/lib'
+import useSignalEffect from '@/utils/useSignalEffect'
 import { useFeatureEnabled } from '@/utils/useStore'
-import elementReady from 'element-ready'
+
+type Injected = {
+	subBtn?: HTMLElement
+	ssBtn?: HTMLAnchorElement
+}
+
+const SELECTOR = 'a[href^="/subscribe"]'
+
+async function inject(
+	question: Question,
+	signal: AbortSignal,
+	injected: Injected,
+) {
+	// Find the "Subscribe" button, hide it
+	// Create a clone for "View screenshot" button
+
+	const subBtn = await findElement<HTMLAnchorElement>(
+		SELECTOR,
+		signal,
+		(a) => a.textContent === 'Subscribe',
+	)
+
+	if (!subBtn) return
+
+	const ssBtn = subBtn.cloneNode(true) as HTMLAnchorElement
+	ssBtn.href = getEditorialLink(question.id, question.title)
+	ssBtn.innerText = 'View screenshot'
+
+	if (signal.aborted) return
+
+	subBtn.after(ssBtn)
+	subBtn.hidden = true
+
+	injected.subBtn = subBtn
+	injected.ssBtn = ssBtn
+}
 
 export default function useEditorial(question: Question | null, url: string) {
 	const [isEnabled] = useFeatureEnabled('premiumScreenshots')
 
-	useEffect(() => {
-		if (
-			isEnabled === false ||
-			question == null ||
-			question.premium ||
-			!url.includes('editorial')
-		)
-			return
+	useSignalEffect(
+		(signal) => {
+			if (
+				isEnabled === false ||
+				question == null ||
+				question.premium ||
+				!url.includes('editorial')
+			)
+				return
 
-		const { controller, signal } = makeSignal()
+			const injected: Injected = {}
 
-		// Find the "Subscribe" button, hide it
-		// Create a clone for "View screenshot" button
-		let subBtn: HTMLElement | undefined
-		let ssBtn: HTMLAnchorElement | undefined
+			inject(question, signal, injected)
 
-		//
-		;(async () => {
-			subBtn = await elementReady<HTMLAnchorElement>('a[href^="/subscribe"]', {
-				predicate: (a) => a.textContent === 'Subscribe',
-				signal,
-				stopOnDomReady: false,
-			})
-
-			if (!subBtn) return
-
-			ssBtn = subBtn.cloneNode(true) as HTMLAnchorElement
-			ssBtn.href = getEditorialLink(question.id, question.title)
-			ssBtn.innerText = 'View screenshot'
-
-			if (signal.aborted) return
-
-			subBtn.after(ssBtn)
-			subBtn.hidden = true
-		})()
-
-		return () => {
-			controller.abort()
-			ssBtn?.remove()
-			if (subBtn) subBtn.hidden = false
-		}
-	}, [question, url, isEnabled])
+			return () => {
+				injected.ssBtn?.remove()
+				if (injected.subBtn) injected.subBtn.hidden = false
+			}
+		},
+		[question, url, isEnabled],
+	)
 }
