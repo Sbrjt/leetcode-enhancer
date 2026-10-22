@@ -1,6 +1,9 @@
 import { gfm } from '@truto/turndown-plugin-gfm'
 import { type ClassValue, clsx } from 'clsx'
+import elementReady from 'element-ready'
 import Papa from 'papaparse'
+import type { ReactNode } from 'react'
+import { createRoot } from 'react-dom/client'
 import TurndownService from 'turndown'
 import type { Question } from '../types'
 
@@ -39,6 +42,25 @@ export const makeSignal = (timeoutMs = 60 * 1000) => {
 			AbortSignal.timeout(timeoutMs),
 		]),
 	}
+}
+
+export async function findElement<T extends Element>(
+	selector: string,
+	signal: AbortSignal,
+	predicate?: (element: HTMLElement) => boolean,
+) {
+	return elementReady<T>(selector, {
+		signal,
+		predicate,
+		stopOnDomReady: false,
+	})
+}
+
+export function injectReactComponent(component: ReactNode, div?: HTMLElement) {
+	div ??= document.createElement('div')
+	const root = createRoot(div)
+	root.render(component)
+	return { root, div }
 }
 
 /**

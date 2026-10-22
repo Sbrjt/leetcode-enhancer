@@ -97,3 +97,5 @@ export type QuestionswithStatus = {
 		}
 	}[]
 }
+
+export type AbortableEffect = (signal: AbortSignal) => (() => void) | void

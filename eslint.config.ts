@@ -26,6 +26,7 @@ export default defineConfig(
 			],
 			'@typescript-eslint/no-explicit-any': 'warn',
 			'@typescript-eslint/ban-ts-comment': 'warn',
+			'no-console': ['error', { allow: ['warn', 'error'] }],
 		},
 	},
 )
