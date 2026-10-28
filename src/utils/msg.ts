@@ -21,3 +21,6 @@ export const handlers = {
 	SEARCH: searchWeb,
 	RELOAD_TAB: reloadTabs,
 }
+
+// todo: use an existing library:
+// https://wxt.dev/guide/essentials/messaging.html
