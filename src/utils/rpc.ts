@@ -11,5 +11,5 @@ export function searchWeb(query: string) {
 }
 
 export async function reloadTabs() {
-	browser.runtime.sendMessage({ type: 'RELOAD_TAB' })
+	return browser.runtime.sendMessage({ type: 'RELOAD_TAB' })
 }
