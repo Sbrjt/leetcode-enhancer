@@ -1,4 +1,5 @@
 import type { editor } from 'monaco-editor'
+import { handlers } from './utils/msg'
 import { SETTINGS } from './utils/settings'
 
 declare global {
@@ -99,3 +100,8 @@ export type QuestionswithStatus = {
 }
 
 export type AbortableEffect = (signal: AbortSignal) => (() => void) | void
+
+export type Message = {
+	type: keyof typeof handlers
+	query?: string
+}

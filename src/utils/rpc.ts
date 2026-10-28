@@ -10,6 +10,6 @@ export function searchWeb(query: string) {
 	})
 }
 
-export async function reloadTabs() {
+export function reloadTabs() {
 	return browser.runtime.sendMessage({ type: 'RELOAD_TAB' })
 }

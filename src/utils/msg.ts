@@ -1,16 +1,23 @@
 // message handlers used in background script
 
-export function handleSearchWeb(query: string) {
+import type { Message } from '@/types'
+
+function searchWeb(msg: Message) {
 	return browser.search.query({
-		text: query,
+		text: msg.query!,
 		disposition: 'NEW_TAB',
 	})
 }
 
-export async function handleReloadTabs() {
+async function reloadTabs() {
 	const tabs = await browser.tabs.query({ url: 'https://leetcode.com/*' })
 
 	for (const tab of tabs) {
 		browser.tabs.reload(tab.id!)
 	}
+}
+
+export const handlers = {
+	SEARCH: searchWeb,
+	RELOAD_TAB: reloadTabs,
 }

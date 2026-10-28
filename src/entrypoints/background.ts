@@ -1,15 +1,11 @@
 import { links } from '@/../package.json'
-import { handleReloadTabs, handleSearchWeb } from '@/utils/bg'
+import type { Message } from '@/types'
+import { handlers } from '@/utils/msg'
 
 export default defineBackground(() => {
-	browser.runtime.onMessage.addListener((msg, _sender, _sendResponse) => {
-		switch (msg.type) {
-			case 'SEARCH':
-				return handleSearchWeb(msg.query)
-
-			case 'RELOAD_TAB':
-				return handleReloadTabs()
-		}
+	browser.runtime.onMessage.addListener((msg: Message) => {
+		const handler = handlers[msg.type]
+		return handler(msg)
 	})
 
 	browser.storage.session.setAccessLevel({
