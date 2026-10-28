@@ -1,7 +1,7 @@
 // show company questions
 
 import QuestionsTable from '@/components/QuestionsTable'
-import { fetchAllQuestionStatuses, getQuestions } from '@/utils/api'
+import { fetchAllQuestionStatuses, getQuestions } from '@/utils/apis'
 import { findElement, injectReactComponent } from '@/utils/lib'
 import useSignalEffect from '@/utils/useSignalEffect'
 import { useFeatureEnabled } from '@/utils/useStore'

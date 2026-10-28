@@ -38,7 +38,7 @@ async function inject(
 }
 
 export default function useDislike(question: Question | null) {
-	const [isEnabled] = useFeatureEnabled('returnDislike')
+	const [isEnabled] = useFeatureEnabled('showDislikes')
 
 	useSignalEffect(
 		(signal) => {

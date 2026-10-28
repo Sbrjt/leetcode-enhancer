@@ -1,7 +1,7 @@
 // this hook provides alternate link for premium editorial
 
 import type { Question } from '@/types'
-import { getEditorialLink } from '@/utils/api'
+import { getEditorialLink } from '@/utils/apis'
 import { findElement } from '@/utils/lib'
 import useSignalEffect from '@/utils/useSignalEffect'
 import { useFeatureEnabled } from '@/utils/useStore'
@@ -43,7 +43,7 @@ async function inject(
 }
 
 export default function useEditorial(question: Question | null, url: string) {
-	const [isEnabled] = useFeatureEnabled('premiumScreenshots')
+	const [isEnabled] = useFeatureEnabled('premiumLinks')
 
 	useSignalEffect(
 		(signal) => {

@@ -1,7 +1,7 @@
 // this hook updates question state on url change
 
 import { Question } from '@/types'
-import { fetchQuestion } from '@/utils/api'
+import { fetchQuestion } from '@/utils/apis'
 
 export default function useQuestion(url: string) {
 	const [question, setQuestion] = useState<Question | null>(null)

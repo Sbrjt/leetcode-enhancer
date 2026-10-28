@@ -1,5 +1,5 @@
-import { SETTINGS } from '@/utils/lib'
 import type { editor } from 'monaco-editor'
+import { SETTINGS } from './utils/settings'
 
 declare global {
 	interface Window {

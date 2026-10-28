@@ -1,22 +1,14 @@
 import { links } from '@/../package.json'
+import { handleReloadTabs, handleSearchWeb } from '@/utils/bg'
 
 export default defineBackground(() => {
-	browser.runtime.onMessage.addListener(async (msg, _sender, _sendResponse) => {
-		if (msg.type === 'SEARCH') {
-			browser.search.query({
-				text: msg.query,
-				disposition: 'NEW_TAB',
-			})
+	browser.runtime.onMessage.addListener((msg, _sender, _sendResponse) => {
+		switch (msg.type) {
+			case 'SEARCH':
+				return handleSearchWeb(msg.query)
 
-			return
-		}
-
-		if (msg.type === 'RELOAD_TAB') {
-			const tabs = await browser.tabs.query({ url: 'https://leetcode.com/*' })
-
-			for (const tab of tabs) {
-				browser.tabs.reload(tab.id!)
-			}
+			case 'RELOAD_TAB':
+				return handleReloadTabs()
 		}
 	})
 
@@ -26,11 +18,5 @@ export default defineBackground(() => {
 
 	browser.runtime.onInstalled.addListener(async () => {
 		browser.runtime.setUninstallURL(links.uninstall)
-
-		// temporary
-		browser.storage.sync.set({
-			premiumScreenshots: true,
-			companyQuestions: true,
-		})
 	})
 })

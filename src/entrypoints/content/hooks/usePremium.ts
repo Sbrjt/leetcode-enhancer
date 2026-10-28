@@ -1,7 +1,7 @@
 // show alternate links to premium questions
 
 import type { Question } from '@/types'
-import { getScreenshotLink } from '@/utils/api'
+import { getScreenshotLink } from '@/utils/apis'
 import { findElement, searchGfG, searchLintCode } from '@/utils/lib'
 import useSignalEffect from '@/utils/useSignalEffect'
 import { useFeatureEnabled } from '@/utils/useStore'
@@ -72,7 +72,7 @@ async function inject(
 }
 
 export default function usePremium(question: Question | null) {
-	const [isEnabled] = useFeatureEnabled('premiumScreenshots')
+	const [isEnabled] = useFeatureEnabled('premiumLinks')
 
 	useSignalEffect(
 		(signal) => {

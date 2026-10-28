@@ -1,6 +1,7 @@
 import pkg from '@/../package.json'
 import { Switch } from '@/components/ui/switch'
 import { getDebugInfo } from '@/utils/lib'
+import { reloadTabs } from '@/utils/rpc'
 import { useFeatureEnabled } from '@/utils/useStore'
 import {
 	LuChevronRight,
@@ -16,7 +17,7 @@ function App() {
 
 	const toggleEnabled = () => {
 		setIsEnabled(!isEnabled)
-		browser.runtime.sendMessage({ type: 'RELOAD_TAB' })
+		reloadTabs()
 	}
 
 	return (
