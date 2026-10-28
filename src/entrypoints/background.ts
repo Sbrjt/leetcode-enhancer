@@ -18,6 +18,40 @@ export default defineBackground(() => {
 				browser.tabs.reload(tab.id!)
 			}
 		}
+
+		if (msg.type === 'NOTIFY') {
+			const granted = await browser.permissions.request({
+				permissions: ['notifications', 'alarms'],
+			})
+
+			// https://developer.chrome.com/docs/extensions/reference/api/alarms
+
+			browser.alarms.create('weekly-reminder', {
+				delayInMinutes: 10080,
+				periodInMinutes: 10080,
+				persistAcrossSessions: true,
+			})
+
+			browser.alarms.onAlarm.addListener((alarm) => {
+				if (alarm.name !== 'weekly-reminder') return
+
+				browser.notifications.create({
+					type: 'basic',
+					iconUrl: browser.runtime.getURL('/icons/128.png'),
+					title: 'LeetCode Enhancer',
+					message: 'Your weekly reminder!',
+				})
+			})
+
+			if (granted) {
+				await browser.notifications.create({
+					type: 'basic',
+					iconUrl: browser.runtime.getURL('/icons/128.png'),
+					title: 'LeetCode Enhancer',
+					message: 'Your feature has finished loading!',
+				})
+			}
+		}
 	})
 
 	browser.storage.session.setAccessLevel({

@@ -4,6 +4,10 @@ import { SETTINGS } from '@/utils/lib'
 import { useFeatureEnabled } from '@/utils/useStore'
 
 function App() {
+	const notify = () => {
+		browser.runtime.sendMessage({ type: 'NOTIFY' })
+	}
+
 	return (
 		<div
 			className='flex min-h-screen flex-col items-center justify-start
@@ -21,6 +25,8 @@ function App() {
 					/>
 				))}
 			</div>
+
+			<button onClick={notify}>notify</button>
 		</div>
 	)
 }
