@@ -1,7 +1,4 @@
-import { Switch } from '@/components/ui/switch'
-import { Setting, SettingKey } from '@/types'
-import { SETTINGS } from '@/utils/lib'
-import { useFeatureEnabled } from '@/utils/useStore'
+import SettingSwitch from '@/components/SettingSwitch'
 
 function App() {
 	return (
@@ -14,30 +11,16 @@ function App() {
 				<h1 className='text-2xl font-bold'>LeetCode Enhancer Options</h1>
 			</div>
 			<div className='mt-5 flex w-full max-w-md flex-col gap-4'>
-				{Object.entries(SETTINGS).map(([key, setting]) => (
-					<SettingItem
-						key={key}
-						setting={{ key: key as SettingKey, ...setting }}
-					/>
-				))}
+				<SettingSwitch settingKey='enabled' reload />
+				<SettingSwitch settingKey='showRating' />
+				<SettingSwitch settingKey='formatOnRun' />
+				<SettingSwitch settingKey='autoComplete' reload />
+				<SettingSwitch settingKey='copyCode' />
+				<SettingSwitch settingKey='showDislikes' />
+				<SettingSwitch settingKey='premiumLinks' />
+				<SettingSwitch settingKey='companyQuestions' />
+				<SettingSwitch settingKey='videoSolutions' />
 			</div>
-		</div>
-	)
-}
-
-function SettingItem({ setting }: { setting: Setting }) {
-	const [value, setValue] = useFeatureEnabled(setting.key)
-
-	return (
-		<div
-			className='flex items-center justify-between rounded-lg border
-				border-white/10 bg-white/5 p-3'
-		>
-			<label className='text-sm font-medium'>{setting.label}</label>
-			<Switch
-				checked={value ?? setting.default}
-				onChange={() => setValue(!value)}
-			/>
 		</div>
 	)
 }

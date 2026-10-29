@@ -1,5 +1,5 @@
 import type { SettingKey } from '@/types'
-import { SETTINGS } from '@/utils/lib'
+import { SETTINGS } from './settings'
 
 /**
  * A hook to read/write in the browser extension storage.

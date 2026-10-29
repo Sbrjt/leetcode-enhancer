@@ -2,7 +2,7 @@
 
 import SolutionVideos from '@/components/SolutionVideos'
 import type { Question } from '@/types'
-import { getNeetcode, getStriver } from '@/utils/api'
+import { getNeetcode, getStriver } from '@/utils/apis'
 import { findElement, injectReactComponent } from '@/utils/lib'
 import useSignalEffect from '@/utils/useSignalEffect'
 import { useFeatureEnabled } from '@/utils/useStore'
@@ -51,7 +51,7 @@ export default function useVideoSolution(
 	question: Question | null,
 	url: string,
 ) {
-	const [isEnabled] = useFeatureEnabled('videoSolution')
+	const [isEnabled] = useFeatureEnabled('videoSolutions')
 
 	useSignalEffect(
 		(signal) => {

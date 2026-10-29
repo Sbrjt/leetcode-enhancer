@@ -1,3 +1,4 @@
+import type { Question } from '@/types'
 import { gfm } from '@truto/turndown-plugin-gfm'
 import { type ClassValue, clsx } from 'clsx'
 import elementReady from 'element-ready'
@@ -5,25 +6,7 @@ import Papa from 'papaparse'
 import type { ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import TurndownService from 'turndown'
-import type { Question } from '../types'
-
-export const SETTINGS = {
-	enabled: { label: 'Extension enabled', default: true },
-	showRating: { label: 'Problem difficulty rating', default: true },
-	formatOnRun: { label: 'Format on run', default: true },
-	autoComplete: { label: 'Enable auto-complete', default: true },
-	copyCode: { label: 'Copy code button', default: true },
-	returnDislike: { label: 'Return dislike button', default: true },
-	premiumScreenshots: {
-		label: 'Screenshots of premium editorials and questions',
-		default: true,
-	},
-	companyQuestions: { label: 'Company questions and tags', default: true },
-	videoSolution: {
-		label: 'Video solutions from Neetcode and Striver',
-		default: true,
-	},
-} as const
+import { searchWeb } from './rpc'
 
 export function cn(...inputs: ClassValue[]) {
 	return clsx(inputs)
@@ -80,17 +63,11 @@ export function observeElement(callback: MutationCallback) {
 }
 
 export function searchGfG(question: string) {
-	browser.runtime.sendMessage({
-		type: 'SEARCH',
-		query: `${question} site:geeksforgeeks.org "Practice"`,
-	})
+	searchWeb(`${question} site:geeksforgeeks.org "Practice"`)
 }
 
 export function searchLintCode(question: string) {
-	browser.runtime.sendMessage({
-		type: 'SEARCH',
-		query: `${question} site:lintcode.com`,
-	})
+	searchWeb(`${question} site:lintcode.com`)
 }
 
 export async function getTab() {
@@ -190,6 +167,8 @@ export function getRange(num: number) {
 		return '2000-2999'
 	} else if (num <= 3999) {
 		return '3000-3999'
+	} else if (num <= 4999) {
+		return '4000-4999'
 	}
 
 	throw new Error(`Unsupported number: ${num}`)
