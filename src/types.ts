@@ -105,3 +105,14 @@ export type Message = {
 	type: keyof typeof handlers
 	query?: string
 }
+
+type UnixSeconds = number
+
+export type Contest = {
+	data: {
+		topTwoContests: {
+			title: string
+			startTime: UnixSeconds
+		}[]
+	}
+}

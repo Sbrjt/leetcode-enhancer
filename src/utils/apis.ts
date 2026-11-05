@@ -1,6 +1,7 @@
 import type {
 	CompanyMapping,
 	CompanyQuestion,
+	Contest,
 	GraphQLResponse,
 	NeetcodeData,
 	ProblemRating,
@@ -183,6 +184,19 @@ export async function fetchAllQuestionStatuses() {
 	}
 
 	return statusMap
+}
+
+export async function fetchContests() {
+	const res = await fetch('https://competeapi.vercel.app/contests/leetcode/')
+	if (!res.ok) return null
+
+	const json: Contest = await res.json()
+	const contests = json.data.topTwoContests
+
+	return {
+		weekly: contests.find((c) => c.title.startsWith('Weekly'))!,
+		biweekly: contests.find((c) => c.title.startsWith('Biweekly'))!,
+	}
 }
 
 // TODO: cache the apis!

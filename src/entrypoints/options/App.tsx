@@ -1,6 +1,27 @@
 import SettingSwitch from '@/components/SettingSwitch'
+import { toast } from '@/utils/reminder'
+import { contestReminders } from '@/utils/rpc'
 
 function App() {
+	async function toggleContestReminders(enabled: boolean) {
+		if (!enabled) {
+			// delete existing contest reminders
+			return true
+		}
+
+		const granted = await browser.permissions.request({
+			permissions: ['notifications', 'alarms'],
+		})
+
+		if (!granted) return false
+
+		// console.log('init alarm')
+		await contestReminders()
+		// console.log('created alarm')
+		toast('Contest reminders enabled!')
+		return true
+	}
+
 	return (
 		<div
 			className='flex min-h-screen flex-col items-center justify-start
@@ -20,6 +41,10 @@ function App() {
 				<SettingSwitch settingKey='premiumLinks' />
 				<SettingSwitch settingKey='companyQuestions' />
 				<SettingSwitch settingKey='videoSolutions' />
+				<SettingSwitch
+					settingKey='contestReminders'
+					onToggle={toggleContestReminders}
+				/>
 			</div>
 		</div>
 	)

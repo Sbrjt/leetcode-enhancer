@@ -17,6 +17,7 @@ export default defineConfig({
 				},
 			],
 			permissions: ['search', 'storage', '<all_urls>'],
+			optional_permissions: ['alarms', 'notifications'],
 			key: CHROME_PUBLIC_KEY,
 			browser_specific_settings: {
 				gecko: {

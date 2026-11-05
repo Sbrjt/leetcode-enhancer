@@ -11,12 +11,19 @@ export default function SettingSwitch({
 }: {
 	settingKey: SettingKey
 	reload?: boolean
-	onToggle?: () => void
+	onToggle?: (enabled: boolean) => Promise<boolean>
 }) {
-	const [value, setValue] = useFeatureEnabled(settingKey)
+	const [enabled, setEnabled] = useFeatureEnabled(settingKey)
 
-	function handleToggle() {
-		setValue(!value)
+	async function handleToggle() {
+		const value = !enabled
+
+		if (onToggle) {
+			const success = await onToggle(value)
+			if (!success) return
+		}
+
+		setEnabled(value)
 
 		if (reload) {
 			reloadTabs()
@@ -31,7 +38,7 @@ export default function SettingSwitch({
 			<label className='text-sm font-medium'>
 				{SETTINGS[settingKey].label}
 			</label>
-			<Switch checked={value} onChange={handleToggle} />
+			<Switch checked={enabled} onChange={handleToggle} />
 		</div>
 	)
 }
