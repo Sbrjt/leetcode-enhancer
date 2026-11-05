@@ -9,7 +9,7 @@ import { type Root } from 'react-dom/client'
 
 type Injected = { root?: Root }
 
-const SELECTOR = 'div:has(> div[class*="company_subscribe"])'
+const SELECTOR = 'div:has(> div[class*="subscribeContainer"])'
 
 async function inject(
 	company: string,
