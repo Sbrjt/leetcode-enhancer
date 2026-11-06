@@ -1,7 +1,6 @@
 // message handlers used in background script
 
 import type { Message } from '@/types'
-import { scheduleContestReminders } from './reminder'
 
 function searchWeb(msg: Message) {
 	return browser.search.query({
@@ -21,7 +20,6 @@ async function reloadTabs() {
 export const handlers = {
 	SEARCH: searchWeb,
 	RELOAD_TAB: reloadTabs,
-	CONTEST_REMINDERS: scheduleContestReminders,
 }
 
 // todo: use an existing library:

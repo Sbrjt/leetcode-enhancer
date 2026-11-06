@@ -9,7 +9,7 @@ export default defineBackground(() => {
 		return handler(msg)
 	})
 
-	browser.alarms.onAlarm.addListener(handleAlarms)
+	browser.alarms?.onAlarm.addListener(handleAlarms)
 
 	browser.storage.session.setAccessLevel({
 		accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS',

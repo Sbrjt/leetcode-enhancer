@@ -23,6 +23,9 @@ function createAlarm(name: string, options: Browser.alarms.AlarmCreateInfo) {
 }
 
 export function handleAlarms(alarm: Browser.alarms.Alarm) {
+	// register this in the background service worker
+	// the browser will wake it up when an alarm fires
+
 	if (alarm.name === 'weekly-contest') {
 		toast('Get ready for your weekly contest!')
 	}
@@ -52,6 +55,9 @@ export async function scheduleContestReminders() {
 	// todo: allow user to customize reminder timing?
 
 	// To see all alarms:
-	// run this in service worker console
 	// await browser.alarms.getAll()
+}
+
+export async function clearReminders() {
+	await browser.alarms.clearAll()
 }

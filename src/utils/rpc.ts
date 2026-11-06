@@ -13,7 +13,3 @@ export function searchWeb(query: string) {
 export function reloadTabs() {
 	return browser.runtime.sendMessage({ type: 'RELOAD_TAB' })
 }
-
-export function contestReminders() {
-	return browser.runtime.sendMessage({ type: 'CONTEST_REMINDERS' })
-}

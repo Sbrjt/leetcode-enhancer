@@ -1,11 +1,14 @@
 import SettingSwitch from '@/components/SettingSwitch'
-import { toast } from '@/utils/reminder'
-import { contestReminders } from '@/utils/rpc'
+import {
+	clearReminders,
+	scheduleContestReminders,
+	toast,
+} from '@/utils/reminder'
 
 function App() {
 	async function toggleContestReminders(enabled: boolean) {
 		if (!enabled) {
-			// delete existing contest reminders
+			await clearReminders()
 			return true
 		}
 
@@ -13,11 +16,12 @@ function App() {
 			permissions: ['notifications', 'alarms'],
 		})
 
-		if (!granted) return false
+		if (!granted) {
+			console.error('Please grant permission')
+			return false
+		}
 
-		// console.log('init alarm')
-		await contestReminders()
-		// console.log('created alarm')
+		await scheduleContestReminders()
 		toast('Contest reminders enabled!')
 		return true
 	}

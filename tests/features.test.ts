@@ -7,8 +7,15 @@ const PROBLEM_2 = 'https://leetcode.com/problems/meeting-rooms-ii'
 test.describe(() => {
 	let page: Page
 
-	test.beforeAll(async ({ extensionContext }) => {
+	test.beforeAll(async ({ extensionContext, background }) => {
 		page = await extensionContext.newPage()
+
+		background.evaluate(() =>
+			browser.storage.sync.set({
+				companyQuestions: true,
+			}),
+		)
+
 		await page.goto(PROBLEM_1)
 	})
 
