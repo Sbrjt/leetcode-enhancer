@@ -35,7 +35,7 @@
 		"turndown": "^7.2.4"
 	},
 	"devDependencies": {
-		"@eslint/js": "^10.0.1",
+		"@eslint/js": "^9.39.5",
 		"@playwright/test": "^1.61.1",
 		"@tailwindcss/vite": "^4.2.2",
 		"@types/addons-linter": "^6.16.1",
@@ -49,9 +49,11 @@
 		"@wxt-dev/auto-icons": "^1.1.1",
 		"@wxt-dev/module-react": "^1.1.5",
 		"addons-linter": "^10.5.0",
-		"eslint": "^10.7.0",
+		"eslint": "^9.39.5",
 		"eslint-config-prettier": "^10.1.8",
+		"eslint-import-resolver-typescript": "^4.4.5",
 		"eslint-plugin-github-action": "^0.3.0",
+		"eslint-plugin-import-x": "^4.18.0",
 		"eslint-plugin-no-unsanitized": "^4.1.5",
 		"globals": "^17.7.0",
 		"husky": "^9.1.7",

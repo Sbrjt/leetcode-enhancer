@@ -2,6 +2,7 @@ import eslintReact from '@eslint-react/eslint-plugin'
 import eslint from '@eslint/js'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import pluginGitHubAction from 'eslint-plugin-github-action'
+import importPlugin from 'eslint-plugin-import-x'
 import noUnsanitized from 'eslint-plugin-no-unsanitized'
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
@@ -14,8 +15,9 @@ export default defineConfig(
 	noUnsanitized.configs.recommended,
 	eslintReact.configs['recommended-typescript'],
 	pluginGitHubAction.configs.recommended,
+	importPlugin.flatConfigs.recommended,
+	importPlugin.flatConfigs.typescript,
 	{
-		languageOptions: { globals: { ...globals.webextensions } },
 		rules: {
 			'@typescript-eslint/no-unused-vars': [
 				'warn',
@@ -27,7 +29,19 @@ export default defineConfig(
 			'@typescript-eslint/no-explicit-any': 'warn',
 			'@typescript-eslint/ban-ts-comment': 'warn',
 			'no-console': ['error', { allow: ['warn', 'error'] }],
+			'import-x/no-unused-modules': [
+				'warn',
+				{
+					unusedExports: true,
+					ignoreExports: [
+						'src/entrypoints/**.ts',
+						'src/entrypoints/**/*index.tsx',
+						'src/components/ui/**/*.tsx',
+					],
+				},
+			],
 		},
+		languageOptions: { globals: { ...globals.webextensions } },
 	},
 )
 
