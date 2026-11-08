@@ -1,11 +1,14 @@
 export const Switch = ({
 	checked,
 	onChange,
+	disabled = false,
 }: {
 	checked: boolean
+	disabled?: boolean
 	onChange: () => void
 }) => (
 	<button
+		disabled={disabled}
 		onClick={onChange}
 		className={`h-6 w-11 rounded-full p-1 transition-colors ${
 			checked ? 'bg-[#5d51d6]' : 'bg-white/10'

@@ -70,12 +70,6 @@ export function searchLintCode(question: string) {
 	searchWeb(`${question} site:lintcode.com`)
 }
 
-export async function getTab() {
-	return await browser.runtime.sendMessage({
-		type: 'GET_TAB',
-	})
-}
-
 /**
  * Formats the number of dislikes compactly.
  *

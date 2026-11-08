@@ -14,4 +14,8 @@ export const SETTINGS = {
 		label: 'Video solutions from Neetcode and Striver',
 		default: true,
 	},
+	contestReminders: {
+		label: 'Get contest reminders',
+		default: false,
+	},
 } as const

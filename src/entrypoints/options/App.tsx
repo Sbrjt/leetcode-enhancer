@@ -1,6 +1,31 @@
 import SettingSwitch from '@/components/SettingSwitch'
+import {
+	clearReminders,
+	scheduleContestReminders,
+	toast,
+} from '@/utils/reminder'
 
 function App() {
+	async function toggleContestReminders(enabled: boolean) {
+		if (!enabled) {
+			await clearReminders()
+			return true
+		}
+
+		const granted = await browser.permissions.request({
+			permissions: ['notifications', 'alarms'],
+		})
+
+		if (!granted) {
+			console.error('Please grant permission')
+			return false
+		}
+
+		await scheduleContestReminders()
+		toast('Contest reminders enabled!')
+		return true
+	}
+
 	return (
 		<div
 			className='flex min-h-screen flex-col items-center justify-start
@@ -20,6 +45,10 @@ function App() {
 				<SettingSwitch settingKey='premiumLinks' />
 				<SettingSwitch settingKey='companyQuestions' />
 				<SettingSwitch settingKey='videoSolutions' />
+				<SettingSwitch
+					settingKey='contestReminders'
+					onToggle={toggleContestReminders}
+				/>
 			</div>
 		</div>
 	)
