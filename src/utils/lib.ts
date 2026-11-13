@@ -173,3 +173,18 @@ export function getRange(num: number) {
 
 	throw new Error(`Unsupported number: ${num}`)
 }
+
+export async function openWhatsNew() {
+	// openPopup() doesn't accept a URL or route,
+	// so set the popup page temporarily to #/whats-new
+	// make sure to reset to the default route afterward
+
+	const whatsNew = await fetchWhatsNew()
+
+	if (!whatsNew) return
+
+	await browser.action.setPopup({
+		popup: `popup.html#/whats-new?message=${encodeURIComponent(whatsNew)}`,
+	})
+	await browser.action.openPopup()
+}

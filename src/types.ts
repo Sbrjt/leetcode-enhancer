@@ -105,3 +105,9 @@ export type Message = {
 	type: keyof typeof handlers
 	query?: string
 }
+
+export type Release = {
+	body: string
+	name: string
+	created_at: string
+}

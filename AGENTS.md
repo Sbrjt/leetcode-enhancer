@@ -89,3 +89,4 @@ await sleep(15000)
 ```
 
 Modify this script as needed to take autonomous control of the browser.
+Kill existing chrome and node before running it.
