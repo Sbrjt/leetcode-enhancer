@@ -6,6 +6,7 @@ import Papa from 'papaparse'
 import type { ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import TurndownService from 'turndown'
+import { fetchWhatsNew } from './apis'
 import { searchWeb } from './rpc'
 
 export function cn(...inputs: ClassValue[]) {
