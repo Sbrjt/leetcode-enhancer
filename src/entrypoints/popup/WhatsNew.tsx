@@ -2,11 +2,6 @@ import ReactMarkdown from 'react-markdown'
 import { useSearchParams } from 'react-router-dom'
 
 function WhatsNew() {
-	useEffect(() => {
-		// reset the popup to its default page after opening #/whats-new
-		browser.action.setPopup({ popup: 'popup.html' })
-	}, [])
-
 	const [searchParams] = useSearchParams()
 	const whatsNew = searchParams.get('message')
 
