@@ -1,5 +1,6 @@
 import { links } from '@/../package.json'
 import type { Message } from '@/types'
+import { openWhatsNew } from '@/utils/lib'
 import { handlers } from '@/utils/msg'
 
 export default defineBackground(() => {
@@ -12,7 +13,11 @@ export default defineBackground(() => {
 		accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS',
 	})
 
-	browser.runtime.onInstalled.addListener(async () => {
+	browser.runtime.onInstalled.addListener(async (details) => {
 		browser.runtime.setUninstallURL(links.uninstall)
+
+		if (details.reason === 'update') {
+			await openWhatsNew()
+		}
 	})
 })

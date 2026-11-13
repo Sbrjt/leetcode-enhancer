@@ -1,0 +1,135 @@
+import pkg from '@/../package.json'
+import { Switch } from '@/components/ui/switch'
+import { getDebugInfo } from '@/utils/lib'
+import { reloadTabs } from '@/utils/rpc'
+import { useFeatureEnabled } from '@/utils/useStore'
+import {
+	LuChevronRight,
+	LuGithub,
+	LuSettings,
+	LuStar,
+	LuTerminal,
+} from 'react-icons/lu'
+import { browser } from 'wxt/browser'
+
+function App() {
+	const [isEnabled, setIsEnabled] = useFeatureEnabled('enabled')
+
+	const toggleEnabled = () => {
+		setIsEnabled(!isEnabled)
+		reloadTabs()
+	}
+
+	return (
+		<>
+			<EnableExtension isEnabled={isEnabled ?? true} onToggle={toggleEnabled} />
+			<Settings />
+			<BMC />
+			<Pills />
+		</>
+	)
+}
+
+function EnableExtension({
+	isEnabled,
+	onToggle,
+}: {
+	isEnabled: boolean
+	onToggle: () => void
+}) {
+	return (
+		<div
+			className='flex w-full items-center justify-between rounded-2xl border
+				border-white/5 bg-white/5 p-4'
+		>
+			<div className='flex flex-col'>
+				<span className='text-[15px] font-bold'>Enable extension</span>
+				<span className='text-xs text-white/40'>Active on this page</span>
+			</div>
+			<Switch checked={isEnabled} onChange={onToggle} />
+		</div>
+	)
+}
+
+function Settings() {
+	return (
+		<a
+			href={browser.runtime.getURL('/options.html')}
+			target='_blank'
+			className='flex w-full items-center justify-between rounded-2xl border
+				border-white/5 bg-white/5 p-4 text-sm font-bold text-white/90
+				transition-all hover:bg-white/10'
+		>
+			<div className='flex items-center gap-3'>
+				<LuSettings size={18} className='text-white/60' />
+				Settings
+			</div>
+			<LuChevronRight
+				size={16}
+				className='text-white/30 group-hover:text-white/60'
+			/>
+		</a>
+	)
+}
+
+function BMC() {
+	return (
+		<a
+			href={pkg.links.funding}
+			target='_blank'
+			className='h-12 w-full rounded-xl bg-[#FFDD00]'
+		>
+			<img
+				src='/bmc.svg'
+				alt='Buy Me A Coffee'
+				className='h-full w-full object-contain'
+			/>
+		</a>
+	)
+}
+
+function Pills() {
+	return (
+		<div className='mt-1 flex flex-wrap justify-center gap-2'>
+			<a href={pkg.homepage} target='_blank' className='pill'>
+				<LuGithub size={12} />
+				GitHub
+			</a>
+
+			{/* <a
+				href={`${pkg.homepage}/issues/new`}
+				target='_blank'
+				className='pill'
+			>
+				<LuMessageSquareWarning size={12} />
+				Report Issue
+			</a> */}
+
+			<a
+				href={
+					import.meta.env.CHROME ?
+						pkg.links.chromeWebStore
+					:	pkg.links.firefoxAddon
+				}
+				target='_blank'
+				className='pill'
+			>
+				<LuStar size={12} />
+				Rate Me
+			</a>
+
+			<button
+				onClick={async () => {
+					const info = await getDebugInfo()
+					navigator.clipboard.writeText(JSON.stringify(info, null, 2))
+				}}
+				className='pill'
+			>
+				<LuTerminal size={12} />
+				Copy Logs
+			</button>
+		</div>
+	)
+}
+
+export default App

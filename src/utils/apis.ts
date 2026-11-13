@@ -7,6 +7,7 @@ import type {
 	QuestionData,
 	QuestionStatus,
 	QuestionswithStatus,
+	Release,
 	StriverData,
 } from '@/types'
 import { getRange, parseCsv } from '@/utils/lib'
@@ -183,6 +184,15 @@ export async function fetchAllQuestionStatuses() {
 	}
 
 	return statusMap
+}
+
+export async function fetchWhatsNew() {
+	const res = await fetch(
+		'https://api.github.com/repos/Sbrjt/leetcode-enhancer/releases',
+	)
+	const json: Release[] = await res.json()
+	const whatsNew = json[0].body
+	return whatsNew.replace("## What's Changed", '').trim()
 }
 
 // TODO: cache the apis!

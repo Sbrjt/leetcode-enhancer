@@ -6,6 +6,7 @@ import Papa from 'papaparse'
 import type { ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import TurndownService from 'turndown'
+import { fetchWhatsNew } from './apis'
 import { searchWeb } from './rpc'
 
 export function cn(...inputs: ClassValue[]) {
@@ -172,4 +173,26 @@ export function getRange(num: number) {
 	}
 
 	throw new Error(`Unsupported number: ${num}`)
+}
+
+export async function openWhatsNew() {
+	// openPopup() doesn't accept a URL or route,
+	// so set the popup page temporarily to #/whats-new
+	// reset to the default route afterward
+
+	const whatsNew = await fetchWhatsNew()
+
+	if (!whatsNew) return
+
+	try {
+		await browser.action.setPopup({
+			popup: `popup.html#/whats-new?message=${encodeURIComponent(whatsNew)}`,
+		})
+
+		await browser.action.openPopup()
+	} finally {
+		await browser.action.setPopup({
+			popup: 'popup.html',
+		})
+	}
 }
