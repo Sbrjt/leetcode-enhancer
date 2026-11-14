@@ -17,7 +17,6 @@
         <img src="https://img.shields.io/badge/Built with-WXT-blue?logo=wxt&logoColor=white"></a>
     <a href="https://github.com/Sbrjt/leetcode-enhancer/actions/workflows/cron.yml">
         <img src="https://github.com/Sbrjt/leetcode-enhancer/actions/workflows/cron.yml/badge.svg"></a>
-</a>
 </div>
 
 ### ✨ Features
@@ -64,10 +63,11 @@
 If you like my project, please gimme a star! ⭐💫
 
 <a href="/ONBOARDING.md">
- <img src="https://img.shields.io/badge/PRs-welcome-green.svg"></a>
+    <img src="https://img.shields.io/badge/PRs-welcome-green.svg"></a>
 <a href="https://ko-fi.com/sbrjt">
-  <img src="https://img.shields.io/badge/Support me-F16061?logo=ko-fi&logoColor=white"></a>
-<a href="https://x.com/messages/compose?recipient_id=1630871745233055746">
-  <img src="https://img.shields.io/badge/Ask me anything-000000?style=flat&logo=x&logoColor=white"></a>
+    <img src="https://img.shields.io/badge/Support me-F16061?logo=ko-fi&logoColor=white"></a>
+<a href="https://discord.gg/wQsvVCbyZ2">
+    <img src="https://img.shields.io/badge/Discord-Join-blue?logo=discord&logoColor=white">
+</a>
 
 © Shubhrajit Sadhukhan :octocat:
