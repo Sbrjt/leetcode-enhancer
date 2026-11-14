@@ -24,6 +24,7 @@ export default defineConfig({
 					data_collection_permissions: { required: ['none'] },
 				},
 			},
+			homepage_url: 'https://github.com/Sbrjt/leetcode-enhancer',
 		}
 	},
 	modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
