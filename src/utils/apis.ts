@@ -94,6 +94,10 @@ export async function getCompanyTags(problemId: number) {
  * Fetches company-wise interview questions from [snehasishroy/leetcode-companywise-interview-questions](https://github.com/snehasishroy/leetcode-companywise-interview-questions)
  */
 export async function getQuestions(company: string) {
+	if (company === 'facebook') {
+		company = 'meta'
+	}
+
 	const baseUrl =
 		'https://raw.githubusercontent.com/snehasishroy/leetcode-companywise-interview-questions/master'
 
