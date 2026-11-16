@@ -5,6 +5,7 @@ export default defineConfig({
 	workers: '100%',
 	retries: process.env.CI ? 1 : 0,
 	reporter: process.env.CI ? 'github' : 'list',
+	globalSetup: './tests/build.ts',
 
 	timeout: 60_000,
 	expect: { timeout: 0 },
