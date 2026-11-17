@@ -1,25 +1,25 @@
 import elementReady from 'element-ready'
+import { wirePyrightModel } from './myext/pyright'
+
+const OPTIONS = {
+	quickSuggestions: { other: true },
+	selectionHighlight: true,
+	bracketPairColorization: { enabled: true },
+	wordBasedSuggestions: 'allDocuments',
+}
 
 export default defineUnlistedScript(async () => {
 	await elementReady('.monaco-editor', { stopOnDomReady: false })
 
-	// console.log(window.monaco.languages.getLanguages())
+	for (const editor of window.monaco.editor.getEditors?.() || []) {
+		editor.updateOptions(OPTIONS)
+		editor.onDidChangeConfiguration(() => editor.updateOptions(OPTIONS))
 
-	const editors = window.monaco.editor.getEditors?.() || []
+		const model = editor.getModel()
 
-	for (const editor of editors) {
-		// console.log(editor?.getModel()?.getLanguageId())
-
-		editor.updateOptions({
-			quickSuggestions: { other: true },
-			selectionHighlight: true,
-			bracketPairColorization: { enabled: true },
-			// parameterHints: { enabled: true },
-		})
-
-		// console.log(editor.getModel()?.getLanguageId())
-		// console.log(editor.getRawOptions())
-		// editor.trigger('keyboard', 'editor.action.triggerSuggest', {})
+		if (model?.getLanguageId() === 'python3') {
+			wirePyrightModel(model)
+		}
 	}
 })
 
