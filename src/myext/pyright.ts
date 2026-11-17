@@ -1,14 +1,60 @@
 // AI Generated
 
-import pyrightWorkerUrl from '@typefox/pyright-browser/dist/pyright.worker.js?url'
+import pyrightWorkerUrl from 'browser-basedpyright/dist/pyright.worker.js?url'
 
 const models = new Map<string, any>()
+const modelUris = new Map<string, string>()
 let completionProvider: { dispose(): void } | undefined
 
+const WORKSPACE_URI = 'file:///workspace'
+
+// Language Server Protocol and Monaco use different numeric completion-kind
+// enums, so passing the LSP value through labels methods as the wrong item type.
+const LSP_TO_MONACO_COMPLETION_KIND: Record<number, number> = {
+	1: 18, // Text
+	2: 0, // Method
+	3: 1, // Function
+	4: 2, // Constructor
+	5: 3, // Field
+	6: 4, // Variable
+	7: 5, // Class
+	8: 7, // Interface
+	9: 8, // Module
+	10: 9, // Property
+	11: 12, // Unit
+	12: 13, // Value
+	13: 15, // Enum
+	14: 17, // Keyword
+	15: 25, // Snippet
+	16: 19, // Color
+	17: 20, // File
+	18: 21, // Reference
+	19: 23, // Folder
+	20: 16, // Enum member
+	21: 14, // Constant
+	22: 6, // Struct
+	23: 10, // Event
+	24: 11, // Operator
+	25: 24, // Type parameter
+}
+
+function getPyrightUri(model: any) {
+	const monacoUri = model.uri.toString()
+	let uri = modelUris.get(monacoUri)
+	if (!uri) {
+		const fileName = encodeURIComponent(monacoUri).replaceAll('%', '_')
+		uri = `${WORKSPACE_URI}/${fileName}.py`
+		modelUris.set(monacoUri, uri)
+	}
+	return uri
+}
+
 async function createServer() {
-	const worker = await fetch(new URL(pyrightWorkerUrl, import.meta.url))
+	const workerUrl = await fetch(new URL(pyrightWorkerUrl, import.meta.url))
 		.then((res) => res.blob())
-		.then((blob) => new Worker(URL.createObjectURL(blob)))
+		.then((blob) => URL.createObjectURL(blob))
+	const worker = new Worker(workerUrl)
+	const backgroundWorkers = new Set<Worker>()
 
 	worker.postMessage({ type: 'browser/boot', mode: 'foreground' })
 
@@ -20,7 +66,22 @@ async function createServer() {
 
 	worker.onmessage = (e) => {
 		const { id: msgId, method, params, result } = e.data
-		if (msgId != null && ('result' in e.data || 'error' in e.data)) {
+		if (e.data.type === 'browser/newWorker') {
+			const backgroundWorker = new Worker(workerUrl)
+			backgroundWorkers.add(backgroundWorker)
+			backgroundWorker.addEventListener('error', (error) =>
+				console.error('Basedpyright background worker failed', error),
+			)
+			backgroundWorker.postMessage(
+				{
+					type: 'browser/boot',
+					mode: 'background',
+					initialData: e.data.initialData,
+					port: e.data.port,
+				},
+				[e.data.port],
+			)
+		} else if (msgId != null && ('result' in e.data || 'error' in e.data)) {
 			const request = pending.get(msgId)
 			if (e.data.error) {
 				request?.reject(new Error(e.data.error.message || 'Pyright request failed'))
@@ -50,16 +111,15 @@ async function createServer() {
 				)
 			}
 		} else if (method === 'workspace/configuration') {
+			const analysis = {
+				diagnosticMode: 'openFilesOnly',
+				typeCheckingMode: 'basic',
+			}
 			worker.postMessage({
 				id: msgId,
-				result: params.items.map(() => ({
-					python: {
-						analysis: {
-							diagnosticMode: 'openFilesOnly',
-							typeCheckingMode: 'basic',
-						},
-					},
-				})),
+				result: params.items.map(({ section }: { section?: string }) =>
+					section === 'python' || section === 'basedpyright' ? { analysis } : null,
+				),
 			})
 		}
 	}
@@ -75,10 +135,18 @@ async function createServer() {
 		worker.postMessage({ method, params })
 
 	await call('initialize', {
+		rootUri: WORKSPACE_URI,
+		workspaceFolders: [{ uri: WORKSPACE_URI, name: 'leetcode' }],
 		capabilities: {
-			workspace: { configuration: true },
-			textDocument: { completion: { completionItem: { snippetSupport: true } } },
+			workspace: { configuration: true, workspaceFolders: true },
+			textDocument: {
+				publishDiagnostics: { versionSupport: true },
+				completion: { completionItem: { snippetSupport: true } },
+			},
 		},
+		// browser-basedpyright bundles typeshed, but the workspace still needs a
+		// virtual file so the root directory exists in its in-memory filesystem.
+		initializationOptions: { files: { '/workspace/.gitkeep': '' } },
 	})
 	notify('initialized')
 	return { call, notify }
@@ -109,7 +177,7 @@ function ensureCompletionProvider() {
 			try {
 				const response = await getServer().then(({ call }) =>
 					call('textDocument/completion', {
-						textDocument: { uri: model.uri.toString() },
+						textDocument: { uri: getPyrightUri(model) },
 						position: {
 							line: position.lineNumber - 1,
 							character: position.column - 1,
@@ -123,7 +191,7 @@ function ensureCompletionProvider() {
 						const textEdit = item.textEdit
 						return {
 							label: item.label,
-							kind: item.kind,
+						kind: LSP_TO_MONACO_COMPLETION_KIND[item.kind] ?? 18,
 							detail: item.detail,
 							documentation: completionDocumentation(item.documentation),
 							insertText: textEdit?.newText ?? item.insertText ?? item.label,
@@ -162,7 +230,8 @@ export function getServer() {
  * Connects a Monaco model to the Pyright language server.
  */
 export async function wirePyrightModel(model: any) {
-	const uri = model.uri.toString()
+	const monacoUri = model.uri.toString()
+	const uri = getPyrightUri(model)
 	if (models.has(uri)) return
 	ensureCompletionProvider()
 	const server = await getServer()
@@ -200,6 +269,7 @@ export async function wirePyrightModel(model: any) {
 	model.onWillDispose(() => {
 		sub.dispose()
 		models.delete(uri)
+		modelUris.delete(monacoUri)
 		notify('textDocument/didClose', { textDocument: { uri } })
 	})
 }

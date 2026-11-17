@@ -13,7 +13,7 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
-    "@typefox/pyright-browser": "^1.1.299",
+    "browser-basedpyright": "1.40.2",
     "element-ready": "^9.0.2",
     "lodash.debounce": "^4.0.8",
     "monaco-editor": "^0.55.1",
