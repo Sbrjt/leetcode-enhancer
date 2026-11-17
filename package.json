@@ -27,6 +27,7 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"element-ready": "^9.0.2",
+		"monaco-pyright-lsp": "^0.1.7",
 		"papaparse": "^5.5.3",
 		"radix-ui": "^1.6.4",
 		"react": "^19.2.7",

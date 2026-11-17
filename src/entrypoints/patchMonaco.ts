@@ -1,3 +1,4 @@
+import { wirePyrightModel } from '@/utils/pyright'
 import elementReady from 'element-ready'
 
 const OPTIONS = {
@@ -10,9 +11,18 @@ const OPTIONS = {
 export default defineUnlistedScript(async () => {
 	await elementReady('.monaco-editor', { stopOnDomReady: false })
 
-	for (const editor of window.monaco.editor.getEditors?.() || []) {
+	const editors = window.monaco.editor.getEditors?.() || []
+
+	for (const editor of editors) {
 		editor.updateOptions(OPTIONS)
 		editor.onDidChangeConfiguration(() => editor.updateOptions(OPTIONS))
+
+		const model = editor.getModel()
+		const language = model?.getLanguageId()
+
+		if (language === 'python3') {
+			wirePyrightModel(editor, model)
+		}
 	}
 })
 

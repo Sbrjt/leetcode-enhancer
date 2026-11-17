@@ -11,7 +11,7 @@ export default defineConfig({
 		return {
 			web_accessible_resources: [
 				{
-					resources: ['patchMonaco.js'],
+					resources: ['patchMonaco.js', 'assets/*.js'],
 					matches: ['https://leetcode.com/*'],
 					use_dynamic_url: true,
 				},
