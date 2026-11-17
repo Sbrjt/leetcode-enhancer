@@ -1,140 +1,111 @@
-// AI Generated
-
 import pyrightWorkerUrl from 'browser-basedpyright/dist/pyright.worker.js?url'
-
-const models = new Map<string, any>()
-const modelUris = new Map<string, string>()
-let completionProvider: { dispose(): void } | undefined
+import {
+	BrowserMessageReader,
+	BrowserMessageWriter,
+	createProtocolConnection,
+} from 'vscode-languageserver-protocol/browser'
 
 const WORKSPACE_URI = 'file:///workspace'
-
-// Language Server Protocol and Monaco use different numeric completion-kind
-// enums, so passing the LSP value through labels methods as the wrong item type.
-const LSP_TO_MONACO_COMPLETION_KIND: Record<number, number> = {
-	1: 18, // Text
-	2: 0, // Method
-	3: 1, // Function
-	4: 2, // Constructor
-	5: 3, // Field
-	6: 4, // Variable
-	7: 5, // Class
-	8: 7, // Interface
-	9: 8, // Module
-	10: 9, // Property
-	11: 12, // Unit
-	12: 13, // Value
-	13: 15, // Enum
-	14: 17, // Keyword
-	15: 25, // Snippet
-	16: 19, // Color
-	17: 20, // File
-	18: 21, // Reference
-	19: 23, // Folder
-	20: 16, // Enum member
-	21: 14, // Constant
-	22: 6, // Struct
-	23: 10, // Event
-	24: 11, // Operator
-	25: 24, // Type parameter
+const ANALYSIS_OPTIONS = {
+	diagnosticMode: 'openFilesOnly',
+	typeCheckingMode: 'basic',
 }
 
-function getPyrightUri(model: any) {
-	const monacoUri = model.uri.toString()
-	let uri = modelUris.get(monacoUri)
-	if (!uri) {
-		const fileName = encodeURIComponent(monacoUri).replaceAll('%', '_')
-		uri = `${WORKSPACE_URI}/${fileName}.py`
-		modelUris.set(monacoUri, uri)
-	}
-	return uri
-}
+const models = new Map<string, any>()
+let completionProvider: { dispose(): void } | undefined
+let monaco: any
+
+// LSP and Monaco assign different numeric values to the same completion kinds.
+const LSP_COMPLETION_KINDS = [
+	undefined,
+	'Text', 'Method', 'Function', 'Constructor', 'Field', 'Variable', 'Class',
+	'Interface', 'Module', 'Property', 'Unit', 'Value', 'Enum', 'Keyword',
+	'Snippet', 'Color', 'File', 'Reference', 'Folder', 'EnumMember', 'Constant',
+	'Struct', 'Event', 'Operator', 'TypeParameter',
+] as const
+
+const pyrightUri = (model: any) =>
+	`${WORKSPACE_URI}/${encodeURIComponent(model.uri.toString()).replaceAll('%', '_')}.py`
+
+const toMonacoRange = (range: any) => ({
+	startLineNumber: range.start.line + 1,
+	startColumn: range.start.character + 1,
+	endLineNumber: range.end.line + 1,
+	endColumn: range.end.character + 1,
+})
 
 async function createServer() {
+	monaco ??= window.monaco
 	const workerUrl = await fetch(new URL(pyrightWorkerUrl, import.meta.url))
-		.then((res) => res.blob())
-		.then((blob) => URL.createObjectURL(blob))
+		.then((response) => response.blob())
+		.then(URL.createObjectURL)
 	const worker = new Worker(workerUrl)
+	const channel = new MessageChannel()
 	const backgroundWorkers = new Set<Worker>()
+	const { MarkerSeverity, editor } = monaco
+	const severities = [
+		MarkerSeverity.Hint,
+		MarkerSeverity.Error,
+		MarkerSeverity.Warning,
+		MarkerSeverity.Info,
+		MarkerSeverity.Hint,
+	]
 
-	worker.postMessage({ type: 'browser/boot', mode: 'foreground' })
-
-	const pending = new Map<
-		number,
-		{ resolve: (res: any) => void; reject: (reason: unknown) => void }
-	>()
-	let id = 1
-
-	worker.onmessage = (e) => {
-		const { id: msgId, method, params, result } = e.data
-		if (e.data.type === 'browser/newWorker') {
-			const backgroundWorker = new Worker(workerUrl)
-			backgroundWorkers.add(backgroundWorker)
-			backgroundWorker.addEventListener('error', (error) =>
-				console.error('Basedpyright background worker failed', error),
-			)
-			backgroundWorker.postMessage(
-				{
-					type: 'browser/boot',
-					mode: 'background',
-					initialData: e.data.initialData,
-					port: e.data.port,
-				},
-				[e.data.port],
-			)
-		} else if (msgId != null && ('result' in e.data || 'error' in e.data)) {
-			const request = pending.get(msgId)
-			if (e.data.error) {
-				request?.reject(new Error(e.data.error.message || 'Pyright request failed'))
-			} else {
-				request?.resolve(result)
-			}
-			pending.delete(msgId)
-		} else if (method === 'textDocument/publishDiagnostics') {
-			const model = models.get(params.uri)
-			const monaco = (window as any).monaco
-			if (model && monaco) {
-				monaco.editor.setModelMarkers(
-					model,
-					'pyright',
-					params.diagnostics.map((d: any) => ({
-						startLineNumber: d.range.start.line + 1,
-						startColumn: d.range.start.character + 1,
-						endLineNumber: d.range.end.line + 1,
-						endColumn: d.range.end.character + 1,
-						message: d.message,
-						severity:
-							d.severity === 1 ? 8
-							: d.severity === 2 ? 4
-							: 2,
-						source: 'pyright',
-					})),
-				)
-			}
-		} else if (method === 'workspace/configuration') {
-			const analysis = {
-				diagnosticMode: 'openFilesOnly',
-				typeCheckingMode: 'basic',
-			}
-			worker.postMessage({
-				id: msgId,
-				result: params.items.map(({ section }: { section?: string }) =>
-					section === 'python' || section === 'basedpyright' ? { analysis } : null,
-				),
-			})
+	worker.onmessage = ({ data }) => {
+		if (data.type !== 'browser/newWorker') {
+			channel.port2.postMessage(data)
+			return
 		}
-	}
 
-	const call = (method: string, params = {}) => {
-		const cur = id++
-		worker.postMessage({ id: cur, method, params })
-		return new Promise<any>((resolve, reject) =>
-			pending.set(cur, { resolve, reject }),
+		const backgroundWorker = new Worker(workerUrl)
+		backgroundWorkers.add(backgroundWorker)
+		backgroundWorker.addEventListener('error', (error) =>
+			console.error('Basedpyright background worker failed', error),
+		)
+		backgroundWorker.postMessage(
+			{
+				type: 'browser/boot',
+				mode: 'background',
+				initialData: data.initialData,
+				port: data.port,
+			},
+			[data.port],
 		)
 	}
-	const notify = (method: string, params = {}) =>
-		worker.postMessage({ method, params })
 
-	await call('initialize', {
+	const connection = createProtocolConnection(
+		new BrowserMessageReader(channel.port1),
+		new BrowserMessageWriter(worker),
+	)
+	connection.onNotification(
+		'textDocument/publishDiagnostics',
+		(params: any) => {
+			const model = models.get(params.uri)
+			if (!model) return
+
+			editor.setModelMarkers(
+				model,
+				'pyright',
+				params.diagnostics.map((diagnostic: any) => ({
+					...toMonacoRange(diagnostic.range),
+					message: diagnostic.message,
+					severity: severities[diagnostic.severity] ?? MarkerSeverity.Info,
+					source: 'pyright',
+				})),
+			)
+		},
+	)
+	connection.onRequest('workspace/configuration', (params: any) =>
+		params.items.map(({ section }: { section?: string }) =>
+			section === 'python' || section === 'basedpyright' ?
+				{ analysis: ANALYSIS_OPTIONS }
+			:	null,
+		),
+	)
+
+	worker.postMessage({ type: 'browser/boot', mode: 'foreground' })
+	connection.listen()
+	await connection.sendRequest('initialize', {
 		rootUri: WORKSPACE_URI,
 		workspaceFolders: [{ uri: WORKSPACE_URI, name: 'leetcode' }],
 		capabilities: {
@@ -144,101 +115,103 @@ async function createServer() {
 				completion: { completionItem: { snippetSupport: true } },
 			},
 		},
-		// browser-basedpyright bundles typeshed, but the workspace still needs a
-		// virtual file so the root directory exists in its in-memory filesystem.
 		initializationOptions: { files: { '/workspace/.gitkeep': '' } },
 	})
-	notify('initialized')
-	return { call, notify }
+	connection.sendNotification('initialized')
+	return connection
 }
 
-function toMonacoRange(range: any) {
-	return {
-		startLineNumber: range.start.line + 1,
-		startColumn: range.start.character + 1,
-		endLineNumber: range.end.line + 1,
-		endColumn: range.end.character + 1,
-	}
-}
+let serverPromise: ReturnType<typeof createServer>
 
-function completionDocumentation(documentation: any) {
-	if (typeof documentation === 'string') return documentation
-	if (documentation?.value) return { value: documentation.value, isTrusted: false }
-	return undefined
-}
+export const getServer = () => (serverPromise ??= createServer())
 
 function ensureCompletionProvider() {
 	if (completionProvider) return
 
-	const monaco = (window as any).monaco
-	completionProvider = monaco.languages.registerCompletionItemProvider('python3', {
-		triggerCharacters: ['.'],
-		provideCompletionItems: async (model: any, position: any) => {
-			try {
-				const response = await getServer().then(({ call }) =>
-					call('textDocument/completion', {
-						textDocument: { uri: getPyrightUri(model) },
-						position: {
-							line: position.lineNumber - 1,
-							character: position.column - 1,
+	monaco ??= window.monaco
+	completionProvider = monaco.languages.registerCompletionItemProvider(
+		'python3',
+		{
+			triggerCharacters: ['.'],
+			provideCompletionItems: async (model: any, position: any) => {
+				try {
+					const server = await getServer()
+					const response: any = await server.sendRequest(
+						'textDocument/completion',
+						{
+							textDocument: { uri: pyrightUri(model) },
+							position: {
+								line: position.lineNumber - 1,
+								character: position.column - 1,
+							},
 						},
-					}),
-				)
-				const items = Array.isArray(response) ? response : response?.items || []
+					)
+					const items =
+						Array.isArray(response) ? response : (response?.items ?? [])
 
-				return {
-					suggestions: items.map((item: any) => {
-						const textEdit = item.textEdit
-						return {
-							label: item.label,
-						kind: LSP_TO_MONACO_COMPLETION_KIND[item.kind] ?? 18,
-							detail: item.detail,
-							documentation: completionDocumentation(item.documentation),
-							insertText: textEdit?.newText ?? item.insertText ?? item.label,
-							insertTextRules: item.insertTextFormat === 2 ? 4 : undefined,
-							range: textEdit ? toMonacoRange(textEdit.range) : undefined,
-							filterText: item.filterText,
-							sortText: item.sortText,
-							preselect: item.preselect,
-							commitCharacters: item.commitCharacters,
-							additionalTextEdits: item.additionalTextEdits?.map((edit: any) => ({
-								range: toMonacoRange(edit.range),
-								text: edit.newText,
-							})),
-						}
-					}),
+					return {
+						suggestions: items.map((item: any) => {
+							const textEdit = item.textEdit
+							const documentation = item.documentation
+							const word = model.getWordUntilPosition(position)
+							return {
+								label: item.label,
+								kind:
+									monaco.languages.CompletionItemKind[
+										LSP_COMPLETION_KINDS[item.kind] ?? 'Text'
+									],
+								detail: item.detail,
+								documentation:
+									typeof documentation === 'string' ? documentation : (
+										documentation?.value && {
+											value: documentation.value,
+											isTrusted: false,
+										}
+									),
+								insertText: textEdit?.newText ?? item.insertText ?? item.label,
+								insertTextRules:
+									item.insertTextFormat === 2 ?
+										monaco.languages.CompletionItemInsertTextRule
+											.InsertAsSnippet
+									:	undefined,
+								range: textEdit ? toMonacoRange(textEdit.range) : {
+									startLineNumber: position.lineNumber,
+									endLineNumber: position.lineNumber,
+									startColumn: word.startColumn,
+									endColumn: word.endColumn,
+								},
+								filterText: item.filterText,
+								sortText: item.sortText,
+								preselect: item.preselect,
+								commitCharacters: item.commitCharacters,
+								additionalTextEdits: item.additionalTextEdits?.map(
+									(edit: any) => ({
+										range: toMonacoRange(edit.range),
+										text: edit.newText,
+									}),
+								),
+							}
+						}),
+					}
+				} catch (error) {
+					console.error('Pyright completion request failed', error)
+					return { suggestions: [] }
 				}
-			} catch (error) {
-				console.error('Pyright completion request failed', error)
-				return { suggestions: [] }
-			}
+			},
 		},
-	})
+	)
 }
 
-// For singleton pattern (WXT does not support content scripts as ESM :(
-let serverPromise: ReturnType<typeof createServer>
-
-export function getServer() {
-	if (!serverPromise) {
-		serverPromise = createServer()
-	}
-	return serverPromise
-}
-
-/**
- * Connects a Monaco model to the Pyright language server.
- */
 export async function wirePyrightModel(model: any) {
-	const monacoUri = model.uri.toString()
-	const uri = getPyrightUri(model)
+	const uri = pyrightUri(model)
 	if (models.has(uri)) return
+
+	// Reserve the URI before awaiting so concurrent calls open it only once.
+	models.set(uri, model)
 	ensureCompletionProvider()
 	const server = await getServer()
-	const { notify } = server
-	models.set(uri, model)
 
-	notify('textDocument/didOpen', {
+	server.sendNotification('textDocument/didOpen', {
 		textDocument: {
 			uri,
 			languageId: 'python',
@@ -247,29 +220,16 @@ export async function wirePyrightModel(model: any) {
 		},
 	})
 
-	const sub = model.onDidChangeContent((e: any) =>
-		notify('textDocument/didChange', {
+	const subscription = model.onDidChangeContent(() =>
+		server.sendNotification('textDocument/didChange', {
 			textDocument: { uri, version: model.getVersionId() },
-			contentChanges: e.changes.map((c: any) => ({
-				range: {
-					start: {
-						line: c.range.startLineNumber - 1,
-						character: c.range.startColumn - 1,
-					},
-					end: {
-						line: c.range.endLineNumber - 1,
-						character: c.range.endColumn - 1,
-					},
-				},
-				text: c.text,
-			})),
+			contentChanges: [{ text: model.getValue() }],
 		}),
 	)
 
 	model.onWillDispose(() => {
-		sub.dispose()
+		subscription.dispose()
 		models.delete(uri)
-		modelUris.delete(monacoUri)
-		notify('textDocument/didClose', { textDocument: { uri } })
+		server.sendNotification('textDocument/didClose', { textDocument: { uri } })
 	})
 }
