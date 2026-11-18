@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'node:path'
+import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import removeConsole from 'vite-plugin-remove-console'
 import { defineConfig } from 'wxt'
 import pkg from './package.json'
@@ -11,7 +12,7 @@ export default defineConfig({
 		return {
 			web_accessible_resources: [
 				{
-					resources: ['patchMonaco.js', 'assets/*.js'],
+					resources: ['patchMonaco.js', 'assets/*.gz'],
 					matches: ['https://leetcode.com/*'],
 					use_dynamic_url: true,
 				},
@@ -33,6 +34,12 @@ export default defineConfig({
 	vite: (configEnv) => ({
 		plugins: [
 			tailwindcss(),
+			// this reduces pyright worker (20MB) -> .gz (4MB)
+			compression({
+				algorithms: [defineAlgorithm('gzip')],
+				include: [/assets\/worker-.*\.js$/],
+				deleteOriginalAssets: true,
+			}),
 			...(configEnv.mode === 'production' ?
 				[removeConsole({ includes: ['log'] })]
 			:	[]),

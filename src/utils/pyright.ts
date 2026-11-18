@@ -4,19 +4,23 @@ import { MonacoPyrightProvider } from 'monaco-pyright-lsp'
 import pyrightWorkerUrl from 'monaco-pyright-lsp/dist/worker.js?worker&url'
 
 export async function wirePyrightModel(editor: any, model: any) {
-	// Pyright expects 'python', while LeetCode uses 'python3'
-	window.monaco.editor.setModelLanguage(model, 'python')
+	try {
+		// Pyright expects 'python', while LeetCode uses 'python3'
+		window.monaco.editor.setModelLanguage(model, 'python')
 
-	const provider = await createProvider()
-	await provider.setupDiagnostics(editor)
+		const provider = await createProvider()
+		await provider.setupDiagnostics(editor)
 
-	// Sync existing editor content
-	await provider.lspClient.updateDocVersion(model.getValue())
+		// Sync existing editor content
+		await provider.lspClient.updateDocVersion(model.getValue())
+	} catch {
+		console.error('Error in initiating Pyright')
+	}
 }
 
 async function createProvider() {
-	const workerUrl = await getWorkerUrl()
-	const provider = new MonacoPyrightProvider(workerUrl, { typeStubs })
+	const worker = await loadWorker()
+	const provider = new MonacoPyrightProvider(worker, { typeStubs })
 
 	await provider.init(window.monaco as never)
 	await provider.lspClient.connection.sendNotification(
@@ -38,12 +42,17 @@ async function createProvider() {
 	return provider
 }
 
-async function getWorkerUrl() {
+async function loadWorker() {
 	const scriptUrl = (document.currentScript as HTMLScriptElement)?.src
 	const url = new URL(pyrightWorkerUrl, new URL('.', scriptUrl))
+	url.pathname += '.gz'
 	const res = await fetch(url)
-	const blob = await res.blob()
-	return URL.createObjectURL(blob)
+	if (!res.body) throw new Error('Could not load the Pyright worker')
+	const stream = res.body.pipeThrough(new DecompressionStream('gzip'))
+	const source = await new Response(stream).blob()
+	return URL.createObjectURL(new Blob([source], { type: 'text/javascript' }))
+
+	// Note: the entire decompressed worker sits in memory.
 }
 
 const typeStubs = {
