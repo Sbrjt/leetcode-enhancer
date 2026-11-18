@@ -1,6 +1,7 @@
 import tailwindcss from '@tailwindcss/vite'
-import { resolve } from 'node:path'
-import { compression, defineAlgorithm } from 'vite-plugin-compression2'
+import { globSync } from 'glob'
+import { unlinkSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import removeConsole from 'vite-plugin-remove-console'
 import { defineConfig } from 'wxt'
 import pkg from './package.json'
@@ -12,7 +13,7 @@ export default defineConfig({
 		return {
 			web_accessible_resources: [
 				{
-					resources: ['patchMonaco.js', 'assets/*.gz'],
+					resources: ['patchMonaco.js'],
 					matches: ['https://leetcode.com/*'],
 					use_dynamic_url: true,
 				},
@@ -31,20 +32,32 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
 	srcDir: 'src',
 	autoIcons: { baseIconPath: resolve('public/icon.svg') },
-	vite: (configEnv) => ({
-		plugins: [
-			tailwindcss(),
-			// this reduces pyright worker (20MB) -> .gz (4MB)
-			compression({
-				algorithms: [defineAlgorithm('gzip')],
-				include: [/assets\/worker-.*\.js$/],
-				deleteOriginalAssets: true,
-			}),
-			...(configEnv.mode === 'production' ?
-				[removeConsole({ includes: ['log'] })]
-			:	[]),
-		],
-	}),
+	vite: (configEnv) => {
+		const isProd = configEnv.mode === 'production'
+
+		return {
+			plugins: [
+				tailwindcss(),
+				{
+					name: 'remove-pyright-worker',
+					writeBundle(options, bundle) {
+						const dir = options.dir!
+
+						const [file] = globSync('assets/worker-*.js', {
+							cwd: dir,
+							posix: true,
+						})
+
+						if (file) {
+							unlinkSync(join(dir, file))
+							delete bundle[file]
+						}
+					},
+				},
+				...(isProd ? [removeConsole({ includes: ['log'] })] : []),
+			],
+		}
+	},
 	webExt: {
 		chromiumProfile: resolve('.wxt/chrome-data'),
 		keepProfileChanges: true,

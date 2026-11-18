@@ -1,7 +1,7 @@
 // AI generated code
 
 import { MonacoPyrightProvider } from 'monaco-pyright-lsp'
-import pyrightWorkerUrl from 'monaco-pyright-lsp/dist/worker.js?worker&url'
+import { fetchPyrightWorker } from './apis'
 
 export async function wirePyrightModel(editor: any, model: any) {
 	try {
@@ -19,7 +19,7 @@ export async function wirePyrightModel(editor: any, model: any) {
 }
 
 async function createProvider() {
-	const worker = await loadWorker()
+	const worker = await fetchPyrightWorker()
 	const provider = new MonacoPyrightProvider(worker, { typeStubs })
 
 	await provider.init(window.monaco as never)
@@ -40,19 +40,6 @@ async function createProvider() {
 	)
 
 	return provider
-}
-
-async function loadWorker() {
-	const scriptUrl = (document.currentScript as HTMLScriptElement)?.src
-	const url = new URL(pyrightWorkerUrl, new URL('.', scriptUrl))
-	url.pathname += '.gz'
-	const res = await fetch(url)
-	if (!res.body) throw new Error('Could not load the Pyright worker')
-	const stream = res.body.pipeThrough(new DecompressionStream('gzip'))
-	const source = await new Response(stream).blob()
-	return URL.createObjectURL(new Blob([source], { type: 'text/javascript' }))
-
-	// Note: the entire decompressed worker sits in memory.
 }
 
 const typeStubs = {
