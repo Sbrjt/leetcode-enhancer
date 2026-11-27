@@ -40,6 +40,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.39.5",
 		"@playwright/test": "^1.61.1",
+		"@rollup/plugin-replace": "^6.0.3",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.2.2",
 		"@types/addons-linter": "^6.16.1",
@@ -73,7 +74,6 @@
 		"tailwindcss": "^4.2.2",
 		"typescript": "^6.0.0",
 		"typescript-eslint": "^8.64.0",
-		"vite-plugin-compression2": "^2.5.4",
 		"vite-plugin-remove-console": "^2.2.0",
 		"wxt": "^0.20.27"
 	},

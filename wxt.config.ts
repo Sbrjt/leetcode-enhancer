@@ -1,7 +1,6 @@
+import replace from '@rollup/plugin-replace'
 import tailwindcss from '@tailwindcss/vite'
-import { globSync } from 'glob'
-import { unlinkSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import removeConsole from 'vite-plugin-remove-console'
 import { defineConfig } from 'wxt'
 import pkg from './package.json'
@@ -38,22 +37,14 @@ export default defineConfig({
 		return {
 			plugins: [
 				tailwindcss(),
-				{
-					name: 'remove-pyright-worker',
-					writeBundle(options, bundle) {
-						const dir = options.dir!
-
-						const [file] = globSync('assets/worker-*.js', {
-							cwd: dir,
-							posix: true,
-						})
-
-						if (file) {
-							unlinkSync(join(dir, file))
-							delete bundle[file]
-						}
+				// https://github.com/SardineFish/monaco-pyright-lsp/issues/8
+				replace({
+					include: '**/monaco-pyright-lsp/**/client.js',
+					preventAssignment: true,
+					values: {
+						'new URL("./worker.js", import.meta.url)': '""',
 					},
-				},
+				}),
 				...(isProd ? [removeConsole({ includes: ['log'] })] : []),
 			],
 		}
