@@ -199,6 +199,9 @@ export async function fetchWhatsNew() {
 	return whatsNew.replace("## What's Changed", '').trim()
 }
 
+/**
+ * Fetches Pyright worker script from jsDelivr and creates a blob URL
+ */
 export async function fetchPyrightWorker() {
 	const res = await fetch(
 		'https://cdn.jsdelivr.net/npm/monaco-pyright-lsp/dist/worker.js',

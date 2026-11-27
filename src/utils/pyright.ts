@@ -19,7 +19,11 @@ export async function wirePyrightModel(editor: any, model: any) {
 }
 
 async function createProvider() {
+	// The library comes with its own worker (~20 MB)
+	// but I don't want this in my extension bundle
+	// So, I load the worker from a CDN at runtime
 	const worker = await fetchPyrightWorker()
+
 	const provider = new MonacoPyrightProvider(worker, { typeStubs })
 
 	await provider.init(window.monaco as never)
